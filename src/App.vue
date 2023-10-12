@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import { ref } from 'vue';
 
+const rail = ref<boolean>(true);
+const drawer = ref<boolean>(true);
 </script>
 
 <template>
   <v-layout class="rounded">
-    <v-navigation-drawer expand-on-hover rail>
+    <v-navigation-drawer permanent :rail="rail" v-model="drawer" @click="rail = false">
       <v-list>
-        <v-list-item prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg" title="Sandra Adams"
-          subtitle="sandra_a88@gmailcom"></v-list-item>
+        <v-list-item prepend-avatar=" " title="Sandra Adams" subtitle="sandra_a88@gmailcom">
+          <template v-slot:append>
+            <v-btn variant="text" icon="mdi-chevron-left" @click.stop="rail = !rail"></v-btn>
+          </template>
+        </v-list-item>
       </v-list>
 
       <v-divider></v-divider>
