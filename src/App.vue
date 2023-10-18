@@ -21,16 +21,35 @@ const drawer = ref<boolean>(true);
 
       <v-list density="compact" nav>
         <RouterLink to="/">
-          <v-list-item prepend-icon="mdi-folder" title="My Files" value="myfiles">
-            Home
+          <v-list-item prepend-icon="mdi-view-dashboard-edit-outline" title="Dashboard" value="dashboard">
+            Dashboard
+          </v-list-item>
+        </RouterLink>
+        <RouterLink to="/contacts">
+          <v-list-item prepend-icon="mdi-contacts" title="Contacts" value="contacts">
+            Contacts
+          </v-list-item>
+        </RouterLink>
+        <RouterLink to="/notes">
+          <v-list-item prepend-icon="mdi-note-edit" title="Notes" value="notes">
+            Notes
+          </v-list-item>
+        </RouterLink>
+        <RouterLink to="/reminder">
+          <v-list-item prepend-icon="mdi-alarm-light" title="Reminder" value="reminder">
+            Reminder
           </v-list-item>
         </RouterLink>
         <RouterLink to="/about">
-          <v-list-item prepend-icon="mdi-account-multiple" title="Shared with me" value="shared">
-            About
+          <v-list-item prepend-icon="mdi-cash" title="Expenses" value="expenses">
+            Expenses
           </v-list-item>
         </RouterLink>
-        <v-list-item prepend-icon="mdi-star" title="Starred" value="starred"></v-list-item>
+        <RouterLink to="/tasks">
+          <v-list-item prepend-icon="mdi-calendar-check" title="Tasks" value="tasks">
+            Tasks
+          </v-list-item>
+        </RouterLink>
       </v-list>
     </v-navigation-drawer>
     <v-main class="d-flex align-center justify-center" style="min-height: 300px;">
