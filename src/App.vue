@@ -52,10 +52,16 @@ const drawer = ref<boolean>(true);
         </RouterLink>
       </v-list>
     </v-navigation-drawer>
-    <v-main class="d-flex align-center justify-center" style="min-height: 300px;">
+    <v-main>
       <RouterView />
     </v-main>
   </v-layout>
 </template>
 
-<style scoped></style>
+<style scoped>
+a {
+  text-decoration: none;
+  color: rgb(47, 121, 233);
+  transition: 0.4s;
+}
+</style>
