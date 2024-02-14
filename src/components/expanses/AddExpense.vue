@@ -1,35 +1,29 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue';
-
 const dialog = ref<boolean>(false);
-
-const handleSave = (): void => {
-    dialog.value = false;
-    console.log('form submitted');
-}
+const date = null;
 </script>
 <template>
     <v-btn color="primary" @click="dialog = true">
-        Add Note
+        Add Expense
     </v-btn>
 
     <v-dialog v-model="dialog" width="500">
         <v-card class="px-6 py-4">
             <v-card-title>
-                Add new contact to list
+                Add new expense
             </v-card-title>
             <v-card-text>
                 <v-form @submit.prevent>
-                    <v-text-field label="Note Title" type="input"></v-text-field>
-                    <v-textarea label="Note" auto-grow></v-textarea>
+                    <v-text-field label="Expense Title" type="input"></v-text-field>
+                    <v-text-field label="Expense Value" type="number"></v-text-field>
+                    <v-select label="Type of expense" :items="['Bills', 'Food', 'Shopping', 'Outsie', 'Others']"></v-select>
+                    <VueDatePicker v-model="date" inline auto-apply></VueDatePicker>
                 </v-form>
             </v-card-text>
-            <v-card-item>
-                <v-checkbox label="Important" color="primary"></v-checkbox>
-            </v-card-item>
             <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                 <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleSave" type="button">Add Note</v-btn>
+                <v-btn variant="tonal" color="primary" @click="dialog = false" type="button">Add Expense</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

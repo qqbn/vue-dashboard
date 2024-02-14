@@ -33,6 +33,11 @@ const router = createRouter({
       component: () => import('../views/ReminderView.vue') 
     },
     {
+      path: '/expenses',
+      name: 'expenses',
+      component: () => import('../views/ExpensesView.vue')
+    },
+    {
       path: '/tasks',
       name: 'tasks',
       component: () => import('../views/TasksView.vue')

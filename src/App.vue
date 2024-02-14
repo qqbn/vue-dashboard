@@ -40,7 +40,7 @@ const drawer = ref<boolean>(true);
             Reminder
           </v-list-item>
         </RouterLink>
-        <RouterLink to="/about">
+        <RouterLink to="/expenses">
           <v-list-item prepend-icon="mdi-cash" title="Expenses" value="expenses">
             Expenses
           </v-list-item>
