@@ -10,7 +10,7 @@ import AddNote from "../components/notes/AddNote.vue"
             </v-col>
         </v-row>
         <v-row align="start" justify="start" no-gutters>
-            <v-col cols="4" xl="4" lg="4" md="6" sm="12" v-for="n in 6" :key="n" class="pa-4">
+            <v-col cols="12" xl="4" lg="4" md="6" sm="12" v-for="n in 6" :key="n" class="pa-4">
                 <NoteCard />
             </v-col>
         </v-row>
