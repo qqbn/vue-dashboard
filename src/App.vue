@@ -61,7 +61,6 @@ const drawer = ref<boolean>(true);
 <style scoped>
 a {
   text-decoration: none;
-  color: rgb(47, 121, 233);
   transition: 0.4s;
 }
 </style>
