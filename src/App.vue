@@ -20,33 +20,34 @@ const drawer = ref<boolean>(true);
       <v-divider></v-divider>
 
       <v-list density="compact" nav>
-        <RouterLink to="/">
-          <v-list-item prepend-icon="mdi-view-dashboard-edit-outline" title="Dashboard" value="dashboard">
+        <RouterLink to="/" color="primary">
+          <v-list-item prepend-icon="mdi-view-dashboard-edit-outline" title="Dashboard" value="dashboard"
+            base-color="primary">
             Dashboard
           </v-list-item>
         </RouterLink>
         <RouterLink to="/contacts">
-          <v-list-item prepend-icon="mdi-contacts" title="Contacts" value="contacts">
+          <v-list-item prepend-icon="mdi-contacts" title="Contacts" value="contacts" base-color="primary">
             Contacts
           </v-list-item>
         </RouterLink>
         <RouterLink to="/notes">
-          <v-list-item prepend-icon="mdi-note-edit" title="Notes" value="notes">
+          <v-list-item prepend-icon="mdi-note-edit" title="Notes" value="notes" base-color="primary">
             Notes
           </v-list-item>
         </RouterLink>
         <RouterLink to="/reminder">
-          <v-list-item prepend-icon="mdi-alarm-light" title="Reminder" value="reminder">
+          <v-list-item prepend-icon="mdi-alarm-light" title="Reminder" value="reminder" base-color="primary">
             Reminder
           </v-list-item>
         </RouterLink>
         <RouterLink to="/expenses">
-          <v-list-item prepend-icon="mdi-cash" title="Expenses" value="expenses">
+          <v-list-item prepend-icon="mdi-cash" title="Expenses" value="expenses" base-color="primary">
             Expenses
           </v-list-item>
         </RouterLink>
         <RouterLink to="/tasks">
-          <v-list-item prepend-icon="mdi-calendar-check" title="Tasks" value="tasks">
+          <v-list-item prepend-icon="mdi-calendar-check" title="Tasks" value="tasks" base-color="primary">
             Tasks
           </v-list-item>
         </RouterLink>

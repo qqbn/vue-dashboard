@@ -13,6 +13,7 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
 import VueDatePicker from '@vuepic/vue-datepicker';
+import { VSparkline } from 'vuetify/labs/VSparkline'
 import '@vuepic/vue-datepicker/dist/main.css';
 
 const vuetify = createVuetify({
@@ -28,4 +29,5 @@ app.use(createPinia())
 app.use(router)
 
 app.component('VueDatePicker', VueDatePicker);
+app.component('VSparkline', VSparkline)
 app.use(vuetify).mount('#app')

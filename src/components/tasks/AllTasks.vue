@@ -36,7 +36,7 @@ const setTaskDone = (): void => {
         </div>
     </v-card>
 </template>
-<style scoped>
+<style scoped lang="scss">
 .single-task {
     span {
         font-size: 18px;
