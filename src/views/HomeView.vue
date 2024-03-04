@@ -1,44 +1,64 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Widget1 from '../components/widgets/Widget1.vue';
-console.log('main');
-const widgets = ref([
+import AddWidget from '../components/widgets/AddWidget.vue';
+
+interface SelectedWidget {
+  name: string,
+  component: any,
+  widgetId: number,
+  availableAreas: number[],
+}
+
+interface SelectedWidgets {
+  [key: string]: SelectedWidget | null,
+}
+
+const widgets = ref<SelectedWidget[]>([
   {
+    widgetId: 1,
     name: 'Widget1',
-    id: 1,
+    component: Widget1,
     availableAreas: [1, 2, 3]
   },
   {
+    widgetId: 2,
     name: 'Widget2',
-    id: 2,
+    component: Widget1,
     availableAreas: [1, 2]
   },
   {
+    widgetId: 3,
     name: 'Widget3',
-    id: 3,
+    component: Widget1,
     availableAreas: [1, 2, 3]
   },
   {
+    widgetId: 4,
     name: 'Widget4',
-    id: 4,
+    component: Widget1,
     availableAreas: [3]
   }
 ])
-let selectedComponent = ref(null);
-const test = ref<boolean>(false);
+
+let selectedWidgets = ref<SelectedWidgets | {}>({});
 const dialog = ref<boolean>(false);
-const isWidgetSelected = ref<boolean>(false);
+let availableWidgets = ref<any>(null);
+let actualSelectedWidget = ref<SelectedWidget | null>(null);
+let actualSelectedArea = ref<number | null>(null);
 
 
 const selectComponent = (area: number) => {
+  actualSelectedWidget.value = null;
+  actualSelectedArea.value = area;
   dialog.value = true;
-  test.value = true;
-  selectedComponent = Widget1;
+  availableWidgets = widgets.value.filter(el => el.availableAreas.includes(area));
+  console.log(availableWidgets);
 }
 
-const selectWidget = () => {
-  isWidgetSelected.value = true;
-
+const saveWidget = () => {
+  (selectedWidgets.value as SelectedWidgets)['area' + actualSelectedArea.value] = actualSelectedWidget.value;
+  dialog.value = false;
 }
 
 </script>
@@ -47,12 +67,36 @@ const selectWidget = () => {
   <v-container fluid fill-height class="ma-0 pa-6">
     <v-row>
       <v-col cols="4" style="border: 1px solid red;">
-        <div style="height: 100%; width: 100%; background-color: orange;" @click="selectComponent(1)"></div>
-        <component :is="selectedComponent" v-if="test"></component>
+        <add-widget @select-component="selectComponent(1)" v-if="!selectedWidgets?.area1">
+          Area 1
+        </add-widget>
+        <component v-if="selectedWidgets?.area1" :is="selectedWidgets?.area1?.component"></component>
       </v-col>
       <v-col cols="8" style="border: 1px solid green;">
-        <v-row style="border: 1px solid orange;">row1</v-row>
-        <v-row style="border: 1px solid orchid;">row2</v-row>
+        <v-row style="border: 1px solid orange;">
+          <v-col vols="6">
+            <add-widget @select-component="selectComponent(2)" v-if="!selectedWidgets?.area2">
+              Area 2
+            </add-widget>
+          </v-col>
+          <v-col vols="6">
+            <add-widget @select-component="selectComponent(3)" v-if="!selectedWidgets?.area3">
+              Area 3
+            </add-widget>
+          </v-col>
+        </v-row>
+        <v-row style="border: 1px solid orchid;">
+          <v-col vols="6">
+            <add-widget @select-component="selectComponent(4)" v-if="!selectedWidgets?.area4">
+              Area 4
+            </add-widget>
+          </v-col>
+          <v-col vols="6">
+            <add-widget @select-component="selectComponent(4)" v-if="!selectedWidgets?.area5">
+              Area 5
+            </add-widget>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -60,17 +104,21 @@ const selectWidget = () => {
   <v-dialog v-model="dialog" width="500">
     <v-card class="px-6 py-4">
       <v-card-title>
-        Select widget
+        Select widget for Area{{ actualSelectedArea }}
       </v-card-title>
+      <v-card-subtitle>
+        Selected widget: {{ actualSelectedWidget?.name }}
+      </v-card-subtitle>
       <v-card-item>
-        <v-list :items="widgets" item-title="widget" item-value="widgetId" density="compact">
-          <v-list-item v-for="widget in widgets" :key="widget.id" @click="selectWidget">
+        <v-list item-title="widget" item-value="widgetId" density="compact">
+          <v-list-item v-for="widget in availableWidgets" :key="widget.id" @click="actualSelectedWidget = widget">
             {{ widget.name }}
           </v-list-item>
         </v-list>
       </v-card-item>
       <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
-        <v-btn variant="tonal" color="primary" @click="dialog = false" type="button" v-if="isWidgetSelected">Save</v-btn>
+        <v-btn variant="tonal" color="primary" @click="saveWidget" type="button"
+          v-if="actualSelectedWidget">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -78,6 +126,7 @@ const selectWidget = () => {
 
   </div>
 </template>
+
 <style scoped>
 .dashboard-container {
   width: 100%;
