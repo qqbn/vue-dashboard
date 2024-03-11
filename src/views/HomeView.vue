@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import Widget1 from '../components/widgets/Widget1.vue';
-import AddWidget from '../components/widgets/AddWidget.vue';
+import { ref, onMounted, nextTick } from 'vue';
+import type { SelectedWidget, SelectedWidgets } from '../helpers/interfaces';
+import Widget1 from '@/components/widgets/Widget1.vue';
+import ContactsWidget from '@/components/widgets/ContactsWidget.vue';
+import NotesWidget from '@/components/widgets/NotesWidget.vue';
+import RemindWidget from '@/components/widgets/RemindWidget.vue';
+import TaskWidget from '@/components/widgets/TaskWidget.vue';
+import AddWidget from '@/components/widgets/AddWidget.vue';
 
-interface SelectedWidget {
-  name: string,
-  component: any,
-  widgetId: number,
-  availableAreas: number[],
-}
-
-interface SelectedWidgets {
-  [key: string]: SelectedWidget | null,
-}
+const ContactsWidgetComponent = ContactsWidget;
 
 const widgets = ref<SelectedWidget[]>([
   {
@@ -23,21 +19,27 @@ const widgets = ref<SelectedWidget[]>([
   },
   {
     widgetId: 2,
-    name: 'Widget2',
-    component: Widget1,
-    availableAreas: [1, 2]
+    name: 'Contacts',
+    component: ContactsWidgetComponent,
+    availableAreas: [1]
   },
   {
     widgetId: 3,
-    name: 'Widget3',
-    component: Widget1,
-    availableAreas: [1, 2, 3]
+    name: 'Notes',
+    component: NotesWidget,
+    availableAreas: [2, 3, 4, 5]
   },
   {
     widgetId: 4,
-    name: 'Widget4',
-    component: Widget1,
-    availableAreas: [3]
+    name: 'Remind',
+    component: RemindWidget,
+    availableAreas: [2, 3, 4, 5]
+  },
+  {
+    widgetId: 5,
+    name: 'Task',
+    component: TaskWidget,
+    availableAreas: [2, 3, 4, 5]
   }
 ])
 
@@ -46,7 +48,7 @@ const dialog = ref<boolean>(false);
 let availableWidgets = ref<any>(null);
 let actualSelectedWidget = ref<SelectedWidget | null>(null);
 let actualSelectedArea = ref<number | null>(null);
-
+let selectedIds = ref<any>([]);
 
 const selectComponent = (area: number) => {
   actualSelectedWidget.value = null;
@@ -58,43 +60,53 @@ const selectComponent = (area: number) => {
 
 const saveWidget = () => {
   (selectedWidgets.value as SelectedWidgets)['area' + actualSelectedArea.value] = actualSelectedWidget.value;
+  selectedIds.value.push(actualSelectedWidget.value?.widgetId);
+  localStorage.removeItem('vue-dashboard-widgets')
+  localStorage.setItem('vue-dashboard-widgets', JSON.stringify(selectedIds.value));
   dialog.value = false;
 }
+
+// onMounted(async () => {
+//   const data = localStorage.getItem('vue-dashboard-widgets');
+//   if (data) {
+//       selectedWidgets.value = widgets.value.filter()
+//   }
+// })
 
 </script>
 
 <template>
   <v-container fluid fill-height class="ma-0 pa-6">
     <v-row>
-      <v-col cols="4" style="border: 1px solid red;">
-        <add-widget @select-component="selectComponent(1)" v-if="!selectedWidgets?.area1">
-          Area 1
-        </add-widget>
-        <component v-if="selectedWidgets?.area1" :is="selectedWidgets?.area1?.component"></component>
+      <v-col cols="4">
+        <add-widget @select-component="selectComponent(1)" v-if="!selectedWidgets?.area1">Area 1</add-widget>
+        <component v-if="selectedWidgets?.area1" :is="{...selectedWidgets?.area1?.component}"
+          :data="selectedWidgets?.area1" />
       </v-col>
-      <v-col cols="8" style="border: 1px solid green;">
-        <v-row style="border: 1px solid orange;">
-          <v-col vols="6">
-            <add-widget @select-component="selectComponent(2)" v-if="!selectedWidgets?.area2">
-              Area 2
-            </add-widget>
+      <v-col cols="8">
+        <v-row>
+          <v-col cols="6">
+            <add-widget @select-component="selectComponent(2)" v-if="!selectedWidgets?.area2">Area 2</add-widget>
+            <component v-if="selectedWidgets?.area2" :is="{...selectedWidgets?.area2?.component}"
+              :data="selectedWidgets?.area2">
+            </component>
           </v-col>
-          <v-col vols="6">
-            <add-widget @select-component="selectComponent(3)" v-if="!selectedWidgets?.area3">
-              Area 3
-            </add-widget>
+          <v-col cols="6">
+            <add-widget @select-component="selectComponent(3)" v-if="!selectedWidgets?.area3">Area 3</add-widget>
+            <component v-if="selectedWidgets?.area3" :is="{...selectedWidgets?.area3?.component}"
+              :data="selectedWidgets?.area3"></component>
           </v-col>
         </v-row>
-        <v-row style="border: 1px solid orchid;">
-          <v-col vols="6">
-            <add-widget @select-component="selectComponent(4)" v-if="!selectedWidgets?.area4">
-              Area 4
-            </add-widget>
+        <v-row>
+          <v-col cols="6">
+            <add-widget @select-component="selectComponent(4)" v-if="!selectedWidgets?.area4">Area 4</add-widget>
+            <component v-if="selectedWidgets?.area4" :is="{...selectedWidgets?.area4?.component}"
+              :data="selectedWidgets?.area4"></component>
           </v-col>
-          <v-col vols="6">
-            <add-widget @select-component="selectComponent(4)" v-if="!selectedWidgets?.area5">
-              Area 5
-            </add-widget>
+          <v-col cols="6">
+            <add-widget @select-component="selectComponent(5)" v-if="!selectedWidgets?.area5">Area 5</add-widget>
+            <component v-if="selectedWidgets?.area5" :is="{...selectedWidgets?.area5?.component}"
+              :data="selectedWidgets?.area5"></component>
           </v-col>
         </v-row>
       </v-col>
@@ -117,21 +129,10 @@ const saveWidget = () => {
         </v-list>
       </v-card-item>
       <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
+        <v-btn variant="tonal" color="red" @click="dialog = false" type="button">Close</v-btn>
         <v-btn variant="tonal" color="primary" @click="saveWidget" type="button"
           v-if="actualSelectedWidget">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
-  <div class="dashboard-wrapper">
-
-  </div>
 </template>
-
-<style scoped>
-.dashboard-container {
-  width: 100%;
-  height: 100%;
-  border: 1px solid red;
-
-}
-</style>
