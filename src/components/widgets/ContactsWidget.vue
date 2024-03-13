@@ -5,7 +5,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-console.log(props.data);
+// console.log(props.data);
 </script>
 
 <template>

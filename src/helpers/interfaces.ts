@@ -8,3 +8,8 @@ export interface SelectedWidget {
 export interface SelectedWidgets {
     [key: string]: SelectedWidget | null,
   }
+
+export interface SavedWidget {
+  area: number,
+  id: number,
+}

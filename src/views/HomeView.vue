@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue';
-import type { SelectedWidget, SelectedWidgets } from '../helpers/interfaces';
+import { ref, onMounted, nextTick, onBeforeMount } from 'vue';
+import type { SelectedWidget, SelectedWidgets, SavedWidget } from '../helpers/interfaces';
 import Widget1 from '@/components/widgets/Widget1.vue';
 import ContactsWidget from '@/components/widgets/ContactsWidget.vue';
 import NotesWidget from '@/components/widgets/NotesWidget.vue';
@@ -48,31 +48,44 @@ const dialog = ref<boolean>(false);
 let availableWidgets = ref<any>(null);
 let actualSelectedWidget = ref<SelectedWidget | null>(null);
 let actualSelectedArea = ref<number | null>(null);
-let selectedIds = ref<any>([]);
+let savedWidgets = ref<any>([]);
 
 const selectComponent = (area: number) => {
   actualSelectedWidget.value = null;
   actualSelectedArea.value = area;
   dialog.value = true;
   availableWidgets = widgets.value.filter(el => el.availableAreas.includes(area));
-  console.log(availableWidgets);
 }
 
 const saveWidget = () => {
   (selectedWidgets.value as SelectedWidgets)['area' + actualSelectedArea.value] = actualSelectedWidget.value;
-  selectedIds.value.push(actualSelectedWidget.value?.widgetId);
+  savedWidgets.value.push(saveWidgetObj(actualSelectedArea.value, actualSelectedWidget.value?.widgetId));
+
   localStorage.removeItem('vue-dashboard-widgets')
-  localStorage.setItem('vue-dashboard-widgets', JSON.stringify(selectedIds.value));
+  localStorage.setItem('vue-dashboard-widgets', JSON.stringify(savedWidgets.value));
   dialog.value = false;
 }
 
-// onMounted(async () => {
-//   const data = localStorage.getItem('vue-dashboard-widgets');
-//   if (data) {
-//       selectedWidgets.value = widgets.value.filter()
-//   }
-// })
+const saveWidgetObj = (area?: number | null, widgetId?: number) => {
+  const obj = {
+    area: area,
+    id: widgetId,
+  }
 
+  return obj;
+}
+
+const getWidgets = () => {
+  const data = localStorage.getItem('vue-dashboard-widgets');
+  if (!data) return;
+
+  savedWidgets.value = JSON.parse(data);
+  savedWidgets.value.forEach((element: { id: number; area: string; }) => {
+    (selectedWidgets.value as any)['area' + element.area] = widgets.value.find(el => el.widgetId === element.id);
+  });
+}
+
+getWidgets()
 </script>
 
 <template>
@@ -87,7 +100,7 @@ const saveWidget = () => {
         <v-row>
           <v-col cols="6">
             <add-widget @select-component="selectComponent(2)" v-if="!selectedWidgets?.area2">Area 2</add-widget>
-            <component v-if="selectedWidgets?.area2" :is="{...selectedWidgets?.area2?.component}"
+            <component v-if="selectedWidgets?.area2" :is="selectedWidgets?.area2?.component"
               :data="selectedWidgets?.area2">
             </component>
           </v-col>
