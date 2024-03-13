@@ -61,8 +61,7 @@ const saveWidget = () => {
   (selectedWidgets.value as SelectedWidgets)['area' + actualSelectedArea.value] = actualSelectedWidget.value;
   savedWidgets.value.push(saveWidgetObj(actualSelectedArea.value, actualSelectedWidget.value?.widgetId));
 
-  localStorage.removeItem('vue-dashboard-widgets')
-  localStorage.setItem('vue-dashboard-widgets', JSON.stringify(savedWidgets.value));
+  saveToLS();
   dialog.value = false;
 }
 
@@ -73,6 +72,17 @@ const saveWidgetObj = (area?: number | null, widgetId?: number) => {
   }
 
   return obj;
+}
+
+const removeWidget = (area: number, id?: number): void => {
+  selectedWidgets.value = Object.fromEntries(Object.entries(selectedWidgets.value).filter(([key, value]) => Number(key.slice(-1)) != area));
+  savedWidgets.value = savedWidgets.value.filter((el: SavedWidget) => el.area != area);
+  saveToLS();
+}
+
+const saveToLS = (): void => {
+  localStorage.removeItem('vue-dashboard-widgets');
+  localStorage.setItem('vue-dashboard-widgets', JSON.stringify(savedWidgets.value));
 }
 
 const getWidgets = () => {
@@ -94,32 +104,32 @@ getWidgets()
       <v-col cols="4">
         <add-widget @select-component="selectComponent(1)" v-if="!selectedWidgets?.area1">Area 1</add-widget>
         <component v-if="selectedWidgets?.area1" :is="{...selectedWidgets?.area1?.component}"
-          :data="selectedWidgets?.area1" />
+          :data="selectedWidgets?.area1" @remove-widget="removeWidget(1, $event)" />
       </v-col>
       <v-col cols="8">
         <v-row>
           <v-col cols="6">
             <add-widget @select-component="selectComponent(2)" v-if="!selectedWidgets?.area2">Area 2</add-widget>
-            <component v-if="selectedWidgets?.area2" :is="selectedWidgets?.area2?.component"
-              :data="selectedWidgets?.area2">
+            <component v-if="selectedWidgets?.area2" :is="{...selectedWidgets?.area2?.component}"
+              :data="selectedWidgets?.area2" @remove-widget="removeWidget(2, $event)">
             </component>
           </v-col>
           <v-col cols="6">
             <add-widget @select-component="selectComponent(3)" v-if="!selectedWidgets?.area3">Area 3</add-widget>
             <component v-if="selectedWidgets?.area3" :is="{...selectedWidgets?.area3?.component}"
-              :data="selectedWidgets?.area3"></component>
+              :data="selectedWidgets?.area3" @remove-widget="removeWidget(3, $event)"></component>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="6">
             <add-widget @select-component="selectComponent(4)" v-if="!selectedWidgets?.area4">Area 4</add-widget>
             <component v-if="selectedWidgets?.area4" :is="{...selectedWidgets?.area4?.component}"
-              :data="selectedWidgets?.area4"></component>
+              :data="selectedWidgets?.area4" @remove-widget="removeWidget(4, $event)"></component>
           </v-col>
           <v-col cols="6">
             <add-widget @select-component="selectComponent(5)" v-if="!selectedWidgets?.area5">Area 5</add-widget>
             <component v-if="selectedWidgets?.area5" :is="{...selectedWidgets?.area5?.component}"
-              :data="selectedWidgets?.area5"></component>
+              :data="selectedWidgets?.area5" @remove-widget="removeWidget(5, $event)"></component>
           </v-col>
         </v-row>
       </v-col>

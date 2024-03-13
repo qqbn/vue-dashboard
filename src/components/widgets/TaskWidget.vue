@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import type { SelectedWidget } from '@/helpers/interfaces';
+import RemoveWidget from './RemoveWidget.vue';
 interface Props {
     data?: SelectedWidget,
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits(['removeWidget'])
 </script>
 
 <template>
-    <v-btn class="ma-2" color="primary" icon="mdi-delete-circle" @click="$emit('removeComponent', data?.widgetId)"
-        size="x-small">
-    </v-btn>
+    <remove-widget @remove-widget="emit('removeWidget', props.data?.widgetId)" />
     <v-card class="pa-2 mb-2">
         <v-card-title>Task Title</v-card-title>
         <v-card-text class="task-widget-text">
