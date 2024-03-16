@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, onBeforeMount } from 'vue';
-import type { SelectedWidget, SelectedWidgets, SavedWidget } from '../helpers/interfaces';
+import { type SelectedWidget, type SelectedWidgets, type SavedWidget, ModalType } from '../helpers/interfaces';
 import Widget1 from '@/components/widgets/Widget1.vue';
 import ContactsWidget from '@/components/widgets/ContactsWidget.vue';
 import NotesWidget from '@/components/widgets/NotesWidget.vue';
@@ -45,16 +45,18 @@ const widgets = ref<SelectedWidget[]>([
 
 let selectedWidgets = ref<SelectedWidgets | {}>({});
 const dialog = ref<boolean>(false);
-let availableWidgets = ref<any>(null);
-let actualSelectedWidget = ref<SelectedWidget | null>(null);
-let actualSelectedArea = ref<number | null>(null);
-let savedWidgets = ref<any>([]);
+const availableWidgets = ref<any>(null);
+const actualSelectedWidget = ref<SelectedWidget | null>(null);
+const actualSelectedArea = ref<number | null>(null);
+const savedWidgets = ref<any>([]);
+const modalType = ref<string>('');
 
 const selectComponent = (area: number) => {
   actualSelectedWidget.value = null;
   actualSelectedArea.value = area;
   dialog.value = true;
-  availableWidgets = widgets.value.filter(el => el.availableAreas.includes(area));
+  availableWidgets.value = widgets.value.filter(el => el.availableAreas.includes(area));
+  modalType.value = ModalType.add;
 }
 
 const saveWidget = () => {
@@ -74,10 +76,19 @@ const saveWidgetObj = (area?: number | null, widgetId?: number) => {
   return obj;
 }
 
-const removeWidget = (area: number, id?: number): void => {
-  selectedWidgets.value = Object.fromEntries(Object.entries(selectedWidgets.value).filter(([key, value]) => Number(key.slice(-1)) != area));
-  savedWidgets.value = savedWidgets.value.filter((el: SavedWidget) => el.area != area);
+const handleRemoveWidget = (area: number, id?: number): void => {
+  dialog.value = true;
+  modalType.value = ModalType.remove;
+  const tmp = widgets.value.filter(el => el.widgetId === id);
+  actualSelectedWidget.value = tmp[0];
+  actualSelectedArea.value = area;
+}
+
+const removeWidget = (): void => {
+  selectedWidgets.value = Object.fromEntries(Object.entries(selectedWidgets.value).filter(([key, value]) => Number(key.slice(-1)) != actualSelectedArea.value));
+  savedWidgets.value = savedWidgets.value.filter((el: SavedWidget) => el.area != actualSelectedArea.value);
   saveToLS();
+  dialog.value = false;
 }
 
 const saveToLS = (): void => {
@@ -104,32 +115,32 @@ getWidgets()
       <v-col cols="4">
         <add-widget @select-component="selectComponent(1)" v-if="!selectedWidgets?.area1">Area 1</add-widget>
         <component v-if="selectedWidgets?.area1" :is="{...selectedWidgets?.area1?.component}"
-          :data="selectedWidgets?.area1" @remove-widget="removeWidget(1, $event)" />
+          :data="selectedWidgets?.area1" @remove-widget="handleRemoveWidget(1, $event)" />
       </v-col>
       <v-col cols="8">
         <v-row>
           <v-col cols="6">
             <add-widget @select-component="selectComponent(2)" v-if="!selectedWidgets?.area2">Area 2</add-widget>
             <component v-if="selectedWidgets?.area2" :is="{...selectedWidgets?.area2?.component}"
-              :data="selectedWidgets?.area2" @remove-widget="removeWidget(2, $event)">
+              :data="selectedWidgets?.area2" @remove-widget="handleRemoveWidget(2, $event)">
             </component>
           </v-col>
           <v-col cols="6">
             <add-widget @select-component="selectComponent(3)" v-if="!selectedWidgets?.area3">Area 3</add-widget>
             <component v-if="selectedWidgets?.area3" :is="{...selectedWidgets?.area3?.component}"
-              :data="selectedWidgets?.area3" @remove-widget="removeWidget(3, $event)"></component>
+              :data="selectedWidgets?.area3" @remove-widget="handleRemoveWidget(3, $event)"></component>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="6">
             <add-widget @select-component="selectComponent(4)" v-if="!selectedWidgets?.area4">Area 4</add-widget>
             <component v-if="selectedWidgets?.area4" :is="{...selectedWidgets?.area4?.component}"
-              :data="selectedWidgets?.area4" @remove-widget="removeWidget(4, $event)"></component>
+              :data="selectedWidgets?.area4" @remove-widget="handleRemoveWidget(4, $event)"></component>
           </v-col>
           <v-col cols="6">
             <add-widget @select-component="selectComponent(5)" v-if="!selectedWidgets?.area5">Area 5</add-widget>
             <component v-if="selectedWidgets?.area5" :is="{...selectedWidgets?.area5?.component}"
-              :data="selectedWidgets?.area5" @remove-widget="removeWidget(5, $event)"></component>
+              :data="selectedWidgets?.area5" @remove-widget="handleRemoveWidget(5, $event)"></component>
           </v-col>
         </v-row>
       </v-col>
@@ -137,7 +148,7 @@ getWidgets()
   </v-container>
 
   <v-dialog v-model="dialog" width="500">
-    <v-card class="px-6 py-4">
+    <v-card class="px-6 py-4" v-if="modalType === ModalType.add">
       <v-card-title>
         Select widget for Area{{ actualSelectedArea }}
       </v-card-title>
@@ -155,6 +166,15 @@ getWidgets()
         <v-btn variant="tonal" color="red" @click="dialog = false" type="button">Close</v-btn>
         <v-btn variant="tonal" color="primary" @click="saveWidget" type="button"
           v-if="actualSelectedWidget">Save</v-btn>
+      </v-card-actions>
+    </v-card>
+    <v-card class="px-6 py-4" v-if="modalType === ModalType.remove">
+      <v-card-title class="text-wrap">
+        Do you want to remove {{ actualSelectedWidget?.name }} from Area{{ actualSelectedArea }}?
+      </v-card-title>
+      <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
+        <v-btn variant="tonal" color="red" @click="dialog = false" type="button">No</v-btn>
+        <v-btn variant="tonal" color="primary" @click="removeWidget" type="button">Remove</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

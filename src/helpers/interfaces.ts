@@ -13,3 +13,8 @@ export interface SavedWidget {
   area: number,
   id: number,
 }
+
+export enum ModalType {
+  add = "ADD",
+  remove = "REMOVE"
+}
