@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import type { SelectedWidget } from '@/helpers/interfaces';
+import type { WidgetProps } from '@/helpers/interfaces';
 import RemoveWidget from './RemoveWidget.vue';
-interface Props {
-    data?: SelectedWidget,
-}
 
-const props = defineProps<Props>()
+const props = defineProps<WidgetProps>()
 const emit = defineEmits(['removeWidget'])
 </script>
 
