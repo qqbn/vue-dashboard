@@ -16,7 +16,7 @@ const widgets = ref<SelectedWidget[]>([
     widgetId: 1,
     name: 'Expenses',
     component: ExpensesWidget,
-    availableAreas: [1, 2, 3]
+    availableAreas: [1, 2, 3, 4, 5, 6]
   },
   {
     widgetId: 2,

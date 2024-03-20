@@ -19,6 +19,11 @@ export interface WidgetProps {
   area: number,
 }
 
+export interface ChartProps {
+  value: number[],
+  selectedTime?: string | null 
+}
+
 export enum ModalType {
   add = "ADD",
   remove = "REMOVE"
