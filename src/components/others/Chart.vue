@@ -3,7 +3,6 @@ import type { ChartProps } from "../../helpers/interfaces";
 const props = defineProps<ChartProps>()
 </script>
 <template>
-    {{ value }}
     <v-card class="mx-auto text-center" color="primary" dark max-width="1000">
         <v-card-text>
             <v-sheet color="rgba(0, 0, 0, .12)">
