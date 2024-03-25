@@ -2,6 +2,14 @@
 import { ref } from 'vue';
 const dialog = ref<boolean>(false);
 const date = null;
+const typeItems = [
+    { id: 1, name: 'Bills' },
+    { id: 2, name: 'Food' },
+    { id: 3, name: 'Shopping' },
+    { id: 4, name: 'Outside' },
+    { id: 5, name: 'Others' }
+]
+const selectedType = ref<[] | null>(null);
 </script>
 <template>
     <v-btn color="primary" @click="dialog = true">
@@ -17,7 +25,8 @@ const date = null;
                 <v-form @submit.prevent>
                     <v-text-field label="Expense Title" type="input"></v-text-field>
                     <v-text-field label="Expense Value" type="number"></v-text-field>
-                    <v-select label="Type of expense" :items="['Bills', 'Food', 'Shopping', 'Outsie', 'Others']"></v-select>
+                    <v-select label="Type of expense" :items="typeItems" v-model="selectedType" item-title="name"
+                        item-value="id"></v-select>
                     <VueDatePicker v-model="date" inline auto-apply></VueDatePicker>
                 </v-form>
             </v-card-text>
