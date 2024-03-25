@@ -5,7 +5,7 @@ import RemoveWidget from './RemoveWidget.vue';
 import Chart from '../others/Chart.vue';
 
 const props = defineProps<WidgetProps>()
-console.log(props.area);
+
 const emit = defineEmits(['removeWidget'])
 const value = [
     423,

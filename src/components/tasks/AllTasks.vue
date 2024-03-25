@@ -1,9 +1,5 @@
-
-import type { blob } from 'stream/consumers';
 <script lang="ts" setup>
 import { ref } from 'vue';
-const dialog = ref<boolean>(false);
-const date = null;
 const taskDone = ref<boolean>(false);
 const setTaskDone = (): void => {
     taskDone.value = !taskDone.value;
@@ -21,7 +17,8 @@ const setTaskDone = (): void => {
                     Lorem ipsum dolor sit amet, consectetur
                     adipiscing
                     elit. Fusce gravida tellus at elit interdum, malesuada
-                    efficitur ipsum eleifend. Aenean tristique hendrerit arcu. Curabitur et augueLorem ipsum dolor sit amet,
+                    efficitur ipsum eleifend. Aenean tristique hendrerit arcu. Curabitur et augueLorem ipsum dolor sit
+                    amet,
                     consectetur adipiscing elit. Fusce gravida tellus at elit interdum, malesuada
                     efficitur ipsum eleifend.
                 </p>
