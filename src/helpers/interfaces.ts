@@ -24,6 +24,13 @@ export interface ChartProps {
   selectedTime?: string | null 
 }
 
+export interface NoteData {
+  title: string;
+  date: any;
+  note: string;
+  isImportant: boolean;
+}
+
 export enum ModalType {
   add = "ADD",
   remove = "REMOVE"
