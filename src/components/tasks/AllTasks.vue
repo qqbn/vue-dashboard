@@ -1,9 +1,6 @@
 <script lang="ts" setup>
+import TaskCard from '../tasks/TaskCard.vue';
 import { ref } from 'vue';
-const taskDone = ref<boolean>(false);
-const setTaskDone = (): void => {
-    taskDone.value = !taskDone.value;
-}
 </script>
 <template>
     <v-card class="pa-4">
@@ -11,24 +8,7 @@ const setTaskDone = (): void => {
         <v-card-subtitle><v-switch label="Only done tasks" color="primary"></v-switch></v-card-subtitle>
         <div v-for="(n, index) in 5" :key="n">
             <v-divider></v-divider>
-            <div class="d-flex justify-space-between align-flex-start single-task mt-2 mb-2">
-                <p :style="taskDone ? 'text-decoration: line-through;' : ''" class="mr-2">
-                    {{ index + 1 }}.
-                    Lorem ipsum dolor sit amet, consectetur
-                    adipiscing
-                    elit. Fusce gravida tellus at elit interdum, malesuada
-                    efficitur ipsum eleifend. Aenean tristique hendrerit arcu. Curabitur et augueLorem ipsum dolor sit
-                    amet,
-                    consectetur adipiscing elit. Fusce gravida tellus at elit interdum, malesuada
-                    efficitur ipsum eleifend.
-                </p>
-                <div class="icon-box">
-                    <v-btn variant="tonal" color="primary" type="button" icon="mdi-check-circle-outline" size="small"
-                        @click="setTaskDone"></v-btn>
-                    <v-btn variant="tonal" color="primary" type="button" icon="mdi-notebook-edit" size="small"></v-btn>
-                    <v-btn variant="tonal" color="primary" type="button" icon="mdi-bucket-outline" size="small"></v-btn>
-                </div>
-            </div>
+            <taskCard :index="index" />
             <v-divider></v-divider>
         </div>
     </v-card>

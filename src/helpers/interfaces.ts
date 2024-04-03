@@ -31,6 +31,24 @@ export interface NoteData {
   isImportant: boolean;
 }
 
+export interface TaskData {
+  task: string;
+  isDone: boolean;
+  index?: number;
+}
+
+export interface RemindData {
+  name: string,
+  date: any,
+}
+
+export interface ContactData {
+  firstName: string,
+  lastName: string,
+  phoneNumber: string,
+  eMail: string,
+}
+
 export enum ModalType {
   add = "ADD",
   remove = "REMOVE"

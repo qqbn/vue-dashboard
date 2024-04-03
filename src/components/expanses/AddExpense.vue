@@ -22,13 +22,11 @@ const selectedType = ref<[] | null>(null);
                 Add new expense
             </v-card-title>
             <v-card-text>
-                <v-form @submit.prevent>
-                    <v-text-field label="Expense Title" type="input"></v-text-field>
-                    <v-text-field label="Expense Value" type="number"></v-text-field>
-                    <v-select label="Type of expense" :items="typeItems" v-model="selectedType" item-title="name"
-                        item-value="id"></v-select>
-                    <VueDatePicker v-model="date" inline auto-apply></VueDatePicker>
-                </v-form>
+                <v-text-field label="Expense Title" type="input"></v-text-field>
+                <v-text-field label="Expense Value" type="number"></v-text-field>
+                <v-select label="Type of expense" :items="typeItems" v-model="selectedType" item-title="name"
+                    item-value="id"></v-select>
+                <VueDatePicker v-model="date" inline auto-apply></VueDatePicker>
             </v-card-text>
             <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                 <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
