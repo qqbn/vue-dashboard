@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { typeItems, timeItems } from '@/helpers/constants.js';
 import Chart from '../others/Chart.vue';
 const value = [
     423,
@@ -10,37 +11,38 @@ const value = [
     610,
     760,
 ];
-const typeItems = [
-    { id: 1, name: 'Bills' },
-    { id: 2, name: 'Food' },
-    { id: 3, name: 'Shopping' },
-    { id: 4, name: 'Outside' },
-    { id: 5, name: 'Others' }
-]
 
-const timeItems = [
-    {
-        id: 1,
-        name: 'Today'
-    },
-    {
-        id: 2,
-        name: 'Week'
-    },
-    {
-        id: 3,
-        name: 'Month'
-    },
-    {
-        id: 4,
-        name: 'Year'
-    }
-]
 const selectedType = ref<[] | null>(null);
 const selectedTime = ref<number>(1);
 const selectedTimeName = computed(() => {
-    return timeItems.find(el => el.id === selectedTime.value)?.name;
+    return timeItems.find((el: any) => el.id === selectedTime.value)?.name;
 })
+
+const getExpenseType = (val: number): string => {
+    const type = typeItems.find((el: any) => el.id === val)?.name;
+    return type ? type : 'Others';
+}
+
+const expenses = [
+    {
+        title: 'Test expense',
+        expenseValue: 599,
+        type: 1,
+        date: '12/12/2024'
+    },
+    {
+        title: 'Test expense2',
+        expenseValue: 333,
+        type: 1,
+        date: '11/11/2024'
+    },
+    {
+        title: 'Test expense3',
+        expenseValue: 1000,
+        type: 2,
+        date: '12/12/2024'
+    },
+]
 
 </script>
 <template>
@@ -51,6 +53,28 @@ const selectedTimeName = computed(() => {
         <v-select label="Period of time" :items="timeItems" chips class="pa-2 w-100" v-model="selectedTime"
             item-title="name" item-value="id"></v-select>
     </div>
-    <chart :value="value" :selected-time="selectedTimeName" />
+    <v-row>
+        <v-col cols="2" xl="2" lg="2" md="2" sm="12" xs="12">
+            <v-list>
+                <v-list-subheader>Expenses list:</v-list-subheader>
+                <v-list-item v-for="expense in expenses" :key="expense.type">
+                    <v-list-item-title>
+                        {{ expense.title }}
+                    </v-list-item-title>
+                    <v-divider></v-divider>
+                    <v-list-item-subtitle>
+                        {{ expense.expenseValue + '$' }}
+                    </v-list-item-subtitle>
+                    <v-divider></v-divider>
+                    <v-list-item-subtitle>
+                        {{ expense.date }} {{ getExpenseType(expense.type) }}
+                    </v-list-item-subtitle>
+                </v-list-item>
+            </v-list>
+        </v-col>
+        <v-col cols="8" xl="8" lg="8" md="8" sm="12" xs="12">
+            <chart :value="value" :selected-time="selectedTimeName" />
+        </v-col>
+    </v-row>
 </template>
 <style scoped></style>
