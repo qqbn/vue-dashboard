@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import RemoveItem from '@/components/others/RemoveItem.vue';
 import { ref } from 'vue';
 
 const rail = ref<boolean>(true);
@@ -57,6 +58,7 @@ const drawer = ref<boolean>(true);
       <RouterView />
     </v-main>
   </v-layout>
+  <RemoveItem />
 </template>
 
 <style scoped>

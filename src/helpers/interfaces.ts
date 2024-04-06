@@ -49,6 +49,12 @@ export interface ContactData {
   eMail: string,
 }
 
+export interface RemoveData {
+  id: number | null,
+  type: number | null,
+  endpoint: string,
+}
+
 export enum ModalType {
   add = "ADD",
   remove = "REMOVE"
