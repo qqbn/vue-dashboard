@@ -14,8 +14,7 @@ export const useRemoveStore = defineStore('remove', () => {
         isRemoving.value = val;
         removingData.value.id = data.id;
         removingData.value.type = data.type
-        removingData.value.endpoint = getEndpoint(data.type);
-        console.log(removingData.value);
+        removingData.value.endpoint = getEndpoint(data.type) + '/' + data.id;
     }
 
     function getEndpoint(type: number): string {

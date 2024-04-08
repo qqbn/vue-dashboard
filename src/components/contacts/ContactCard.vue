@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useContactsStore } from '@/stores/contacts';
+import { useRemoveStore } from '@/stores/remove';
+
 const store = useContactsStore();
+const removeStore = useRemoveStore();
 
 const firstName = ref<string>('Sandra')
 const lastName = ref<string>('Adams')
@@ -27,7 +30,8 @@ const handleEdit = () => {
         <v-card-actions> <v-btn variant="tonal" color="primary" size="x-small">Send email</v-btn>
         </v-card-actions>
         <v-card-action class="mt-4 d-flex align-center justify-end">
-            <v-btn variant="tonal" color="red" append-icon="mdi-bucket-outline" class="mr-2">Delete</v-btn>
+            <v-btn variant="tonal" color="red" append-icon="mdi-bucket-outline" class="mr-2"
+                @click="removeStore.removeItem(true, { id: 4, type: 1 })">Delete</v-btn>
             <v-btn variant="tonal" color="primary" append-icon="mdi-human-edit" @click="handleEdit">Edit</v-btn>
         </v-card-action>
     </v-card>

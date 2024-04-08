@@ -2,8 +2,10 @@
 import { ref } from 'vue';
 import type { TaskData } from '../../helpers/interfaces';
 import { useTasksStore } from '@/stores/tasks';
+import { useRemoveStore } from '@/stores/remove';
 
 const store = useTasksStore();
+const removeStore = useRemoveStore();
 const props = defineProps<TaskData>();
 
 const isDone = ref<boolean>(false);
@@ -33,7 +35,8 @@ const handleEditTask = (): void => {
                 @click="setTaskDone"></v-btn>
             <v-btn variant="tonal" color="primary" type="button" icon="mdi-notebook-edit" size="small"
                 @click="handleEditTask"></v-btn>
-            <v-btn variant="tonal" color="primary" type="button" icon="mdi-bucket-outline" size="small"></v-btn>
+            <v-btn variant="tonal" color="primary" type="button" icon="mdi-bucket-outline" size="small"
+                @click="removeStore.removeItem(true, { id: 3, type: 5 })"></v-btn>
         </div>
     </div>
 </template>

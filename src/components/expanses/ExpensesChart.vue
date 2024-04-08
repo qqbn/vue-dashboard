@@ -2,6 +2,8 @@
 import { ref, computed } from 'vue';
 import { typeItems, timeItems } from '@/helpers/constants.js';
 import Chart from '../others/Chart.vue';
+import { useRemoveStore } from '@/stores/remove';
+const removeStore = useRemoveStore();
 const value = [
     423,
     446,
@@ -54,12 +56,17 @@ const expenses = [
             item-title="name" item-value="id"></v-select>
     </div>
     <v-row>
-        <v-col cols="2" xl="2" lg="2" md="2" sm="12" xs="12">
+        <v-col cols="8" xl="8" lg="8" md="12" sm="12" xs="12">
+            <chart :value="value" :selected-time="selectedTimeName" />
+        </v-col>
+        <v-col cols="3" xl="3" lg="3" md="12" sm="12" xs="12">
             <v-list>
                 <v-list-subheader>Expenses list:</v-list-subheader>
                 <v-list-item v-for="expense in expenses" :key="expense.type">
-                    <v-list-item-title>
-                        {{ expense.title }}
+                    <v-list-item-title class="d-flex justify-space-between">
+                        <span>{{ expense.title }}</span>
+                        <v-btn class="ml-2" icon="mdi-bucket-outline" color="primary" variant="tonal" size="x-small"
+                            @click="removeStore.removeItem(true, { id: 5, type: 4 })"></v-btn>
                     </v-list-item-title>
                     <v-divider></v-divider>
                     <v-list-item-subtitle>
@@ -71,9 +78,6 @@ const expenses = [
                     </v-list-item-subtitle>
                 </v-list-item>
             </v-list>
-        </v-col>
-        <v-col cols="8" xl="8" lg="8" md="8" sm="12" xs="12">
-            <chart :value="value" :selected-time="selectedTimeName" />
         </v-col>
     </v-row>
 </template>

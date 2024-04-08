@@ -18,7 +18,7 @@ const handleEditNote = () => {
 const handleRemoveNote = () => {
     const obj = {
         id: 1,
-        type: 1,
+        type: 3,
 
     }
 

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useEditNoteStore } from '@/stores/editNote';
+import { useRemoveStore } from '@/stores/remove';
 const store = useEditNoteStore();
+const removeStore = useRemoveStore();
 
 const title = ref<string>('Note Title')
 const date = ref<any>('Date: 12-12-2024')
@@ -26,7 +28,8 @@ const handleEditNote = () => {
         <v-card-subtitle>{{ date }}</v-card-subtitle>
         <v-card-text>{{ note }}</v-card-text>
         <v-card-action class="mt-4 d-flex align-center justify-end">
-            <v-btn variant="tonal" color="red" append-icon="mdi-bucket-outline" class="mr-2">Delete</v-btn>
+            <v-btn variant="tonal" color="red" append-icon="mdi-bucket-outline" class="mr-2"
+                @click="removeStore.removeItem(true, { id: 2, type: 2 })">Delete</v-btn>
             <v-btn variant="tonal" color="primary" append-icon="mdi-file-edit-outline" @click="handleEditNote">Edit
                 note</v-btn>
         </v-card-action>
