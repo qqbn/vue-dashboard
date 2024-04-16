@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const remindsController = require('../controllers/remindsController');
 
-router.get('/', (req, res) => {
-    res.send('reminds route');
-})
+router.get('/', remindsController.getReminds);
 
 
 module.exports = router;

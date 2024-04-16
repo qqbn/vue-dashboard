@@ -1,5 +1,5 @@
 
-exports.getTasksService = async (data) => {
+exports.getTasksAll = async (data) => {
     
     return 'tasks service';
 }
