@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, onBeforeMount } from 'vue';
 import { type SelectedWidget, type SelectedWidgets, type SavedWidget, ModalType } from '../helpers/interfaces';
-import Widget1 from '@/components/widgets/Widget1.vue';
 import ContactsWidget from '@/components/widgets/ContactsWidget.vue';
 import NotesWidget from '@/components/widgets/NotesWidget.vue';
 import RemindWidget from '@/components/widgets/RemindWidget.vue';
@@ -115,32 +114,32 @@ getWidgets()
     <v-row>
       <v-col cols="4">
         <add-widget @select-component="selectComponent(1)" v-if="!selectedWidgets?.area1">Area 1</add-widget>
-        <component v-if="selectedWidgets?.area1" :is="{...selectedWidgets?.area1?.component}"
+        <component v-if="selectedWidgets?.area1" :is="{ ...selectedWidgets?.area1?.component }"
           :data="selectedWidgets?.area1" :area="1" @remove-widget="handleRemoveWidget(1, $event)" />
       </v-col>
       <v-col cols="8">
         <v-row>
           <v-col cols="6">
             <add-widget @select-component="selectComponent(2)" v-if="!selectedWidgets?.area2">Area 2</add-widget>
-            <component v-if="selectedWidgets?.area2" :is="{...selectedWidgets?.area2?.component}"
+            <component v-if="selectedWidgets?.area2" :is="{ ...selectedWidgets?.area2?.component }"
               :data="selectedWidgets?.area2" :area="2" @remove-widget="handleRemoveWidget(2, $event)">
             </component>
           </v-col>
           <v-col cols="6">
             <add-widget @select-component="selectComponent(3)" v-if="!selectedWidgets?.area3">Area 3</add-widget>
-            <component v-if="selectedWidgets?.area3" :is="{...selectedWidgets?.area3?.component}"
+            <component v-if="selectedWidgets?.area3" :is="{ ...selectedWidgets?.area3?.component }"
               :data="selectedWidgets?.area3" :area="3" @remove-widget="handleRemoveWidget(3, $event)"></component>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="6">
             <add-widget @select-component="selectComponent(4)" v-if="!selectedWidgets?.area4">Area 4</add-widget>
-            <component v-if="selectedWidgets?.area4" :is="{...selectedWidgets?.area4?.component}"
+            <component v-if="selectedWidgets?.area4" :is="{ ...selectedWidgets?.area4?.component }"
               :data="selectedWidgets?.area4" :area="4" @remove-widget="handleRemoveWidget(4, $event)"></component>
           </v-col>
           <v-col cols="6">
             <add-widget @select-component="selectComponent(5)" v-if="!selectedWidgets?.area5">Area 5</add-widget>
-            <component v-if="selectedWidgets?.area5" :is="{...selectedWidgets?.area5?.component}"
+            <component v-if="selectedWidgets?.area5" :is="{ ...selectedWidgets?.area5?.component }"
               :data="selectedWidgets?.area5" :area="5" @remove-widget="handleRemoveWidget(5, $event)"></component>
           </v-col>
         </v-row>

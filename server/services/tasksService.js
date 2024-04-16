@@ -1,5 +1,6 @@
+const taskModel = require('../models/taskModel');
 
 exports.getTasksAll = async (data) => {
-    
-    return 'tasks service';
+    const results = await taskModel.getAllTasks();
+    return results;
 }
