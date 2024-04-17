@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { error } = require('console');
 
 const prisma = new PrismaClient()
 
@@ -8,7 +9,21 @@ const getAllTasks = async () => {
     return tasks;
 }
 
+const setTaskDone = async (id, isDone) => {
+    const doneTask = await prisma.tasks.update({
+        where: {
+            id: id,
+        },
+        data: {
+            done: isDone,
+        }
+    })
+    
+    return doneTask;
+}
+
 
 module.exports = {
     getAllTasks,
+    setTaskDone
 }
