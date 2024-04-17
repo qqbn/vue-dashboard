@@ -1,4 +1,6 @@
+const taskModel = require('../models/remindsModel');
+
 exports.getRemindsAll = async (data) => {
-    
-    return 'reminds service';
+    const results = await taskModel.getAllReminds();
+    return results;
 }

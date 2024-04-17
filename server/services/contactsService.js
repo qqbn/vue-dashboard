@@ -1,4 +1,6 @@
-exports.getContactsAll = async (data) => {
+const contactsModel = require('../models/contactsModel');
 
-    return 'contacts service';
+exports.getContactsAll = async (data) => {
+    const results = await contactsModel.getAllContacts();
+    return results;
 }

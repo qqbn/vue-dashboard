@@ -1,3 +1,6 @@
+const notesModel = require('../models/notesModel');
+
 exports.getNotesAll = async (data) => {
-    return 'notes services';
+    const results = await notesModel.getAllNotes();
+    return results;
 }

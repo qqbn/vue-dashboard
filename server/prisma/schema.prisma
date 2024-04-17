@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model contacts {
+  id           Int     @id @default(autoincrement())
+  first_name   String? @db.VarChar(255)
+  last_name    String? @db.VarChar(255)
+  phone_number String? @db.VarChar(255)
+  email        String? @db.VarChar(255)
+  avatar       Int?
+}
+
+model expenses {
+  id    Int       @id @default(autoincrement())
+  title String    @db.VarChar(255)
+  value Int?
+  type  Int?
+  date  DateTime? @db.DateTime(0)
+}
+
+model notes {
+  id        Int      @id @default(autoincrement())
+  title     String?  @db.VarChar(255)
+  content   String?  @db.VarChar(255)
+  important Boolean?
+}
+
+model reminds {
+  id   Int       @id @default(autoincrement())
+  name String?   @db.VarChar(255)
+  date DateTime? @db.DateTime(0)
+}
+
+model tasks {
+  id      Int      @id @default(autoincrement())
+  content String?  @db.VarChar(255)
+  done    Boolean?
+}

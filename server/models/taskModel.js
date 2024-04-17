@@ -1,8 +1,11 @@
-const db = require('../db_config');
+const { PrismaClient } = require('@prisma/client');
+
+const prisma = new PrismaClient()
 
 
 const getAllTasks = async () => {
-    return await db.query('SELECT * FROM tasks');
+    const tasks = await prisma.tasks.findMany();
+    return tasks;
 }
 
 
