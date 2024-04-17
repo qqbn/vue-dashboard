@@ -3,13 +3,18 @@ import { ref } from 'vue';
 import type { TaskData } from '../../helpers/interfaces';
 import { useTasksStore } from '@/stores/tasks';
 import { useRemoveStore } from '@/stores/remove';
+import axios from 'axios';
+import { apiUrl } from '@/helpers/constants';
 
 const store = useTasksStore();
 const removeStore = useRemoveStore();
-const props = defineProps<TaskData>();
+const props = defineProps<{
+    task: TaskData,
+    index: number,
+}>();
 
-const isDone = ref<boolean>(false);
-const task = ref<string>('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce gravida tellus at elit interdum, malesuada efficitur ipsum eleifend. Aenean tristique hendrerit arcu. Curabitur et augueLorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce gravida tellus at elit interdum, malesuada efficitur ipsum eleifend.');
+const isDone = ref<boolean>(props.task.done);
+const task = ref<string>(props.task.content);
 
 const setTaskDone = (): void => {
     isDone.value = !isDone.value;
@@ -17,9 +22,11 @@ const setTaskDone = (): void => {
 
 const handleEditTask = (): void => {
     const obj = {
-        task: task.value,
-        isDone: isDone.value,
+        content: task.value,
+        done: isDone.value,
     }
+
+    console.log(obj);
 
     store.changeIsEditing(true, obj);
 }
@@ -27,8 +34,8 @@ const handleEditTask = (): void => {
 <template>
     <div class="d-flex justify-space-between align-flex-start single-task mt-2 mb-2">
         <p :style="isDone ? 'text-decoration: line-through;' : ''" class="mr-2">
-            <span v-if="(index + 1)">{{ index + 1 }}.</span>
-            {{ task }}
+            <span>{{ index + 1 }}.</span>
+            {{ props.task.content }}
         </p>
         <div class="icon-box">
             <v-btn variant="tonal" color="primary" type="button" icon="mdi-check-circle-outline" size="small"

@@ -32,8 +32,9 @@ export interface NoteData {
 }
 
 export interface TaskData {
-  task: string;
-  isDone: boolean;
+  id?: number,
+  content: string;
+  done: boolean;
   index?: number;
 }
 

@@ -7,8 +7,8 @@ const store = useTasksStore();
 const { isEditing } = storeToRefs(store);
 
 const dialog = ref<boolean>(false);
-const task = ref<string>('');
-const isDone = ref<boolean>(false);
+const content = ref<string>('');
+const done = ref<boolean>(false);
 const modalTitle = computed(() => store.isEditing ? 'Edit task' : 'Add new task')
 
 const handleEdit = (): void => {
@@ -17,8 +17,8 @@ const handleEdit = (): void => {
 
 const showModal = (): void => {
     dialog.value = !dialog.value;
-    task.value = '';
-    isDone.value = false;
+    content.value = '';
+    done.value = false;
 }
 
 watch(dialog, () => {
@@ -32,8 +32,8 @@ watch(isEditing, () => {
     if (!isEditing.value) return;
 
     dialog.value = true;
-    task.value = store.editingData.task;
-    isDone.value = store.editingData.isDone;
+    content.value = store.editingData.content;
+    done.value = store.editingData.done;
 })
 </script>
 <template>
@@ -45,8 +45,8 @@ watch(isEditing, () => {
         <v-card class="px-6 py-4">
             <v-card-title>{{ modalTitle }}</v-card-title>
             <v-card-text>
-                <v-checkbox label="Task done" color="primary" v-model="isDone" v-if="store.isEditing"></v-checkbox>
-                <v-textarea clearable label="Task content" variant="solo-filled" v-model="task"></v-textarea>
+                <v-checkbox label="Task done" color="primary" v-model="done" v-if="store.isEditing"></v-checkbox>
+                <v-textarea clearable label="Task content" variant="solo-filled" v-model="content"></v-textarea>
             </v-card-text>
             <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                 <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>

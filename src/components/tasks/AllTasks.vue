@@ -1,14 +1,35 @@
 <script lang="ts" setup>
+import axios from 'axios'
 import TaskCard from '../tasks/TaskCard.vue';
-import { ref } from 'vue';
+import { ref, onBeforeMount } from 'vue';
+import { apiUrl } from '@/helpers/constants';
+import type { TaskData } from '@/helpers/interfaces';
+
+const allTasks = ref<TaskData[] | null>(null);
+const onlyDone = ref<boolean>(false);
+
+const loadAllTask = async (): Promise<void> => {
+    try {
+        const response = await axios.get(apiUrl + 'tasks');
+        allTasks.value = response.data;
+        console.log(allTasks.value);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+onBeforeMount(async () => {
+    loadAllTask()
+})
 </script>
 <template>
     <v-card class="pa-4">
         <v-card-title>Your tasks</v-card-title>
-        <v-card-subtitle><v-switch label="Only done tasks" color="primary"></v-switch></v-card-subtitle>
-        <div v-for="(n, index) in 5" :key="n">
+        <v-card-subtitle><v-switch label="Only done tasks" color="primary"
+                v-model="onlyDone"></v-switch></v-card-subtitle>
+        <div v-for="(task, index) in allTasks" :key="task.id">
             <v-divider></v-divider>
-            <taskCard :index="index" />
+            <taskCard :index="index" :task="task" v-if="task.id" />
             <v-divider></v-divider>
         </div>
     </v-card>

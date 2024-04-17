@@ -25,4 +25,6 @@ const timeItems = [
     }
 ]
 
-export {typeItems, timeItems};
+const apiUrl = 'http://localhost:5500/';
+
+export  {typeItems, timeItems, apiUrl};
