@@ -7,14 +7,29 @@ const getTasks = async (req, res) => {
 }
 
 const setTask = async (req, res) => {
-    const data = await tasksServices.setTaskAction(req.body);
+    const id = JSON.parse(req.params['id']);
+    if(!id) res.sendStatus(404);
+
+    const data = await tasksServices.setTaskAction(id, req.body);
     
     if(data){
-        res.sendStatus(200);
+        res.status(200).json({ message: 'Task set as done' });
+    }
+}
+
+const deleteTask = async (req, res) => {
+    const id = JSON.parse(req.params['id']);
+    if(!id) res.sendStatus(404);
+
+    const data = await tasksServices.deleteTaskAction(id, req.body);
+
+    if(data){
+        res.status(200).json({ message: 'Task deleted' });
     }
 }
 
 module.exports = {
     getTasks,
-    setTask
+    setTask,
+    deleteTask
 }

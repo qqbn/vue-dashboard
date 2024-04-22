@@ -5,8 +5,13 @@ exports.getTasksAll = async (data) => {
     return results;
 }
 
-exports.setTaskAction = async(data) => {
-    const results = await taskModel.setTaskDone(data.id, data.isDone);
+exports.setTaskAction = async(id, data) => {
+    const results = await taskModel.setTaskDone(id, data.isDone);
     
+    return results;
+}
+
+exports.deleteTaskAction = async(id) => {
+    const results = await taskModel.deleteTask(id);
     return results;
 }

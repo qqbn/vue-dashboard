@@ -22,8 +22,19 @@ const setTaskDone = async (id, isDone) => {
     return doneTask;
 }
 
+const deleteTask = async (id) => {
+    const deletedTask = await prisma.tasks.delete({
+        where: {
+            id: id,
+        }
+    })
+
+    return deletedTask;
+}
+
 
 module.exports = {
     getAllTasks,
-    setTaskDone
+    setTaskDone,
+    deleteTask
 }
