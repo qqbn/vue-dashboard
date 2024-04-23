@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 import type { TaskData } from '../../helpers/interfaces';
 import { useTasksStore } from '@/stores/tasks';
 import { useRemoveStore } from '@/stores/remove';
@@ -8,6 +8,7 @@ import { apiUrl } from '@/helpers/constants';
 
 const store = useTasksStore();
 const removeStore = useRemoveStore();
+const emit = defineEmits()
 const props = defineProps<{
     task: TaskData,
     index: number,
@@ -16,8 +17,16 @@ const props = defineProps<{
 const isDone = ref<boolean>(props.task.done);
 const task = ref<string>(props.task.content);
 
-const setTaskDone = (): void => {
-    isDone.value = !isDone.value;
+const setTaskDone = async (): Promise<void> => {
+    try {
+        const response = await axios.patch(apiUrl + 'tasks/taskDone/' + props.task.id, { isDone: true });
+        if (response.status === 200) {
+            isDone.value = !isDone.value;
+            emit('setTaskDone', props.task.id);
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const handleEditTask = (): void => {
@@ -26,9 +35,12 @@ const handleEditTask = (): void => {
         done: isDone.value,
     }
 
-    console.log(obj);
-
     store.changeIsEditing(true, obj);
+}
+
+const handleRemoveTask = (): void => {
+    removeStore.removeItem(true, { id: props.task.id, type: 5 })
+    emit('removeTask', props.task.id);
 }
 </script>
 <template>
@@ -39,11 +51,11 @@ const handleEditTask = (): void => {
         </p>
         <div class="icon-box">
             <v-btn variant="tonal" color="primary" type="button" icon="mdi-check-circle-outline" size="small"
-                @click="setTaskDone"></v-btn>
+                @click="setTaskDone" v-if="!isDone"></v-btn>
             <v-btn variant="tonal" color="primary" type="button" icon="mdi-notebook-edit" size="small"
                 @click="handleEditTask"></v-btn>
             <v-btn variant="tonal" color="primary" type="button" icon="mdi-bucket-outline" size="small"
-                @click="removeStore.removeItem(true, { id: 3, type: 5 })"></v-btn>
+                @click="handleRemoveTask"></v-btn>
         </div>
     </div>
 </template>

@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, defineEmits } from 'vue';
 import { useRemoveStore } from '@/stores/remove';
 import { storeToRefs } from 'pinia';
+import axios from 'axios';
 
 const dialog = ref<boolean>(false);
 const store = useRemoveStore();
 const { isRemoving } = storeToRefs(store);
-const endpoint = ref<string>('');
+const type = ref<string>('');
+const emit = defineEmits()
 
 watch(dialog, () => {
     if (dialog.value) return;
@@ -21,32 +23,39 @@ watch(isRemoving, () => {
     dialog.value = true;
 })
 
-const handleRemove = () => {
-    dialog.value = false;
-    console.log(store.removingData.endpoint);
+const handleRemove = async (): Promise<void> => {
+    try {
+        const response = await axios.delete(store.removingData.endpoint);
+        if (response.status === 200) {
+            store.isRemoved = true;
+        }
+    } catch (error) {
+        console.log(error);
+    } finally {
+        dialog.value = false;
+    }
 }
 
 const removingTitle = computed(() => {
-    let type;
     switch (store.removingData.type) {
         case 1:
-            type = 'contact';
+            type.value = 'contact';
             break;
         case 2:
-            type = 'note';
+            type.value = 'note';
             break;
         case 3:
-            type = 'remind';
+            type.value = 'remind';
             break;
         case 4:
-            type = 'expense';
+            type.value = 'expense';
             break;
         case 5:
-            type = 'task';
+            type.value = 'task';
             break;
     }
 
-    return 'Do you want to delete ' + type + ' of id: ' + store.removingData.id + '?';
+    return 'Do you want to delete ' + type.value + ' of id: ' + store.removingData.id + '?';
 })
 </script>
 <template>
