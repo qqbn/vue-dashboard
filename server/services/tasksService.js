@@ -15,3 +15,8 @@ exports.deleteTaskAction = async(id) => {
     const results = await taskModel.deleteTask(id);
     return results;
 }
+
+exports.addTaskAction = async(data) => {
+    const results = await taskModel.addTask(data);
+    return results;
+}

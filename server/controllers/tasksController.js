@@ -1,4 +1,5 @@
 const tasksServices = require('../services/tasksService');
+const validation = require('../validations/validations');
 
 const getTasks = async (req, res) => {
     const data = await tasksServices.getTasksAll();
@@ -8,7 +9,7 @@ const getTasks = async (req, res) => {
 
 const setTask = async (req, res) => {
     const id = JSON.parse(req.params['id']);
-    if(!id) res.sendStatus(404);
+    if(!id) res.status(400).json({ message: 'Task not found' });
 
     const data = await tasksServices.setTaskAction(id, req.body);
     
@@ -19,7 +20,7 @@ const setTask = async (req, res) => {
 
 const deleteTask = async (req, res) => {
     const id = JSON.parse(req.params['id']);
-    if(!id) res.sendStatus(404);
+    if(!id) res.status(400).json({ message: 'Task not found' });
 
     const data = await tasksServices.deleteTaskAction(id, req.body);
 
@@ -28,8 +29,21 @@ const deleteTask = async (req, res) => {
     }
 }
 
+const addTask = async (req,res) => {
+    const { error } = await validation.validateTask(req.body);
+    if(error){
+        return res.status(400).json({message: error.message});
+    }
+
+    const data = await tasksServices.addTaskAction(req.body);
+    if(data){
+        res.send(data);
+    }
+}
+
 module.exports = {
     getTasks,
     setTask,
-    deleteTask
+    deleteTask,
+    addTask,
 }

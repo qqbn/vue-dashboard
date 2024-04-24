@@ -32,9 +32,20 @@ const deleteTask = async (id) => {
     return deletedTask;
 }
 
+const addTask = async (data) => {
+    const task = await prisma.tasks.create({
+        data: {
+            content: data.content,
+        }
+    })
+
+    return task;
+}
+
 
 module.exports = {
     getAllTasks,
     setTaskDone,
-    deleteTask
+    deleteTask,
+    addTask
 }
