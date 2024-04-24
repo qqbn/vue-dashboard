@@ -5,38 +5,23 @@ import { ref, onBeforeMount, watch, computed } from 'vue';
 import { apiUrl } from '@/helpers/constants';
 import type { TaskData } from '@/helpers/interfaces';
 import { useRemoveStore } from '@/stores/remove';
+import { useTasksStore } from '@/stores/tasks';
 import { storeToRefs } from 'pinia';
 
-const allTasks = ref<TaskData[] | []>([]);
+const removeStore = useRemoveStore();
+const { isRemoved } = storeToRefs(removeStore);
+const store = useTasksStore();
+
+const allTasks = computed(() => store.allTasks)
 const onlyDone = ref<boolean>(false);
-const store = useRemoveStore();
-const { isRemoved } = storeToRefs(store);
 const removingId = ref<number>();
 
-const loadAllTask = async (): Promise<void> => {
-    try {
-        const response = await axios.get(apiUrl + 'tasks');
-        allTasks.value = response.data;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 watch(isRemoved, () => {
-    if (!isRemoved) return;
-
-    if (removingId.value) {
-        removeSingleTask(removingId.value);
-    }
+    if (isRemoved.value && removingId.value) store.removeTask(removingId.value);
 })
 
-const removeSingleTask = (id: number): void => {
-    allTasks.value = allTasks.value.filter((el: any) => el.id != id);
-    store.isRemoved = false;
-}
-
 const displayedTasks = computed(() => {
-    return onlyDone.value ? allTasks.value.filter((el: any) => el.done) : allTasks.value;
+    return onlyDone.value ? store.allTasks.filter((el: any) => el.done) : store.allTasks;
 })
 
 const setTaskDone = (id: number): void => {
@@ -46,9 +31,8 @@ const setTaskDone = (id: number): void => {
     }
 }
 
-
 onBeforeMount(async () => {
-    loadAllTask()
+    await store.loadAllTasks();
 })
 </script>
 <template>
