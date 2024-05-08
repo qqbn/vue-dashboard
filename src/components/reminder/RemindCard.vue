@@ -1,35 +1,34 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 import { useRemindsStore } from '@/stores/reminds';
 import { useRemoveStore } from '@/stores/remove';
+import type { RemindData } from '@/helpers/interfaces';
 const store = useRemindsStore();
 const storeRemove = useRemoveStore();
 
-const name = ref<string>('Very important remind');
-const date = ref<any>('12/12/2024')
+const props = defineProps<{
+    remind: RemindData,
+}>();
+const emit = defineEmits()
+
 const handleEditNote = () => {
     const obj = {
-        name: name.value,
-        date: date.value,
+        name: props.remind.name,
+        date: props.remind.date,
     }
     store.changeIsEditing(true, obj);
 }
 
 const handleRemoveNote = () => {
-    const obj = {
-        id: 1,
-        type: 3,
-
-    }
-
-    storeRemove.removeItem(true, obj);
+    storeRemove.removeItem(true, { id: props.remind.id, type: 3 });
+    emit('removeRemind', props.remind.id);
 }
 </script>
 <template>
     <v-card class="pa-4">
-        <v-card-title class="d-flex justify-space-between align-center">{{ name }}<v-icon icon="mdi-clock-alert-outline"
-                size="small" color="primary"></v-icon></v-card-title>
-        <v-card-subtitle>Date: {{ date }}</v-card-subtitle>
+        <v-card-title class="d-flex justify-space-between align-center">{{ props.remind.name }}<v-icon
+                icon="mdi-clock-alert-outline" size="small" color="primary"></v-icon></v-card-title>
+        <v-card-subtitle>Date: {{ props.remind.date }}</v-card-subtitle>
         <v-card-action class="mt-4 d-flex align-center justify-end">
             <v-btn variant="tonal" color="red" append-icon="mdi-bucket-outline" class="mr-2"
                 @click="handleRemoveNote">Delete</v-btn>

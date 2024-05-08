@@ -39,6 +39,7 @@ export interface TaskData {
 }
 
 export interface RemindData {
+  id?: number,
   name: string,
   date: any,
 }

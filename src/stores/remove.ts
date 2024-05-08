@@ -25,6 +25,8 @@ export const useRemoveStore = defineStore('remove', () => {
           return 'test1';
         case 2: 
           return 'test2';
+        case 3: 
+        return apiUrl + 'reminds/delete/'
         case 5:
           return apiUrl + 'tasks/delete/';
         default:
