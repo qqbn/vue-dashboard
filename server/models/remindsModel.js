@@ -8,7 +8,17 @@ const getAllReminds = async () => {
     return reminds;
 }
 
+const deleteRemind = async (id) => {
+    const deletedRemind = await prisma.reminds.delete({
+        where: {
+            id: id,
+        }
+    })
+
+    return deletedRemind;
+}
 
 module.exports = {
     getAllReminds,
+    deleteRemind,
 }
