@@ -18,7 +18,19 @@ const deleteRemind = async (id) => {
     return deletedRemind;
 }
 
+const addRemind = async (data) => {
+    const remind = await prisma.reminds.create({
+        data: {
+            name: data.name,
+            date: data.date
+        }
+    })
+
+    return remind;
+}
+
 module.exports = {
     getAllReminds,
     deleteRemind,
+    addRemind,
 }

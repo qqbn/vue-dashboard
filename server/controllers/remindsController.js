@@ -1,4 +1,5 @@
 const remindsSerivce = require('../services/remindsService');
+const validation = require('../validations/validations');
 
 const getReminds = async (req, res) => {
     const data = await remindsSerivce.getRemindsAll();
@@ -16,7 +17,20 @@ const deleteRemind = async (req, res) => {
         res.status(200).json({ message: 'Remind deleted' });
     }
 }
+
+const addRemind = async(req, res) => {
+    const { error } = await validation.validateRemind(req.body);
+    if(error){
+        return res.status(400).json({message: error.message});
+    }
+
+    const data = await remindsSerivce.addRemindAction(req.body);
+    if(data){
+        res.send(data);
+    }
+}
 module.exports = {
     getReminds,
-    deleteRemind
+    deleteRemind,
+    addRemind
 }
