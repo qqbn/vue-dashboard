@@ -6,7 +6,7 @@ exports.getTasksAll = async (data) => {
 }
 
 exports.setTaskAction = async(id, data) => {
-    const results = await taskModel.setTaskDone(id, data.isDone);
+    const results = await taskModel.setTaskDone(id, data.done);
     
     return results;
 }

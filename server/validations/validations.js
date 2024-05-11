@@ -11,7 +11,7 @@ exports.validateTask = async (data) => {
 exports.validateEditingTask = async (data) => {
     const schema = Joi.object({
         content: Joi.string().min(1).required(),
-        isDone: Joi.boolean().required(),
+        done: Joi.boolean().required(),
     })
 
     return schema.validate(data);

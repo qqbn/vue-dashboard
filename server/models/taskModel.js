@@ -9,13 +9,13 @@ const getAllTasks = async () => {
     return tasks;
 }
 
-const setTaskDone = async (id, isDone) => {
+const setTaskDone = async (id, done) => {
     const doneTask = await prisma.tasks.update({
         where: {
             id: id,
         },
         data: {
-            done: isDone,
+            done: done,
         }
     })
     
@@ -49,7 +49,7 @@ const editTask = async (id, data) => {
         },
         data: {
             content: data.content,
-            done: data.isDone
+            done: data.done
         }
     })
 
