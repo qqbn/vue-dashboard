@@ -11,6 +11,7 @@ const { isEditing } = storeToRefs(store);
 const dialog = ref<boolean>(false);
 const content = ref<string>('');
 const done = ref<boolean>(false);
+const taskId = ref<number>(0);
 const modalTitle = computed(() => store.isEditing ? 'Edit task' : 'Add new task')
 const contentRules = [
     (value: any) => {
@@ -18,10 +19,6 @@ const contentRules = [
         return 'Field cannot be empty'
     }
 ]
-
-const handleEdit = (): void => {
-    dialog.value = false;
-}
 
 const showModal = (): void => {
     dialog.value = !dialog.value;
@@ -42,6 +39,7 @@ watch(isEditing, () => {
     dialog.value = true;
     content.value = store.editingData.content;
     done.value = store.editingData.done;
+    taskId.value = store.editingData.id;
 })
 
 const handleAddTask = async (): Promise<void> => {
@@ -57,7 +55,21 @@ const handleAddTask = async (): Promise<void> => {
         dialog.value = false;
     }
 
-} 
+}
+
+const handleEditTask = async (id: number): Promise<void> => {
+    try {
+        const response = await axios.put(apiUrl + `tasks/editTask/${id}`, { content: content.value, done: done.value });
+        if (response.status === 200) {
+            store.editTask({ id: id, content: content.value, done: done.value })
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    finally {
+        dialog.value = false;
+    }
+}
 </script>
 <template>
     <v-btn color="primary" @click="showModal">
@@ -77,7 +89,8 @@ const handleAddTask = async (): Promise<void> => {
                 <v-btn variant="tonal" color="primary" @click="handleAddTask" type="button" v-if="!store.isEditing"
                     :disabled="content.length < 1">Add
                     Task</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleEdit" type="button" v-else>Edit Task</v-btn>
+                <v-btn variant="tonal" color="primary" @click="handleEditTask(taskId)" type="button" v-else>Edit
+                    Task</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

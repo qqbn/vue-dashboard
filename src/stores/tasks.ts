@@ -12,6 +12,7 @@ export const useTasksStore = defineStore('tasks', () => {
     const editingData = ref<TaskData>({
       content: '',
       done: false,
+      id: 0,
     })
 
     function changeIsEditing(val: boolean, data: TaskData): void{
@@ -35,9 +36,17 @@ export const useTasksStore = defineStore('tasks', () => {
     }
 
     function addTask(data: TaskData): void{
-      console.log(data);
       (allTasks.value as TaskData[]).push(data);
     }
+
+    function editTask(data: TaskData): void {
+      const index = allTasks.value.findIndex(obj => obj.id = data.id);
+
+      if(index != -1){
+        allTasks.value[index].content = data.content;
+        allTasks.value[index].done = data.done;
+      }
+    }
   
-    return {changeIsEditing, isEditing, editingData, loadAllTasks,allTasks, removeTask, addTask }
+    return {changeIsEditing, isEditing, editingData, loadAllTasks,allTasks, removeTask, addTask, editTask }
 })

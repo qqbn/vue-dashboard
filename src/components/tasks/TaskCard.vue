@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, defineEmits } from 'vue';
+import { ref, defineEmits, computed } from 'vue';
 import type { TaskData } from '../../helpers/interfaces';
 import { useTasksStore } from '@/stores/tasks';
 import { useRemoveStore } from '@/stores/remove';
@@ -14,14 +14,12 @@ const props = defineProps<{
     index: number,
 }>();
 
-const isDone = ref<boolean>(props.task.done);
-const task = ref<string>(props.task.content);
+const isDone = computed(() => props.task.done)
 
 const setTaskDone = async (): Promise<void> => {
     try {
-        const response = await axios.patch(apiUrl + 'tasks/taskDone/' + props.task.id, { isDone: true });
+        const response = await axios.patch(apiUrl + 'tasks/taskDone/' + props.task.id, { done: true });
         if (response.status === 200) {
-            isDone.value = !isDone.value;
             emit('setTaskDone', props.task.id);
         }
     } catch (error) {
@@ -31,8 +29,9 @@ const setTaskDone = async (): Promise<void> => {
 
 const handleEditTask = (): void => {
     const obj = {
-        content: task.value,
-        done: isDone.value,
+        content: props.task.content,
+        done: props.task.done,
+        id: props.task.id,
     }
 
     store.changeIsEditing(true, obj);

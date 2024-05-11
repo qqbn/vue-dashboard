@@ -32,7 +32,7 @@ export interface NoteData {
 }
 
 export interface TaskData {
-  id?: number,
+  id: number,
   content: string;
   done: boolean;
   index?: number;
