@@ -30,7 +30,6 @@ export const useTasksStore = defineStore('tasks', () => {
     }
 
     function removeTask(id: number): void{
-      console.log(id);
       allTasks.value = allTasks.value.filter((el: TaskData) => el.id != id);
       removeStore.isRemoved = false;
     }
@@ -40,7 +39,7 @@ export const useTasksStore = defineStore('tasks', () => {
     }
 
     function editTask(data: TaskData): void {
-      const index = allTasks.value.findIndex(obj => obj.id = data.id);
+      const index = allTasks.value.findIndex(obj => obj.id === data.id);
 
       if(index != -1){
         allTasks.value[index].content = data.content;

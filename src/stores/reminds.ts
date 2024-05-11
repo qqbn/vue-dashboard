@@ -12,6 +12,7 @@ export const useRemindsStore = defineStore('reminds', () => {
     const editingData = ref<RemindData>({
       name: '',
       date: null,
+      id: 0,
     })
 
     function changeIsEditing(val: boolean, data: RemindData){
@@ -28,10 +29,23 @@ export const useRemindsStore = defineStore('reminds', () => {
       }
     }
 
+    function addRemind(data: RemindData): void{
+      (allReminds.value as RemindData[]).push(data);
+    }
+
     function removeRemind(id: number): void{
       allReminds.value = allReminds.value.filter((el: RemindData) => el.id != id);
       removeStore.isRemoved = false;
     }
+
+    function editRemind(data: RemindData): void{
+      const index = allReminds.value.findIndex(obj => obj.id === data.id);
+
+      if(index != -1){
+        allReminds.value[index].name = data.name;
+        allReminds.value[index].date = data.date;
+      }
+    }
   
-    return {changeIsEditing, isEditing, editingData, loadAllReminds, allReminds, removeRemind }
+    return {changeIsEditing, isEditing, editingData, loadAllReminds, allReminds, removeRemind, addRemind, editRemind }
 })

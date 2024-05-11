@@ -2,6 +2,8 @@
 import { ref, watch, computed } from 'vue';
 import { useRemindsStore } from '@/stores/reminds';
 import { storeToRefs } from 'pinia';
+import axios from 'axios';
+import { apiUrl } from '@/helpers/constants';
 
 const store = useRemindsStore();
 const { isEditing } = storeToRefs(store);
@@ -9,11 +11,9 @@ const { isEditing } = storeToRefs(store);
 const dialog = ref<boolean>(false);
 const name = ref<string>('');
 const date = ref<any>(null);
+const remindId = ref<number>(0);
 const modalTitle = computed(() => store.isEditing ? 'Edit remind' : 'Add new remind');
 
-const handleSave = (): void => {
-    dialog.value = false;
-}
 
 const showModal = (): void => {
     dialog.value = !dialog.value;
@@ -34,7 +34,36 @@ watch(isEditing, () => {
     dialog.value = true;
     name.value = store.editingData.name;
     date.value = store.editingData.date;
+    remindId.value = store.editingData.id;
 })
+
+const handleAddRemind = async (): Promise<void> => {
+    try {
+        const response = await axios.post(apiUrl + 'reminds/addRemind/', { name: name.value, date: date.value });
+        if (response.status === 200) {
+            store.addRemind(response.data);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    finally {
+        dialog.value = false;
+    }
+}
+
+const handleEditRemind = async (id: number): Promise<void> => {
+    try {
+        const response = await axios.put(apiUrl + `reminds/editRemind/${id}`, { name: name.value, date: new Date(date.value) })
+        if (response.status === 200) {
+            store.editRemind({ id: id, name: name.value, date: new Date(date.value).toISOString().slice(0, 10) })
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    finally {
+        dialog.value = false;
+    }
+}
 </script>
 <template>
     <v-btn color="primary" @click="showModal">
@@ -53,9 +82,11 @@ watch(isEditing, () => {
             </v-card-text>
             <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                 <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleSave" type="button" v-if="!store.isEditing">Add
+                <v-btn variant="tonal" color="primary" @click="handleAddRemind" type="button"
+                    v-if="!store.isEditing">Add
                     Remind</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleSave" type="button" v-else>Edit Remind</v-btn>
+                <v-btn variant="tonal" color="primary" @click="handleEditRemind(remindId)" type="button" v-else>Edit
+                    Remind</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

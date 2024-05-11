@@ -11,10 +11,11 @@ const props = defineProps<{
 }>();
 const emit = defineEmits()
 
-const handleEditNote = () => {
+const handleEditRemind = () => {
     const obj = {
         name: props.remind.name,
         date: props.remind.date,
+        id: props.remind.id,
     }
     store.changeIsEditing(true, obj);
 }
@@ -32,7 +33,7 @@ const handleRemoveNote = () => {
         <v-card-action class="mt-4 d-flex align-center justify-end">
             <v-btn variant="tonal" color="red" append-icon="mdi-bucket-outline" class="mr-2"
                 @click="handleRemoveNote">Delete</v-btn>
-            <v-btn variant="tonal" color="primary" append-icon="mdi-clock-edit-outline" @click="handleEditNote">Edit
+            <v-btn variant="tonal" color="primary" append-icon="mdi-clock-edit-outline" @click="handleEditRemind">Edit
                 remind</v-btn>
         </v-card-action>
     </v-card>
