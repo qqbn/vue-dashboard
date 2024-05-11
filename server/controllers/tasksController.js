@@ -37,7 +37,7 @@ const addTask = async (req,res) => {
 
     const data = await tasksServices.addTaskAction(req.body);
     if(data){
-        res.status(200).json({ message: 'Task added' });
+        res.send(data);
     }
 }
 

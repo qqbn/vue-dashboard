@@ -29,8 +29,23 @@ const addRemind = async (data) => {
     return remind;
 }
 
+const editRemind = async (id, data) => {
+    const remind = await prisma.reminds.update({
+        where: {
+            id: id
+        },
+        data: {
+            name: data.name,
+            date: data.date,     
+        }
+    })
+
+    return remind;
+}
+
 module.exports = {
     getAllReminds,
     deleteRemind,
     addRemind,
+    editRemind,
 }
