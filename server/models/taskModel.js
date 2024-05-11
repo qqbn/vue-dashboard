@@ -42,10 +42,25 @@ const addTask = async (data) => {
     return task;
 }
 
+const editTask = async (id, data) => {
+    const task = await prisma.tasks.update({
+        where:{
+            id: id,
+        },
+        data: {
+            content: data.content,
+            done: data.isDone
+        }
+    })
+
+    return task;
+}
+
 
 module.exports = {
     getAllTasks,
     setTaskDone,
     deleteTask,
-    addTask
+    addTask,
+    editTask,
 }

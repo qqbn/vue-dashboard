@@ -8,6 +8,15 @@ exports.validateTask = async (data) => {
     return schema.validate(data);
 }
 
+exports.validateEditingTask = async (data) => {
+    const schema = Joi.object({
+        content: Joi.string().min(1).required(),
+        isDone: Joi.boolean().required(),
+    })
+
+    return schema.validate(data);
+}
+
 exports.validateRemind = async (data) => {
     const schema = Joi.object({
         name: Joi.string().min(1),

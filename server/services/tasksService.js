@@ -20,3 +20,8 @@ exports.addTaskAction = async(data) => {
     const results = await taskModel.addTask(data);
     return results;
 }
+
+exports.editTaskAction = async(id, data) => {
+    const result = await taskModel.editTask(id, data);
+    return result;
+}
