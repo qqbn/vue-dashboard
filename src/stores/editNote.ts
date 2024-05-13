@@ -45,8 +45,12 @@ export const useEditNoteStore = defineStore('editNote', () => {
       allNotes.value = allNotes.value.filter((el: NoteData) => el.id != id);
       removeStore.isRemoved = false;
     }
+
+    function addNote(data: NoteData): void{
+      (allNotes.value as NoteData[]).push(data);
+    }
   
-    return {changeIsEditing, isEditing, editingData, allNotes, loadAllNotes, editNote, removeNote }
+    return {changeIsEditing, isEditing, editingData, allNotes, loadAllNotes, editNote, removeNote, addNote }
 })
 
   

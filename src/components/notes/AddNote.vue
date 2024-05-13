@@ -20,7 +20,21 @@ const handleSave = (): void => {
     dialog.value = false;
 }
 
-const handleEdit = async (id: number): Promise<void> => {
+const handleAddNote = async (): Promise<void> => {
+    try {
+        const response = await axios.post(apiUrl + `notes/addNote/`, { title: title.value, content: content.value, important: important.value });
+        if (response.status === 200) {
+            store.addNote(response.data);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    finally {
+        dialog.value = false;
+    }
+}
+
+const handleEditNote = async (id: number): Promise<void> => {
     try {
         const response = await axios.put(apiUrl + `notes/editNote/${id}`, { title: title.value, content: content.value, important: important.value });
         if (response.status === 200) {
@@ -79,9 +93,9 @@ watch(isEditing, () => {
             </v-card-item>
             <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                 <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleSave" type="button" v-if="!store.isEditing">Add
+                <v-btn variant="tonal" color="primary" @click="handleAddNote" type="button" v-if="!store.isEditing">Add
                     Note</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleEdit(noteId)" type="button" v-else>Edit
+                <v-btn variant="tonal" color="primary" @click="handleEditNote(noteId)" type="button" v-else>Edit
                     Note</v-btn>
             </v-card-actions>
         </v-card>
