@@ -33,9 +33,23 @@ const deleteNote = async (id) => {
     return note;
 }
 
+const addNote = async (data) => {
+    const note = await prisma.notes.create({
+        data: {
+            title: data.title,
+            date: data.date,
+            content: data.content,
+            important: data.important,
+        }
+    })
+
+    return note;
+}
+
 
 module.exports = {
     getAllNotes,
     editNote,
-    deleteNote
+    deleteNote,
+    addNote,
 }

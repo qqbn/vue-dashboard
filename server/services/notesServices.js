@@ -24,3 +24,12 @@ exports.deleteNoteAction = async (id) => {
 
     return result;
 }
+
+exports.addNoteAction = async (data) => {
+    data['date'] = new Date();
+    const result = await notesModel.addNote(data);
+
+    result.date = helpers.formatDate(result.date);
+
+    return result;
+}

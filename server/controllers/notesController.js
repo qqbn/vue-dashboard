@@ -32,8 +32,21 @@ const deleteNote = async (req, res) => {
     }
 }
 
+const addNote = async (req, res) => {
+    const { error } = await validation.validateNote(req.body);
+    if(error){
+        return res.status(400).json({message: error.message});
+    }
+
+    const data = await notesService.addNoteAction(req.body);
+    if(data){
+        res.send(data);
+    }
+}
+
 module.exports={
     getNotes,
     editNote,
-    deleteNote
+    deleteNote,
+    addNote
 }
