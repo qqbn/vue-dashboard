@@ -25,3 +25,14 @@ exports.validateRemind = async (data) => {
 
     return schema.validate(data);
 }
+
+
+exports.validateNote = async (data) => {
+    const schema = Joi.object({
+        title: Joi.string().min(1).required(),
+        content: Joi.string(),
+        important: Joi.boolean().required(),
+    })
+
+    return schema.validate(data);
+}

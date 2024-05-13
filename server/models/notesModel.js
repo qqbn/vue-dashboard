@@ -8,7 +8,23 @@ const getAllNotes= async () => {
     return notes;
 }
 
+const editNote = async (id, data) => {
+    const note = await prisma.notes.update({
+        where: {
+            id: id
+        },
+        data: {
+            title: data.title,
+            content: data.content,
+            important: data.important
+        }
+    })
+
+    return note;
+}
+
 
 module.exports = {
     getAllNotes,
+    editNote,
 }

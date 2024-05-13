@@ -10,3 +10,11 @@ exports.getNotesAll = async (data) => {
 
     return results;
 }
+
+exports.editNoteAction = async (id, data) => {
+    const result = await notesModel.editNote(id, data);
+    
+    result.date = helpers.formatDate(result.date);
+
+    return result;
+}
