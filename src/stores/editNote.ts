@@ -28,8 +28,18 @@ export const useEditNoteStore = defineStore('editNote', () => {
         console.log(error);
       }
     }
+
+    function editNote(data: NoteData): void {
+      const index = allNotes.value.findIndex(obj => obj.id === data.id);
+
+      if(index != -1){
+        allNotes.value[index].title = data.title;
+        allNotes.value[index].content = data.content;
+        allNotes.value[index].important = data.important;
+      }
+    }
   
-    return {changeIsEditing, isEditing, editingData, allNotes, loadAllNotes }
+    return {changeIsEditing, isEditing, editingData, allNotes, loadAllNotes, editNote }
 })
 
   
