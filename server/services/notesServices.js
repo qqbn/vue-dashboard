@@ -18,3 +18,9 @@ exports.editNoteAction = async (id, data) => {
 
     return result;
 }
+
+exports.deleteNoteAction = async (id) => {
+    const result = await notesModel.deleteNote(id);
+
+    return result;
+}

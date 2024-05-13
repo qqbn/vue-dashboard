@@ -22,7 +22,18 @@ const editNote = async (req, res) => {
     }
 }
 
+const deleteNote = async (req, res) => {
+    const id = JSON.parse(req.params['id']);
+    if(!id) res.status(400).json({ message: 'Note not found' });
+
+    const data = await notesService.deleteNoteAction(id);
+    if(data){
+        res.status(200).json({ message: 'Note deleted' });
+    }
+}
+
 module.exports={
     getNotes,
-    editNote
+    editNote,
+    deleteNote
 }

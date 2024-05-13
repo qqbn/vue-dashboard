@@ -23,8 +23,19 @@ const editNote = async (id, data) => {
     return note;
 }
 
+const deleteNote = async (id) => {
+    const note = await prisma.notes.delete({
+        where:{
+            id: id
+        }
+    });
+
+    return note;
+}
+
 
 module.exports = {
     getAllNotes,
     editNote,
+    deleteNote
 }
