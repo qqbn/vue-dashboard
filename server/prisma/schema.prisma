@@ -25,10 +25,11 @@ model expenses {
 }
 
 model notes {
-  id        Int      @id @default(autoincrement())
-  title     String?  @db.VarChar(255)
-  content   String?  @db.VarChar(255)
+  id        Int       @id @default(autoincrement())
+  title     String?   @db.VarChar(255)
+  content   String?   @db.VarChar(255)
   important Boolean?
+  date      DateTime? @db.DateTime(0)
 }
 
 model reminds {
@@ -38,7 +39,7 @@ model reminds {
 }
 
 model tasks {
-  id      Int      @id @default(autoincrement())
-  content String?  @db.VarChar(255)
-  done    Boolean? @default(false)
+  id      Int     @id @default(autoincrement())
+  content String? @db.VarChar(255)
+  done    Boolean @default(false)
 }
