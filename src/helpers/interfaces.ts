@@ -25,10 +25,11 @@ export interface ChartProps {
 }
 
 export interface NoteData {
+  id: number,
   title: string;
   date: any;
-  note: string;
-  isImportant: boolean;
+  content: string;
+  important: boolean;
 }
 
 export interface TaskData {

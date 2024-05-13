@@ -41,8 +41,8 @@ watch(isEditing, () => {
 
     dialog.value = true;
     title.value = store.editingData.title;
-    note.value = store.editingData.note;
-    important.value = store.editingData.isImportant;
+    note.value = store.editingData.content;
+    important.value = store.editingData.important;
 })
 </script>
 <template>
