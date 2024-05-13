@@ -20,7 +20,7 @@ const handleEditRemind = () => {
     store.changeIsEditing(true, obj);
 }
 
-const handleRemoveNote = () => {
+const handleRemoveRemind = () => {
     storeRemove.removeItem(true, { id: props.remind.id, type: 3 });
     emit('removeRemind', props.remind.id);
 }
@@ -32,7 +32,7 @@ const handleRemoveNote = () => {
         <v-card-subtitle>Date: {{ props.remind.date }}</v-card-subtitle>
         <v-card-action class="mt-4 d-flex align-center justify-end">
             <v-btn variant="tonal" color="red" append-icon="mdi-bucket-outline" class="mr-2"
-                @click="handleRemoveNote">Delete</v-btn>
+                @click="handleRemoveRemind">Delete</v-btn>
             <v-btn variant="tonal" color="primary" append-icon="mdi-clock-edit-outline" @click="handleEditRemind">Edit
                 remind</v-btn>
         </v-card-action>

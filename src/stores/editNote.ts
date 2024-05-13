@@ -3,6 +3,8 @@ import { defineStore } from 'pinia'
 import type { NoteData } from '@/helpers/interfaces';
 import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
+import { useRemoveStore } from './remove';
+const removeStore = useRemoveStore();
 
 export const useEditNoteStore = defineStore('editNote', () => {    
     const isEditing = ref<boolean>(false);
@@ -38,8 +40,13 @@ export const useEditNoteStore = defineStore('editNote', () => {
         allNotes.value[index].important = data.important;
       }
     }
+
+    function removeNote(id: number){
+      allNotes.value = allNotes.value.filter((el: NoteData) => el.id != id);
+      removeStore.isRemoved = false;
+    }
   
-    return {changeIsEditing, isEditing, editingData, allNotes, loadAllNotes, editNote }
+    return {changeIsEditing, isEditing, editingData, allNotes, loadAllNotes, editNote, removeNote }
 })
 
   
