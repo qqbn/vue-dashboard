@@ -1,4 +1,4 @@
-const typeItems = [
+export const typeItems = [
     { id: 1, name: 'Bills' },
     { id: 2, name: 'Food' },
     { id: 3, name: 'Shopping' },
@@ -6,7 +6,7 @@ const typeItems = [
     { id: 5, name: 'Others' }
 ]
 
-const timeItems = [
+export const timeItems = [
     {
         id: 1,
         name: 'Today'
@@ -25,6 +25,4 @@ const timeItems = [
     }
 ]
 
-const apiUrl = 'http://localhost:5500/';
-
-export  {typeItems, timeItems, apiUrl};
+export const apiUrl = 'http://localhost:5500/';

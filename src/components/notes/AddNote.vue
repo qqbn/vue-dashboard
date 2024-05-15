@@ -4,6 +4,7 @@ import { useEditNoteStore } from '@/stores/editNote';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
+import { nameRule, minOneChar } from '@/helpers/validation';
 
 const store = useEditNoteStore();
 const { isEditing } = storeToRefs(store);
@@ -16,9 +17,6 @@ const important = ref<boolean>(true);
 const dialog = ref<boolean>(false);
 const modalTitle = computed(() => store.isEditing ? 'Editing task' : 'Add new task')
 
-const handleSave = (): void => {
-    dialog.value = false;
-}
 
 const handleAddNote = async (): Promise<void> => {
     try {
@@ -85,7 +83,7 @@ watch(isEditing, () => {
                 {{ modalTitle }}
             </v-card-title>
             <v-card-text>
-                <v-text-field label="Note Title" type="input" v-model="title"></v-text-field>
+                <v-text-field label="Note Title" type="input" v-model="title" :rules="nameRule"></v-text-field>
                 <v-textarea label="Note" auto-grow v-model="content"></v-textarea>
             </v-card-text>
             <v-card-item>
@@ -93,9 +91,11 @@ watch(isEditing, () => {
             </v-card-item>
             <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                 <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleAddNote" type="button" v-if="!store.isEditing">Add
+                <v-btn variant="tonal" color="primary" @click="handleAddNote" type="button" v-if="!store.isEditing"
+                    :disabled="!minOneChar(title)">Add
                     Note</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleEditNote(noteId)" type="button" v-else>Edit
+                <v-btn variant="tonal" color="primary" @click="handleEditNote(noteId)" type="button" v-else
+                    :disabled="!minOneChar(title)">Edit
                     Note</v-btn>
             </v-card-actions>
         </v-card>

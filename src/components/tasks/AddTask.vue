@@ -4,6 +4,7 @@ import { useTasksStore } from '@/stores/tasks';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
+import { nameRule, minOneChar } from "@/helpers/validation";
 
 const store = useTasksStore();
 const { isEditing } = storeToRefs(store);
@@ -13,12 +14,6 @@ const content = ref<string>('');
 const done = ref<boolean>(false);
 const taskId = ref<number>(0);
 const modalTitle = computed(() => store.isEditing ? 'Edit task' : 'Add new task')
-const contentRules = [
-    (value: any) => {
-        if (value.length > 0) return true
-        return 'Field cannot be empty'
-    }
-]
 
 const showModal = (): void => {
     dialog.value = !dialog.value;
@@ -82,14 +77,15 @@ const handleEditTask = async (id: number): Promise<void> => {
             <v-card-text>
                 <v-checkbox label="Task done" color="primary" v-model="done" v-if="store.isEditing"></v-checkbox>
                 <v-textarea clearable label="Task content" variant="solo-filled" v-model="content"
-                    :rules="contentRules"></v-textarea>
+                    :rules="nameRule"></v-textarea>
             </v-card-text>
             <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                 <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
                 <v-btn variant="tonal" color="primary" @click="handleAddTask" type="button" v-if="!store.isEditing"
-                    :disabled="content.length < 1">Add
+                    :disabled="!minOneChar(content)">Add
                     Task</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleEditTask(taskId)" type="button" v-else>Edit
+                <v-btn variant="tonal" color="primary" @click="handleEditTask(taskId)" type="button" v-else
+                    :disabled="!minOneChar(content)">Edit
                     Task</v-btn>
             </v-card-actions>
         </v-card>

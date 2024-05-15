@@ -4,13 +4,14 @@ import { useRemindsStore } from '@/stores/reminds';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
+import { nameRule, minOneChar } from "@/helpers/validation";
 
 const store = useRemindsStore();
 const { isEditing } = storeToRefs(store);
 
 const dialog = ref<boolean>(false);
 const name = ref<string>('');
-const date = ref<any>(null);
+const date = ref<any>();
 const remindId = ref<number>(0);
 const modalTitle = computed(() => store.isEditing ? 'Edit remind' : 'Add new remind');
 
@@ -18,7 +19,7 @@ const modalTitle = computed(() => store.isEditing ? 'Edit remind' : 'Add new rem
 const showModal = (): void => {
     dialog.value = !dialog.value;
     name.value = '';
-    date.value = null;
+    date.value = new Date();
 }
 
 watch(dialog, () => {
@@ -76,16 +77,17 @@ const handleEditRemind = async (id: number): Promise<void> => {
                 {{ modalTitle }}
             </v-card-title>
             <v-card-text>
-                <v-text-field label="Remind name" type="input" v-model="name"></v-text-field>
+                <v-text-field label="Remind name" type="input" v-model="name" :rules="nameRule"></v-text-field>
                 <h4>Set date to remind you of something</h4>
-                <VueDatePicker v-model="date" inline auto-apply></VueDatePicker>
+                <VueDatePicker v-model="date" inline auto-apply :min-date="new Date()"></VueDatePicker>
             </v-card-text>
             <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                 <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleAddRemind" type="button"
-                    v-if="!store.isEditing">Add
+                <v-btn variant="tonal" color="primary" @click="handleAddRemind" type="button" v-if="!store.isEditing"
+                    :disabled="!minOneChar(name)">Add
                     Remind</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleEditRemind(remindId)" type="button" v-else>Edit
+                <v-btn variant="tonal" color="primary" @click="handleEditRemind(remindId)" type="button" v-else
+                    :disabled="!minOneChar(name)">Edit
                     Remind</v-btn>
             </v-card-actions>
         </v-card>
