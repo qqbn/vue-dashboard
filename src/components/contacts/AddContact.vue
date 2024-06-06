@@ -10,8 +10,31 @@ const dialog = ref<boolean>(false);
 const firstName = ref<string>('');
 const lastName = ref<string>('');
 const phoneNumber = ref<string>('');
-const eMail = ref<string>('');
+const email = ref<string>('');
 const modalTitle = computed(() => store.isEditing ? 'Edit contact' : 'Add new contact');
+const avatar = ref<number>(null);
+const avatars = [
+    {
+        id: 1,
+        name: 'Lego 1'
+    },
+    {
+        id: 2,
+        name: 'Lego 2'
+    },
+    {
+        id: 3,
+        name: 'Lego 3'
+    },
+    {
+        id: 4,
+        name: 'Lego 4'
+    },
+    {
+        id: 5,
+        name: 'Lego 5'
+    }
+];
 
 const handleSave = (): void => {
     dialog.value = false;
@@ -23,7 +46,7 @@ const showModal = (): void => {
     firstName.value = '';
     lastName.value = '';
     phoneNumber.value = '';
-    eMail.value = '';
+    email.value = '';
 }
 
 watch(dialog, () => {
@@ -40,7 +63,7 @@ watch(isEditing, () => {
     firstName.value = store.editingData.firstName;
     lastName.value = store.editingData.lastName;
     phoneNumber.value = store.editingData.phoneNumber;
-    eMail.value = store.editingData.eMail;
+    email.value = store.editingData.email;
 })
 </script>
 <template>
@@ -57,8 +80,9 @@ watch(isEditing, () => {
                 <v-text-field label="First Name" type="input" v-model="firstName"></v-text-field>
                 <v-text-field label="Last Name" type="input" v-model="lastName"></v-text-field>
                 <v-text-field label="Phone Number" type="phone" v-model="phoneNumber"></v-text-field>
-                <v-text-field label="E-mail" type="email" v-model="eMail"></v-text-field>
-                <v-file-input label="Contact photo"></v-file-input>
+                <v-text-field label="E-mail" type="email" v-model="email"></v-text-field>
+                <v-select label="Contact avatar" :items="avatars" v-model="avatar" item-title="name"
+                    item-value="id"></v-select>
             </v-card-text>
             <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                 <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>

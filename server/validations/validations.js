@@ -36,3 +36,15 @@ exports.validateNote = async (data) => {
 
     return schema.validate(data);
 }
+
+exports.validateContact = async(data) => {
+    const schema = Joi.object({
+        firstName: Joi.string().min(1).required(),
+        lastName: Joi.string().min(1).required(),
+        phoneNumber: Joi.string().min(9).max(9).required(),
+        email: Joi.string().email(),
+        avatar: Joi.number().required(),
+    })
+
+    return schema.validate(data);
+}

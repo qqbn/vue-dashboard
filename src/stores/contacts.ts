@@ -8,7 +8,7 @@ export const useContactsStore = defineStore('contacts', () => {
       firstName: '',
       lastName: '',
       phoneNumber: '',
-      eMail: ''
+      email: ''
     })
 
     function changeIsEditing(val: boolean, data: ContactData){

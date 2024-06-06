@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useContactsStore } from '@/stores/contacts';
 import { useRemoveStore } from '@/stores/remove';
+import { avatars } from '@/helpers/constants.js'
 
 const store = useContactsStore();
 const removeStore = useRemoveStore();
@@ -10,6 +11,7 @@ const firstName = ref<string>('Sandra')
 const lastName = ref<string>('Adams')
 const phoneNumber = ref<string>('123123123')
 const eMail = ref<string>('email@yahoo.com')
+const avatar = computed(() => avatars[2])
 
 const handleEdit = () => {
     const obj = {
@@ -23,7 +25,7 @@ const handleEdit = () => {
 </script>
 <template>
     <v-card class="pa-4">
-        <v-card-item prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"></v-card-item>
+        <v-card-item :prepend-avatar="avatar"></v-card-item>
         <v-card-title>{{ firstName }} {{ lastName }}</v-card-title>
         <v-card-subtitle>Phone: {{ phoneNumber }}</v-card-subtitle>
         <v-card-subtitle>Email: {{ eMail }}</v-card-subtitle>

@@ -49,7 +49,7 @@ export interface ContactData {
   firstName: string,
   lastName: string,
   phoneNumber: string,
-  eMail: string,
+  email: string,
 }
 
 export interface RemoveData {
