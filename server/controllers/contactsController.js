@@ -19,7 +19,18 @@ const addContact = async(req, res) => {
     }
 }
 
+const deleteContact = async (req, res) => {
+    const id = JSON.parse(req.params['id']);
+    if(!id) res.status(400).json({ message: 'Note not found' });
+
+    const data = await contactsService.deleteContactAction(id);
+    if(data){
+        res.status(200).json({ message: 'Contact deleted' });
+    }
+}
+
 module.exports = {
     getContacts,
     addContact,
+    deleteContact
 }
