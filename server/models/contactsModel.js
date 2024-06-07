@@ -8,16 +8,18 @@ const getAllContacts = async () => {
     return contacts;
 }
 
-const addContact = async () => {
+const addContact = async (data) => {
     const contact = prisma.contacts.create({
         data:{
-            first_name: data.firstName,
-            last_name: data.lastName,
-            phone_number: data.phoneNumber,
+            first_name: data.first_name,
+            last_name: data.last_name,
+            phone_number: data.phone_number,
             email: data.email,
             avatar: data.avatar
         }
     })
+
+    return contact;
 }
 
 
