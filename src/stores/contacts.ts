@@ -3,6 +3,8 @@ import { defineStore } from 'pinia'
 import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
 import type { ContactData } from '@/helpers/interfaces';
+import { useRemoveStore } from './remove';
+const removeStore = useRemoveStore();
 
 export const useContactsStore = defineStore('contacts', () => {    
     const isEditing = ref<boolean>(false);
@@ -33,6 +35,11 @@ export const useContactsStore = defineStore('contacts', () => {
     function addContact(data: ContactData): void{
       (allContacts.value as ContactData[]).push(data);
     }
+
+    function removeContact(id: number){
+      allContacts.value = allContacts.value.filter((el: ContactData) => el.id != id);
+      removeStore.isRemoved = false;
+    }
   
-    return {changeIsEditing, isEditing, editingData, loadAllContacts, allContacts, addContact }
+    return {changeIsEditing, isEditing, editingData, loadAllContacts, allContacts, addContact, removeContact }
 })

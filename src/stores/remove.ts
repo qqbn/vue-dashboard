@@ -22,7 +22,7 @@ export const useRemoveStore = defineStore('remove', () => {
     function getEndpoint(type: number): string {
       switch(type){
         case 1:
-          return 'test1';
+          return apiUrl + 'contacts/delete/';
         case 2: 
           return apiUrl + 'notes/delete/';
         case 3: 

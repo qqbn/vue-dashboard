@@ -4,12 +4,18 @@ import ContactCard from '../components/contacts/ContactCard.vue'
 import { useContactsStore } from '@/stores/contacts';
 import { useRemoveStore } from '@/stores/remove';
 import { storeToRefs } from 'pinia';
-import { computed, onBeforeMount } from "vue";
+import { computed, onBeforeMount, ref, watch } from "vue";
 
 const store = useContactsStore();
 const removeStore = useRemoveStore();
 
+const removingId = ref<number>();
+const { isRemoved } = storeToRefs(removeStore);
 const allContacts = computed(() => store.allContacts);
+
+watch(isRemoved, () => {
+    if (isRemoved.value && removingId.value) store.removeContact(removingId.value);
+})
 
 onBeforeMount(async () => {
     await store.loadAllContacts();
@@ -24,7 +30,7 @@ onBeforeMount(async () => {
         </v-row>
         <v-row align="start" justify="start" no-gutters>
             <v-col cols="12" xl="4" lg="4" md="6" sm="12" v-for="contact in allContacts" :key="contact.id" class="pa-4">
-                <ContactCard :contact="contact" />
+                <ContactCard :contact="contact" @removeContact="removingId = $event" />
             </v-col>
         </v-row>
     </v-container>

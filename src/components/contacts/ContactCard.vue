@@ -7,6 +7,7 @@ import type { ContactData } from '@/helpers/interfaces';
 
 const store = useContactsStore();
 const removeStore = useRemoveStore();
+const emit = defineEmits()
 
 const props = defineProps<{
     contact: ContactData,
@@ -25,6 +26,11 @@ const handleEdit = () => {
     }
     store.changeIsEditing(true, obj);
 }
+
+const handleRemoveNote = () => {
+    removeStore.removeItem(true, { id: props.contact.id, type: 1 });
+    emit('removeContact', props.contact.id);
+}
 </script>
 <template>
     <v-card class="pa-4">
@@ -36,7 +42,7 @@ const handleEdit = () => {
         </v-card-actions>
         <v-card-action class="mt-4 d-flex align-center justify-end">
             <v-btn variant="tonal" color="red" append-icon="mdi-bucket-outline" class="mr-2"
-                @click="removeStore.removeItem(true, { id: 4, type: 1 })">Delete</v-btn>
+                @click="handleRemoveNote">Delete</v-btn>
             <v-btn variant="tonal" color="primary" append-icon="mdi-human-edit" @click="handleEdit">Edit</v-btn>
         </v-card-action>
     </v-card>
