@@ -46,10 +46,12 @@ export interface RemindData {
 }
 
 export interface ContactData {
-  firstName: string,
-  lastName: string,
-  phoneNumber: string,
+  id: number,
+  first_name: string,
+  last_name: string,
+  phone_number: string,
   email: string,
+  avatar: number,
 }
 
 export interface RemoveData {

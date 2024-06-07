@@ -2,7 +2,8 @@
 import { ref, watch, computed } from 'vue';
 import { useContactsStore } from '@/stores/contacts';
 import { storeToRefs } from 'pinia';
-
+import axios from 'axios';
+import { apiUrl } from '@/helpers/constants';
 const store = useContactsStore();
 const { isEditing } = storeToRefs(store);
 
@@ -12,7 +13,7 @@ const lastName = ref<string>('');
 const phoneNumber = ref<string>('');
 const email = ref<string>('');
 const modalTitle = computed(() => store.isEditing ? 'Edit contact' : 'Add new contact');
-const avatar = ref<number>(null);
+const avatar = ref<number | null>(null);
 const avatars = [
     {
         id: 1,
@@ -38,7 +39,6 @@ const avatars = [
 
 const handleSave = (): void => {
     dialog.value = false;
-    console.log('form submitted');
 }
 
 const showModal = (): void => {
@@ -60,11 +60,26 @@ watch(isEditing, () => {
     if (!isEditing.value) return;
 
     dialog.value = true;
-    firstName.value = store.editingData.firstName;
-    lastName.value = store.editingData.lastName;
-    phoneNumber.value = store.editingData.phoneNumber;
+    firstName.value = store.editingData.first_name;
+    lastName.value = store.editingData.last_name;
+    phoneNumber.value = store.editingData.phone_number;
     email.value = store.editingData.email;
+    avatar.value = store.editingData.avatar
 })
+
+const handleAddContact = async (): Promise<void> => {
+    try {
+        const response = await axios.post(apiUrl + `contacts/addContact/`, { first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value });
+        if (response.status === 200) {
+            store.addContact(response.data);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    finally {
+        dialog.value = false;
+    }
+}
 </script>
 <template>
     <v-btn color="primary" @click="showModal">
@@ -86,7 +101,8 @@ watch(isEditing, () => {
             </v-card-text>
             <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                 <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleSave" type="button" v-if="!store.isEditing">Save
+                <v-btn variant="tonal" color="primary" @click="handleAddContact" type="button"
+                    v-if="!store.isEditing">Save
                     Contact</v-btn>
                 <v-btn variant="tonal" color="primary" @click="handleSave" type="button" v-else>Edit Contact</v-btn>
             </v-card-actions>

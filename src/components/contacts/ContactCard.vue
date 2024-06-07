@@ -3,22 +3,25 @@ import { ref, computed } from 'vue';
 import { useContactsStore } from '@/stores/contacts';
 import { useRemoveStore } from '@/stores/remove';
 import { avatars } from '@/helpers/constants.js'
+import type { ContactData } from '@/helpers/interfaces';
 
 const store = useContactsStore();
 const removeStore = useRemoveStore();
 
-const firstName = ref<string>('Sandra')
-const lastName = ref<string>('Adams')
-const phoneNumber = ref<string>('123123123')
-const eMail = ref<string>('email@yahoo.com')
-const avatar = computed(() => avatars[2])
+const props = defineProps<{
+    contact: ContactData,
+}>();
+
+const avatar = computed(() => avatars[props.contact.avatar - 1])
 
 const handleEdit = () => {
     const obj = {
-        firstName: firstName.value,
-        lastName: lastName.value,
-        phoneNumber: phoneNumber.value,
-        eMail: eMail.value,
+        id: props.contact.id,
+        first_name: props.contact.first_name,
+        last_name: props.contact.last_name,
+        phone_number: props.contact.last_name,
+        email: props.contact.email,
+        avatar: props.contact.avatar,
     }
     store.changeIsEditing(true, obj);
 }
@@ -26,9 +29,9 @@ const handleEdit = () => {
 <template>
     <v-card class="pa-4">
         <v-card-item :prepend-avatar="avatar"></v-card-item>
-        <v-card-title>{{ firstName }} {{ lastName }}</v-card-title>
-        <v-card-subtitle>Phone: {{ phoneNumber }}</v-card-subtitle>
-        <v-card-subtitle>Email: {{ eMail }}</v-card-subtitle>
+        <v-card-title>{{ props.contact.first_name }} {{ props.contact.last_name }}</v-card-title>
+        <v-card-subtitle>Phone: {{ props.contact.phone_number }}</v-card-subtitle>
+        <v-card-subtitle>Email: {{ props.contact.email }}</v-card-subtitle>
         <v-card-actions> <v-btn variant="tonal" color="primary" size="x-small">Send email</v-btn>
         </v-card-actions>
         <v-card-action class="mt-4 d-flex align-center justify-end">

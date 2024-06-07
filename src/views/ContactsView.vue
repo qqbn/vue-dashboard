@@ -1,6 +1,19 @@
 <script setup lang="ts">
 import AddContact from '../components/contacts/AddContact.vue'
 import ContactCard from '../components/contacts/ContactCard.vue'
+import { useContactsStore } from '@/stores/contacts';
+import { useRemoveStore } from '@/stores/remove';
+import { storeToRefs } from 'pinia';
+import { computed, onBeforeMount } from "vue";
+
+const store = useContactsStore();
+const removeStore = useRemoveStore();
+
+const allContacts = computed(() => store.allContacts);
+
+onBeforeMount(async () => {
+    await store.loadAllContacts();
+})
 </script>
 <template>
     <v-container fluid fill-height class="ma-0 pa-xl-6 pa-lg-6 pa-md-2">
@@ -10,8 +23,8 @@ import ContactCard from '../components/contacts/ContactCard.vue'
             </v-col>
         </v-row>
         <v-row align="start" justify="start" no-gutters>
-            <v-col cols="12" xl="4" lg="4" md="6" sm="12" v-for="n in 6" :key="n" class="pa-4">
-                <ContactCard />
+            <v-col cols="12" xl="4" lg="4" md="6" sm="12" v-for="contact in allContacts" :key="contact.id" class="pa-4">
+                <ContactCard :contact="contact" />
             </v-col>
         </v-row>
     </v-container>
