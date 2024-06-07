@@ -14,3 +14,8 @@ exports.deleteContactAction = async (id) => {
     const results = await contactsModel.deleteContact(id);
     return results;
 }
+
+exports.editContactAction = async (id, data) => {
+    const results = await contactsModel.editContact(id, data);
+    return results;
+}

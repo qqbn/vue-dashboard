@@ -32,9 +32,27 @@ const deleteContact = async (id) => {
     return contact;
 }
 
+const editContact = async (id, data) => {
+    const contact = prisma.contacts.update({
+        where: {
+            id: id
+        },
+        data: {
+            first_name: data.first_name,
+            last_name: data.last_name,
+            phone_number: data.phone_number,
+            email: data.email,
+            avatar: data.avatar
+        }
+    })
+
+    return contact;
+}
+
 
 module.exports = {
     getAllContacts,
     addContact,
-    deleteContact
+    deleteContact,
+    editContact
 }

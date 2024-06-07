@@ -21,7 +21,7 @@ const addContact = async(req, res) => {
 
 const deleteContact = async (req, res) => {
     const id = JSON.parse(req.params['id']);
-    if(!id) res.status(400).json({ message: 'Note not found' });
+    if(!id) res.status(400).json({ message: 'Contact not found' });
 
     const data = await contactsService.deleteContactAction(id);
     if(data){
@@ -29,8 +29,24 @@ const deleteContact = async (req, res) => {
     }
 }
 
+const editContact = async (req, res) => {
+    const id = JSON.parse(req.params['id']);
+    if(!id) res.status(400).json({ message: 'Contact not found' });
+
+    const { error } = await validation.validateContact(req.body);
+    if(error){
+        return res.status(400).json({message: error.message});
+    }
+
+    const data = await contactsService.editContactAction(id, req.body);
+    if(data){
+        res.status(200).json({ message: 'Contact edited' });
+    }
+}
+
 module.exports = {
     getContacts,
     addContact,
-    deleteContact
+    deleteContact,
+    editContact
 }
