@@ -40,6 +40,18 @@ export const useContactsStore = defineStore('contacts', () => {
       allContacts.value = allContacts.value.filter((el: ContactData) => el.id != id);
       removeStore.isRemoved = false;
     }
+
+    function editContact(data: ContactData): void {
+      const index = allContacts.value.findIndex(obj => obj.id === data.id);
+
+      if(index != -1){
+        allContacts.value[index].first_name = data.first_name;
+        allContacts.value[index].last_name = data.last_name;
+        allContacts.value[index].phone_number = data.phone_number;
+        allContacts.value[index].email = data.email;
+        allContacts.value[index].avatar = data.avatar;
+      }
+    }
   
-    return {changeIsEditing, isEditing, editingData, loadAllContacts, allContacts, addContact, removeContact }
+    return {changeIsEditing, isEditing, editingData, loadAllContacts, allContacts, addContact, removeContact, editContact }
 })

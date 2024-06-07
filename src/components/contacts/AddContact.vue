@@ -12,6 +12,7 @@ const firstName = ref<string>('');
 const lastName = ref<string>('');
 const phoneNumber = ref<string>('');
 const email = ref<string>('');
+const contactId = ref<number>(0);
 const modalTitle = computed(() => store.isEditing ? 'Edit contact' : 'Add new contact');
 const avatar = ref<number | null>(null);
 const avatars = [
@@ -37,10 +38,6 @@ const avatars = [
     }
 ];
 
-const handleSave = (): void => {
-    dialog.value = false;
-}
-
 const showModal = (): void => {
     dialog.value = !dialog.value;
     firstName.value = '';
@@ -60,6 +57,7 @@ watch(isEditing, () => {
     if (!isEditing.value) return;
 
     dialog.value = true;
+    contactId.value = store.editingData.id;
     firstName.value = store.editingData.first_name;
     lastName.value = store.editingData.last_name;
     phoneNumber.value = store.editingData.phone_number;
@@ -80,6 +78,21 @@ const handleAddContact = async (): Promise<void> => {
         dialog.value = false;
     }
 }
+
+const handleEditContact = async (id: number): Promise<void> => {
+    try {
+        const response = await axios.put(apiUrl + `contacts/editContact/${id}`, { first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value });
+        if (response.status === 200) {
+            store.editContact({ id: id, first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    finally {
+        dialog.value = false;
+    }
+}
+
 </script>
 <template>
     <v-btn color="primary" @click="showModal">
@@ -104,7 +117,8 @@ const handleAddContact = async (): Promise<void> => {
                 <v-btn variant="tonal" color="primary" @click="handleAddContact" type="button"
                     v-if="!store.isEditing">Save
                     Contact</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleSave" type="button" v-else>Edit Contact</v-btn>
+                <v-btn variant="tonal" color="primary" @click="handleEditContact(contactId)" type="button" v-else>Edit
+                    Contact</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

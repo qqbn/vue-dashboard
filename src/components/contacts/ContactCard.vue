@@ -20,7 +20,7 @@ const handleEdit = () => {
         id: props.contact.id,
         first_name: props.contact.first_name,
         last_name: props.contact.last_name,
-        phone_number: props.contact.last_name,
+        phone_number: props.contact.phone_number,
         email: props.contact.email,
         avatar: props.contact.avatar,
     }
