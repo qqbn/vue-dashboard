@@ -56,10 +56,10 @@ const expenses = [
             item-title="name" item-value="id"></v-select>
     </div>
     <v-row>
-        <v-col cols="8" xl="8" lg="8" md="12" sm="12" xs="12">
+        <v-col cols="12" xl="12" lg="12" md="12" sm="12" xs="12">
             <chart :value="value" :selected-time="selectedTimeName" />
         </v-col>
-        <v-col cols="3" xl="3" lg="3" md="12" sm="12" xs="12">
+        <v-col cols="12" xl="12" lg="12" md="12" sm="12" xs="12">
             <v-list>
                 <v-list-subheader>Expenses list:</v-list-subheader>
                 <v-list-item v-for="expense in expenses" :key="expense.type">
