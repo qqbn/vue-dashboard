@@ -48,3 +48,14 @@ exports.validateContact = async(data) => {
 
     return schema.validate(data);
 }
+
+exports.validateExpense = async (data) => {
+    const schema = Joi.object({
+        title: Joi.string().min(1).required(),
+        value: Joi.number().required(),
+        type: Joi.number().required(),
+        date: Joi.date().iso(),
+    })
+
+    return schema.validate(data);
+}

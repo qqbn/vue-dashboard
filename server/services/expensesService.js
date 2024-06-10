@@ -12,3 +12,9 @@ exports.getExpensesAll = async (page) => {
 
     return {expenses: results.expenses, moreExpenses: results.moreExpenses};
 }
+
+exports.addExpenseAction = async (data) => {
+    const results = await expensesModel.addExpense(data);
+    results.date = helpers.formatDate(results.date);
+    return results;
+}
