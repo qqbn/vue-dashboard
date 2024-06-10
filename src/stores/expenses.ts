@@ -40,9 +40,10 @@ export const useExpensesStore = defineStore('expenses', () => {
     //   removeStore.isRemoved = false;
     // }
 
-    // function addTask(data: TaskData): void{
-    //   (allTasks.value as TaskData[]).push(data);
-    // }
+    function addExpense(data: ExpenseData): void{
+      (allExpenses.value as ExpenseData[]).unshift(data);
+      allExpenses.value.sort((a: any, b: any) => new Date(b.date).getDate() - new Date(a.date).getDate());
+    }
 
     // function editTask(data: TaskData): void {
     //   const index = allTasks.value.findIndex(obj => obj.id === data.id);
@@ -53,5 +54,5 @@ export const useExpensesStore = defineStore('expenses', () => {
     //   }
     // }
   
-    return {loadAllExpenses, allExpenses, page, canLoadMore }
+    return {loadAllExpenses, allExpenses, page, canLoadMore, addExpense }
 })
