@@ -54,6 +54,14 @@ export interface ContactData {
   avatar: number,
 }
 
+export interface ExpenseData {
+  id: number,
+  title: string,
+  value: number,
+  type: number,
+  date: any,
+}
+
 export interface RemoveData {
   id: number | null,
   type: number | null,

@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import { typeItems, timeItems } from '@/helpers/constants.js';
 import Chart from '../others/Chart.vue';
 import { useRemoveStore } from '@/stores/remove';
+import { useExpensesStore } from '@/stores/expenses';
+import { storeToRefs } from 'pinia';
+
 const removeStore = useRemoveStore();
+const removingId = ref<number>();
+const { isRemoved } = storeToRefs(removeStore);
+const store = useExpensesStore()
+
 const value = [
     423,
     446,
@@ -46,6 +53,18 @@ const expenses = [
     },
 ]
 
+const test123 = ref<boolean>(false);
+const allExpenses = computed(() => store.allExpenses);
+
+const handleLoadMore = (page: number) => {
+    console.log(page);
+    console.log(store.page);
+}
+
+onBeforeMount(async () => {
+    await store.loadAllExpenses();
+})
+
 </script>
 <template>
     <div class="w-100 d-flex justify-space-between align-center flex-column flex-md-row">
@@ -57,27 +76,25 @@ const expenses = [
     </div>
     <v-row>
         <v-col cols="12" xl="12" lg="12" md="12" sm="12" xs="12">
-            <chart :value="value" :selected-time="selectedTimeName" />
+            <Chart :value="value" :selected-time="selectedTimeName" />
         </v-col>
         <v-col cols="12" xl="12" lg="12" md="12" sm="12" xs="12">
             <v-list>
                 <v-list-subheader>Expenses list:</v-list-subheader>
-                <v-list-item v-for="expense in expenses" :key="expense.type">
+                <v-list-item v-for="expense in allExpenses" :key="expense.id">
                     <v-list-item-title class="d-flex justify-space-between">
-                        <span>{{ expense.title }}</span>
+                        <span> {{ expense.title }} - {{ expense.value + '$' }}</span>
                         <v-btn class="ml-2" icon="mdi-bucket-outline" color="primary" variant="tonal" size="x-small"
                             @click="removeStore.removeItem(true, { id: 5, type: 4 })"></v-btn>
                     </v-list-item-title>
-                    <v-divider></v-divider>
-                    <v-list-item-subtitle>
-                        {{ expense.expenseValue + '$' }}
-                    </v-list-item-subtitle>
-                    <v-divider></v-divider>
-                    <v-list-item-subtitle>
+                    <v-list-item-subtitle class="mb-2">
                         {{ expense.date }} {{ getExpenseType(expense.type) }}
                     </v-list-item-subtitle>
+                    <v-divider></v-divider>
                 </v-list-item>
             </v-list>
+            <v-btn color="primary" variant="tonal" @click="handleLoadMore(store.page)" v-if="store.canLoadMore">Load
+                more</v-btn>
         </v-col>
     </v-row>
 </template>
