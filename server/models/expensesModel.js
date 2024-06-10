@@ -5,6 +5,7 @@ const prisma = new PrismaClient()
 
 const getAllExpenses= async (page) => {
     const expenses = await prisma.expenses.findMany({
+        orderBy: {date: 'desc'},
         take: 10 * page,
     });
 
