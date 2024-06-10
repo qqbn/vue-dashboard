@@ -4,9 +4,11 @@ const helpers = require('../helpers/helpers');
 exports.getExpensesAll = async (page) => {
     const results = await expensesModel.getAllExpenses(page);
 
-    results.forEach(result => {
+    results.expenses.forEach(result => {
         result.date = helpers.formatDate(result.date);
     })
 
-    return results;
+    results.moreExpenses = !!results.moreExpenses;
+
+    return {expenses: results.expenses, moreExpenses: results.moreExpenses};
 }

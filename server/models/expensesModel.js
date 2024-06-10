@@ -8,7 +8,11 @@ const getAllExpenses= async (page) => {
         take: 10 * page,
     });
 
-    return expenses;
+    const hasMoreExpenses = await prisma.expenses.count({
+        skip: 10 * page,
+      });
+
+    return {expenses: expenses, moreExpenses: hasMoreExpenses};
 }
 
 
