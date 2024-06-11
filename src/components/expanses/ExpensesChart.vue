@@ -21,39 +21,12 @@ const value = [
     760,
 ];
 
-const selectedType = ref<[] | null>(null);
-const selectedTime = ref<number>(1);
+const selectedType = ref<number>(0);
+const selectedTime = ref<number | null>(null);
 const selectedTimeName = computed(() => {
-    return timeItems.find((el: any) => el.id === selectedTime.value)?.name;
+    const name = timeItems.find((el: any) => el.id === selectedTime.value)?.name
+    return name ? name : null;
 })
-
-const getExpenseType = (val: number): string => {
-    const type = typeItems.find((el: any) => el.id === val)?.name;
-    return type ? type : 'Others';
-}
-
-const expenses = [
-    {
-        title: 'Test expense',
-        expenseValue: 599,
-        type: 1,
-        date: '12/12/2024'
-    },
-    {
-        title: 'Test expense2',
-        expenseValue: 333,
-        type: 1,
-        date: '11/11/2024'
-    },
-    {
-        title: 'Test expense3',
-        expenseValue: 1000,
-        type: 2,
-        date: '12/12/2024'
-    },
-]
-
-const test123 = ref<boolean>(false);
 const allExpenses = computed(() => store.allExpenses);
 
 const handleLoadMore = (page: number) => {
@@ -65,18 +38,32 @@ onBeforeMount(async () => {
     await store.loadAllExpenses();
 })
 
+const getExpenseType = (val: number): string => {
+    const type = typeItems.find((el: any) => el.id === val)?.name;
+    return type ? type : 'Others';
+}
+
+const handleTimeChange = (): void => {
+    console.log('handle time change');
+}
+
+const handleTypeChange = (): void => {
+    console.log('handle type change');
+}
+
 </script>
 <template>
     <div class="w-100 d-flex justify-space-between align-center flex-column flex-md-row">
-        <v-select label="Type of expense" :items="typeItems" chips multiple class="pa-2 w-100" v-model="selectedType"
+        <v-select label="Type of expense" :items="typeItems" chips class="pa-2 w-100" v-model="selectedType"
             item-title="name" item-value="id"></v-select>
 
         <v-select label="Period of time" :items="timeItems" chips class="pa-2 w-100" v-model="selectedTime"
-            item-title="name" item-value="id"></v-select>
+            item-title="name" item-value="id" @change="handleTimeChange"></v-select>
     </div>
     <v-row>
         <v-col cols="12" xl="12" lg="12" md="12" sm="12" xs="12">
-            <Chart :value="value" :selected-time="selectedTimeName" />
+            <Chart v-show="selectedTime" :value="value" :selected-time="selectedTimeName" :selected-type="selectedType"
+                :get-expense-type="getExpenseType" />
         </v-col>
         <v-col cols="12" xl="12" lg="12" md="12" sm="12" xs="12">
             <v-list>

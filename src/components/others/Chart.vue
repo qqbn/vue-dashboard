@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import type { ChartProps } from "../../helpers/interfaces";
-const props = defineProps<ChartProps>()
+import { typeItems, timeItems } from '@/helpers/constants.js';
+const props = defineProps<{
+    selectedType: number,
+    selectedTime: string | null,
+    value: any,
+    getExpenseType: any,
+}>()
 </script>
 <template>
     <v-card class="mx-auto text-center" color="primary" dark max-width="1000">
@@ -17,7 +23,7 @@ const props = defineProps<ChartProps>()
 
         <v-card-text v-if="selectedTime">
             <div class="text-h6 font-weight-thin">
-                Expenses from {{ selectedTime }}
+                {{ props.getExpenseType(props.selectedType) }} expenses from {{ props.selectedTime }}
             </div>
         </v-card-text>
     </v-card>

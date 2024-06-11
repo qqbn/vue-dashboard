@@ -22,6 +22,7 @@ export interface WidgetProps {
 export interface ChartProps {
   value: number[],
   selectedTime?: string | null 
+  selectedType: number,
 }
 
 export interface NoteData {

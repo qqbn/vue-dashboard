@@ -1,4 +1,5 @@
 export const typeItems = [
+    { id: 0, name: 'All' },
     { id: 1, name: 'Bills' },
     { id: 2, name: 'Food' },
     { id: 3, name: 'Shopping' },
