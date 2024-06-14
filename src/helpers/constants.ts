@@ -9,20 +9,24 @@ export const typeItems = [
 
 export const timeItems = [
     {
+        id: 0,
+        name: 'No period of time'
+    },
+    {
         id: 1,
         name: 'Today'
     },
     {
         id: 2,
-        name: 'Week'
+        name: 'Last Week'
     },
     {
         id: 3,
-        name: 'Month'
+        name: 'Last Month'
     },
     {
         id: 4,
-        name: 'Year'
+        name: 'Last Year'
     }
 ]
 

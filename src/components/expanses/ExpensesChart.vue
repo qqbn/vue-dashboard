@@ -23,10 +23,10 @@ const value = [
 ];
 
 const selectedType = ref<number>(0);
-const selectedTime = ref<number | null>(null);
-const selectedTimeName = computed(() => {
-    const name = timeItems.find((el: any) => el.id === selectedTime.value)?.name
-    return name ? name : null;
+const selectedTime = ref<number>(0);
+const selectedTimeName = computed((): string => {
+    const name: string = timeItems.find((el: { id: number, name: string }) => el.id === selectedTime.value)!.name;
+    return name;
 })
 const displayExpenses = ref<any>([]);
 
@@ -37,14 +37,40 @@ const getExpenseType = (val: number): string => {
 }
 
 const handleFiltersChange = (): void => {
-    if (selectedType.value != 0) {
-        displayExpenses.value = store.allExpenses.filter(item => item.type === selectedType.value);
-    } else {
-        displayExpenses.value = store.allExpenses;
+    const typeFilter = createTypeFilter(selectedType.value);
+    const dateFilter = createDateFilter();
+
+    displayExpenses.value = store.allExpenses.filter((expense: ExpenseData) => {
+        const typeCondition = selectedType.value ? typeFilter(expense.type) : true;
+        const dateConditon = selectedTime.value ? dateFilter(expense.date) : true;
+        return typeCondition && dateConditon;
+    })
+}
+
+const createTypeFilter = (type: number): Function => {
+    return (value: number) => value === type;
+}
+
+const createDateFilter = (): Function => {
+    return (date: any) => new Date(date) >= getPeriodLimit(selectedTimeName.value);
+}
+
+const getPeriodLimit = (period: string): any => {
+    const now = new Date();
+
+    switch (period) {
+        case 'Today':
+            return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        case 'Last Week':
+            return new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() - 6);
+        case 'Last Month':
+            return new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        case 'Last Year':
+            return new Date(now.getFullYear() - 1, 0, 1);
     }
 }
 
-const handleLoadMore = (page: number) => {
+const handleLoadMore = async (page: number): Promise<void> => {
     console.log(page);
     console.log(store.page);
 }
@@ -81,7 +107,7 @@ onBeforeMount(async () => {
                     </v-list-item-subtitle>
                     <v-divider></v-divider>
                 </v-list-item>
-                <div class="d-flex justify-end">
+                <div class="d-flex justify-center">
                     <v-btn class="mt-2" color="primary" variant="tonal" @click="handleLoadMore(store.page)"
                         v-if="store.canLoadMore">Load
                         more</v-btn>
