@@ -71,8 +71,8 @@ const getPeriodLimit = (period: string): any => {
 }
 
 const handleLoadMore = async (page: number): Promise<void> => {
-    console.log(page);
-    console.log(store.page);
+    await store.loadMoreExpenses();
+    displayExpenses.value = store.allExpenses;
 }
 
 onBeforeMount(async () => {

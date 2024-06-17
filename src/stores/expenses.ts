@@ -27,9 +27,20 @@ export const useExpensesStore = defineStore('expenses', () => {
     async function loadAllExpenses(): Promise<void>{
       try {
         const response = await axios.get(apiUrl + 'expenses/list?page=1');
-        allExpenses.value = response.data.expenses;
+        allExpenses.value = [...response.data.expenses];
         page.value = response.data.page;
         canLoadMore.value = response.data.moreExpenses;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    async function loadMoreExpenses(): Promise<void>{
+      try {
+        const response = await axios.get(apiUrl + `expenses/list?page=${page.value + 1}`);
+        allExpenses.value = [...allExpenses.value, ...response.data.expenses];
+        canLoadMore.value = response.data.moreExpenses;
+        page.value = response.data.page;
       } catch (error) {
         console.log(error);
       }
@@ -54,5 +65,5 @@ export const useExpensesStore = defineStore('expenses', () => {
     //   }
     // }
   
-    return {loadAllExpenses, allExpenses, page, canLoadMore, addExpense }
+    return {loadAllExpenses, allExpenses, page, canLoadMore, addExpense, loadMoreExpenses }
 })
