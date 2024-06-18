@@ -28,7 +28,7 @@ const selectedTimeName = computed((): string => {
     const name: string = timeItems.find((el: { id: number, name: string }) => el.id === selectedTime.value)!.name;
     return name;
 })
-const displayExpenses = ref<any>([]);
+const displayExpenses = computed(() => store.filteredArr);
 
 
 const getExpenseType = (val: number): string => {
@@ -36,48 +36,17 @@ const getExpenseType = (val: number): string => {
     return type ? type : 'Others';
 }
 
-const handleFiltersChange = (): void => {
-    const typeFilter = createTypeFilter(selectedType.value);
-    const dateFilter = createDateFilter();
-
-    displayExpenses.value = store.allExpenses.filter((expense: ExpenseData) => {
-        const typeCondition = selectedType.value ? typeFilter(expense.type) : true;
-        const dateConditon = selectedTime.value ? dateFilter(expense.date) : true;
-        return typeCondition && dateConditon;
-    })
-}
-
-const createTypeFilter = (type: number): Function => {
-    return (value: number) => value === type;
-}
-
-const createDateFilter = (): Function => {
-    return (date: any) => new Date(date) >= getPeriodLimit(selectedTimeName.value);
-}
-
-const getPeriodLimit = (period: string): any => {
-    const now = new Date();
-
-    switch (period) {
-        case 'Today':
-            return new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        case 'Last Week':
-            return new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() - 6);
-        case 'Last Month':
-            return new Date(now.getFullYear(), now.getMonth() - 1, 1);
-        case 'Last Year':
-            return new Date(now.getFullYear() - 1, 0, 1);
-    }
+const handleFiltersChange = async (): Promise<void> => {
+    await store.setFilters(selectedType.value, selectedTimeName.value);
+    await store.filterExpenses();
 }
 
 const handleLoadMore = async (page: number): Promise<void> => {
     await store.loadMoreExpenses();
-    displayExpenses.value = store.allExpenses;
 }
 
 onBeforeMount(async () => {
     await store.loadAllExpenses();
-    displayExpenses.value = store.allExpenses;
 })
 </script>
 <template>
