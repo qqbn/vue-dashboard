@@ -31,8 +31,18 @@ const addExpense = async (data) => {
     return expense;
 }
 
+const deleteExpense = async (id) => {
+    const expense = await prisma.expenses.delete({
+        where: {
+            id: id,
+        }
+    })
+
+    return expense;
+}
 
 module.exports = {
     getAllExpenses,
-    addExpense
+    addExpense,
+    deleteExpense,
 }

@@ -18,3 +18,9 @@ exports.addExpenseAction = async (data) => {
     results.date = helpers.formatDate(results.date);
     return results;
 }
+
+exports.deleteExpenseAction = async (id) => {
+    const results = await expensesModel.deleteExpense(id);
+
+    return results;
+}

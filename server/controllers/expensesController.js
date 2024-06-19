@@ -27,7 +27,19 @@ const addExpense = async (req, res) => {
     }
 }
 
+const deleteExpense = async (req, res) => {
+    const id = JSON.parse(req.params['id']);
+    if(!id) res.status(400).json({ message: 'Expense not found' });
+
+    const data = await expensesService.deleteExpenseAction(id);
+
+    if(data){
+        res.status(200).json({ message: 'Expense deleted' });
+    }
+}
+
 module.exports = {
     getExpenses,
-    addExpense
+    addExpense,
+    deleteExpense,
 }
