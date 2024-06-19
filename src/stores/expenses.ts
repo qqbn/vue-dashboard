@@ -90,6 +90,12 @@ export const useExpensesStore = defineStore('expenses', () => {
       selectedType.value = type;
       selectedPeriod.value = period;
     }
+
+    const removeExpense = async (id: number): Promise<void> => {
+      allExpenses.value = allExpenses.value.filter((el: ExpenseData) => el.id != id);
+      await filterExpenses();
+      removeStore.isRemoved = false;
+    }
   
-    return {loadAllExpenses, allExpenses, page, canLoadMore, addExpense, loadMoreExpenses, filterExpenses, filteredArr, setFilters }
+    return {loadAllExpenses, allExpenses, page, canLoadMore, addExpense, loadMoreExpenses, filterExpenses, filteredArr, setFilters, removeExpense }
 })

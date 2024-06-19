@@ -27,7 +27,7 @@ const handleEdit = () => {
     store.changeIsEditing(true, obj);
 }
 
-const handleRemoveNote = () => {
+const handleRemoveContact = () => {
     removeStore.removeItem(true, { id: props.contact.id, type: 1 });
     emit('removeContact', props.contact.id);
 }
@@ -42,7 +42,7 @@ const handleRemoveNote = () => {
         </v-card-actions>
         <v-card-action class="mt-4 d-flex align-center justify-end">
             <v-btn variant="tonal" color="red" append-icon="mdi-bucket-outline" class="mr-2"
-                @click="handleRemoveNote">Delete</v-btn>
+                @click="handleRemoveContact">Delete</v-btn>
             <v-btn variant="tonal" color="primary" append-icon="mdi-human-edit" @click="handleEdit">Edit</v-btn>
         </v-card-action>
     </v-card>

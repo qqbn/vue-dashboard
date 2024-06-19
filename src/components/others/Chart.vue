@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { ChartProps } from "../../helpers/interfaces";
 import { typeItems, timeItems } from '@/helpers/constants.js';
+
 const props = defineProps<{
     selectedType: number,
     selectedTime: string | null,
-    value: any,
+    values: number[],
     getExpenseType: any,
 }>()
 </script>
@@ -12,8 +13,8 @@ const props = defineProps<{
     <v-card class="mx-auto text-center" color="primary" dark max-width="1000">
         <v-card-text>
             <v-sheet color="rgba(0, 0, 0, .12)">
-                <v-sparkline :model-value="value" color="rgba(255, 255, 255, .7)" height="100" padding="24"
-                    stroke-linecap="round" smooth>
+                <v-sparkline :model-value="values" color="rgba(255, 255, 255, .7)" height="100" padding="20"
+                    stroke-linecap="round" smooth :auto-line-width="false" line-width="2">
                     <template v-slot:label="item">
                         ${{ item.value }}
                     </template>

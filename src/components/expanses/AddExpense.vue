@@ -3,20 +3,15 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
 import { useExpensesStore } from '@/stores/expenses';
+import { typeItems } from '@/helpers/constants.js';
 
 const store = useExpensesStore();
 const dialog = ref<boolean>(false);
 const date = ref<any>('');
-const typeItems = [
-    { id: 1, name: 'Bills' },
-    { id: 2, name: 'Food' },
-    { id: 3, name: 'Shopping' },
-    { id: 4, name: 'Outside' },
-    { id: 5, name: 'Others' }
-]
-const selectedType = ref<[] | null>(null);
+const selectedType = ref<number | null>(null);
 const title = ref<string>('');
 const value = ref<number>(0);
+const expenseTypes = typeItems.filter(el => el.id != 0);
 
 const handleAddNote = async (): Promise<void> => {
     try {
@@ -31,9 +26,17 @@ const handleAddNote = async (): Promise<void> => {
         dialog.value = false;
     }
 }
+
+const showDialog = () => {
+    selectedType.value = null;
+    date.value = '';
+    title.value = '';
+    dialog.value = true;
+    value.value = 0;
+}
 </script>
 <template>
-    <v-btn color="primary" @click="dialog = true">
+    <v-btn color="primary" @click="showDialog">
         Add Expense
     </v-btn>
 
@@ -45,7 +48,7 @@ const handleAddNote = async (): Promise<void> => {
             <v-card-text>
                 <v-text-field label="Expense Title" type="input" v-model="title"></v-text-field>
                 <v-text-field label="Expense Value" type="number" v-model="value"></v-text-field>
-                <v-select label="Type of expense" :items="typeItems" v-model="selectedType" item-title="name"
+                <v-select label="Type of expense" :items="expenseTypes" v-model="selectedType" item-title="name"
                     item-value="id"></v-select>
                 <VueDatePicker v-model="date" inline auto-apply></VueDatePicker>
             </v-card-text>

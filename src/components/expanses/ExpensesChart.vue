@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onBeforeMount } from 'vue';
+import { ref, computed, onBeforeMount, watch } from 'vue';
 import { typeItems, timeItems } from '@/helpers/constants.js';
 import Chart from '../others/Chart.vue';
 import { useRemoveStore } from '@/stores/remove';
@@ -12,16 +12,6 @@ const removingId = ref<number>();
 const { isRemoved } = storeToRefs(removeStore);
 const store = useExpensesStore()
 
-const value = [
-    423,
-    446,
-    675,
-    510,
-    590,
-    610,
-    760,
-];
-
 const selectedType = ref<number>(0);
 const selectedTime = ref<number>(0);
 const selectedTimeName = computed((): string => {
@@ -30,6 +20,7 @@ const selectedTimeName = computed((): string => {
 })
 const displayExpenses = computed(() => store.filteredArr);
 
+const values = computed(() => store.filteredArr.map((obj: ExpenseData) => obj['value']).reverse());
 
 const getExpenseType = (val: number): string => {
     const type = typeItems.find((el: any) => el.id === val)?.name;
@@ -45,6 +36,10 @@ const handleLoadMore = async (page: number): Promise<void> => {
     await store.loadMoreExpenses();
 }
 
+// watch(isRemoved, () => {
+//     if (isRemoved.value && removingId.value) store.removeNote(removingId.value);
+// })
+
 onBeforeMount(async () => {
     await store.loadAllExpenses();
 })
@@ -59,7 +54,7 @@ onBeforeMount(async () => {
     </div>
     <v-row>
         <v-col cols="12" xl="12" lg="12" md="12" sm="12" xs="12" v-show="selectedTime">
-            <Chart :value="value" :selected-time="selectedTimeName" :selected-type="selectedType"
+            <Chart :values="values" :selected-time="selectedTimeName" :selected-type="selectedType"
                 :get-expense-type="getExpenseType" />
         </v-col>
         <v-col cols="12" xl="12" lg="12" md="12" sm="12" xs="12">
@@ -69,7 +64,7 @@ onBeforeMount(async () => {
                     <v-list-item-title class="d-flex justify-space-between">
                         <span> {{ expense.title }} - {{ expense.value + '$' }}</span>
                         <v-btn class="ml-2" icon="mdi-bucket-outline" color="primary" variant="tonal" size="x-small"
-                            @click="removeStore.removeItem(true, { id: 5, type: 4 })"></v-btn>
+                            @click="removeStore.removeItem(true, { id: expense.id, type: 4 })"></v-btn>
                     </v-list-item-title>
                     <v-list-item-subtitle class="mb-2">
                         {{ expense.date }} {{ getExpenseType(expense.type) }}
