@@ -4,7 +4,7 @@ import { useRemindsStore } from '@/stores/reminds';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
-import { nameRule, minOneChar } from "@/helpers/validation";
+import { textRules, minOneChar } from "@/helpers/validation";
 
 const store = useRemindsStore();
 const { isEditing } = storeToRefs(store);
@@ -77,7 +77,7 @@ const handleEditRemind = async (id: number): Promise<void> => {
                 {{ modalTitle }}
             </v-card-title>
             <v-card-text>
-                <v-text-field label="Remind name" type="input" v-model="name" :rules="nameRule"></v-text-field>
+                <v-text-field label="Remind name*" type="input" v-model="name" :rules="textRules"></v-text-field>
                 <h4>Set date to remind you of something</h4>
                 <VueDatePicker v-model="date" inline auto-apply :min-date="new Date()"></VueDatePicker>
             </v-card-text>

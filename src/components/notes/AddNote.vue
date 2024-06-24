@@ -4,7 +4,7 @@ import { useEditNoteStore } from '@/stores/editNote';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
-import { nameRule, minOneChar } from '@/helpers/validation';
+import { textRules, minOneChar } from '@/helpers/validation';
 
 const store = useEditNoteStore();
 const { isEditing } = storeToRefs(store);
@@ -15,7 +15,7 @@ const date = ref<any>('')
 const content = ref<string>("")
 const important = ref<boolean>(true);
 const dialog = ref<boolean>(false);
-const modalTitle = computed(() => store.isEditing ? 'Editing task' : 'Add new task')
+const modalTitle = computed(() => store.isEditing ? 'Editing note' : 'Add new note')
 
 
 const handleAddNote = async (): Promise<void> => {
@@ -83,7 +83,7 @@ watch(isEditing, () => {
                 {{ modalTitle }}
             </v-card-title>
             <v-card-text>
-                <v-text-field label="Note Title" type="input" v-model="title" :rules="nameRule"></v-text-field>
+                <v-text-field label="Note Title*" type="input" v-model="title" :rules="textRules"></v-text-field>
                 <v-textarea label="Note" auto-grow v-model="content"></v-textarea>
             </v-card-text>
             <v-card-item>

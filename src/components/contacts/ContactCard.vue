@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { useContactsStore } from '@/stores/contacts';
 import { useRemoveStore } from '@/stores/remove';
-import { avatars } from '@/helpers/constants.js'
+import { avatarsImages } from '@/helpers/constants.js'
 import type { ContactData } from '@/helpers/interfaces';
 
 const store = useContactsStore();
@@ -13,7 +13,7 @@ const props = defineProps<{
     contact: ContactData,
 }>();
 
-const avatar = computed(() => avatars[props.contact.avatar - 1])
+const avatar = computed(() => avatarsImages[props.contact.avatar - 1])
 
 const handleEdit = () => {
     const obj = {

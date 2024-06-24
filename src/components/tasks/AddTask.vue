@@ -4,7 +4,7 @@ import { useTasksStore } from '@/stores/tasks';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
-import { nameRule, minOneChar } from "@/helpers/validation";
+import { textRules, minOneChar } from "@/helpers/validation";
 
 const store = useTasksStore();
 const { isEditing } = storeToRefs(store);
@@ -76,8 +76,8 @@ const handleEditTask = async (id: number): Promise<void> => {
             <v-card-title>{{ modalTitle }}</v-card-title>
             <v-card-text>
                 <v-checkbox label="Task done" color="primary" v-model="done" v-if="store.isEditing"></v-checkbox>
-                <v-textarea clearable label="Task content" variant="solo-filled" v-model="content"
-                    :rules="nameRule"></v-textarea>
+                <v-textarea clearable label="Task content*" variant="solo-filled" v-model="content"
+                    :rules="textRules"></v-textarea>
             </v-card-text>
             <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                 <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>

@@ -30,6 +30,29 @@ export const timeItems = [
     }
 ]
 
-export const avatars = ['https://randomuser.me/api/portraits/lego/1.jpg', 'https://randomuser.me/api/portraits/lego/3.jpg', 'https://randomuser.me/api/portraits/lego/7.jpg', 'https://randomuser.me/api/portraits/lego/8.jpg', 'https://randomuser.me/api/portraits/lego/6.jpg']
+export const avatars = [
+    {
+        id: 1,
+        name: 'Lego 1'
+    },
+    {
+        id: 2,
+        name: 'Lego 2'
+    },
+    {
+        id: 3,
+        name: 'Lego 3'
+    },
+    {
+        id: 4,
+        name: 'Lego 4'
+    },
+    {
+        id: 5,
+        name: 'Lego 5'
+    }
+];
+
+export const avatarsImages = ['https://randomuser.me/api/portraits/lego/1.jpg', 'https://randomuser.me/api/portraits/lego/3.jpg', 'https://randomuser.me/api/portraits/lego/7.jpg', 'https://randomuser.me/api/portraits/lego/8.jpg', 'https://randomuser.me/api/portraits/lego/6.jpg']
 
 export const apiUrl = 'http://localhost:5500/';

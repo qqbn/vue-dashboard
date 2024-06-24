@@ -4,6 +4,7 @@ import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
 import { useExpensesStore } from '@/stores/expenses';
 import { typeItems } from '@/helpers/constants.js';
+import { textRules, expenseValueRules } from '@/helpers/validation';
 
 const store = useExpensesStore();
 const dialog = ref<boolean>(false);
@@ -46,8 +47,9 @@ const showDialog = () => {
                 Add new expense
             </v-card-title>
             <v-card-text>
-                <v-text-field label="Expense Title" type="input" v-model="title"></v-text-field>
-                <v-text-field label="Expense Value" type="number" v-model="value"></v-text-field>
+                <v-text-field label="Expense Title" type="input" v-model="title" :rules="textRules"></v-text-field>
+                <v-text-field label="Expense Value" type="input" v-model="value"
+                    :rules="expenseValueRules"></v-text-field>
                 <v-select label="Type of expense" :items="expenseTypes" v-model="selectedType" item-title="name"
                     item-value="id"></v-select>
                 <VueDatePicker v-model="date" inline auto-apply></VueDatePicker>

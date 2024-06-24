@@ -36,9 +36,14 @@ const handleLoadMore = async (page: number): Promise<void> => {
     await store.loadMoreExpenses();
 }
 
-// watch(isRemoved, () => {
-//     if (isRemoved.value && removingId.value) store.removeNote(removingId.value);
-// })
+const handleRemoveExpense = (id: number) => {
+    removeStore.removeItem(true, { id: id, type: 4 });
+    removingId.value = id;
+}
+
+watch(isRemoved, () => {
+    if (isRemoved.value && removingId.value) store.removeExpense(removingId.value);
+})
 
 onBeforeMount(async () => {
     await store.loadAllExpenses();
@@ -53,7 +58,7 @@ onBeforeMount(async () => {
             item-title="name" item-value="id" @update:modelValue="handleFiltersChange"></v-select>
     </div>
     <v-row>
-        <v-col cols="12" xl="12" lg="12" md="12" sm="12" xs="12" v-show="selectedTime">
+        <v-col cols="12" xl="12" lg="12" md="12" sm="12" xs="12" v-show="selectedTime && displayExpenses.length > 0">
             <Chart :values="values" :selected-time="selectedTimeName" :selected-type="selectedType"
                 :get-expense-type="getExpenseType" />
         </v-col>
@@ -64,7 +69,7 @@ onBeforeMount(async () => {
                     <v-list-item-title class="d-flex justify-space-between">
                         <span> {{ expense.title }} - {{ expense.value + '$' }}</span>
                         <v-btn class="ml-2" icon="mdi-bucket-outline" color="primary" variant="tonal" size="x-small"
-                            @click="removeStore.removeItem(true, { id: expense.id, type: 4 })"></v-btn>
+                            @click="handleRemoveExpense(expense.id)"></v-btn>
                     </v-list-item-title>
                     <v-list-item-subtitle class="mb-2">
                         {{ expense.date }} {{ getExpenseType(expense.type) }}
