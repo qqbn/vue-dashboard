@@ -4,7 +4,7 @@ import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
 import { useExpensesStore } from '@/stores/expenses';
 import { typeItems } from '@/helpers/constants.js';
-import { textRules, expenseValueRules } from '@/helpers/validation';
+import { textRules, expenseValueRules, fieldRequired } from '@/helpers/validation';
 
 const store = useExpensesStore();
 const dialog = ref<boolean>(false);
@@ -13,8 +13,11 @@ const selectedType = ref<number | null>(null);
 const title = ref<string>('');
 const value = ref<number>(0);
 const expenseTypes = typeItems.filter(el => el.id != 0);
+const form = ref();
 
 const handleAddNote = async (): Promise<void> => {
+    const { valid } = await form.value.validate();
+    if (!valid) return;
     try {
         const response = await axios.post(apiUrl + `expenses/addExpense/`, { title: title.value, value: Number(value.value), type: selectedType.value, date: date.value });
         if (response.status === 200) {
@@ -46,18 +49,21 @@ const showDialog = () => {
             <v-card-title>
                 Add new expense
             </v-card-title>
-            <v-card-text>
-                <v-text-field label="Expense Title" type="input" v-model="title" :rules="textRules"></v-text-field>
-                <v-text-field label="Expense Value" type="input" v-model="value"
-                    :rules="expenseValueRules"></v-text-field>
-                <v-select label="Type of expense" :items="expenseTypes" v-model="selectedType" item-title="name"
-                    item-value="id"></v-select>
-                <VueDatePicker v-model="date" inline auto-apply></VueDatePicker>
-            </v-card-text>
-            <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
-                <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleAddNote" type="button">Add Expense</v-btn>
-            </v-card-actions>
+            <v-form @submit.prevent="handleAddNote" ref="form">
+                <v-card-text>
+                    <v-text-field label="Expense Title" type="input" v-model="title" :rules="textRules"></v-text-field>
+                    <v-text-field label="Expense Value" type="input" v-model="value"
+                        :rules="expenseValueRules"></v-text-field>
+                    <v-select label="Type of expense" :items="expenseTypes" v-model="selectedType" item-title="name"
+                        item-value="id" :rules="fieldRequired"></v-select>
+                    <VueDatePicker v-model="date" inline auto-apply>
+                    </VueDatePicker>
+                </v-card-text>
+                <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
+                    <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
+                    <v-btn variant="tonal" color="primary" type="submit">Add Expense</v-btn>
+                </v-card-actions>
+            </v-form>
         </v-card>
     </v-dialog>
 </template>

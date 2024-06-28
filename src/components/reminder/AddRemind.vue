@@ -14,6 +14,7 @@ const name = ref<string>('');
 const date = ref<any>();
 const remindId = ref<number>(0);
 const modalTitle = computed(() => store.isEditing ? 'Edit remind' : 'Add new remind');
+const form = ref()
 
 
 const showModal = (): void => {
@@ -65,6 +66,21 @@ const handleEditRemind = async (id: number): Promise<void> => {
         dialog.value = false;
     }
 }
+
+const btnText = computed(() => {
+    return !store.isEditing ? 'Add remind' : 'Edit remind'
+});
+
+const handleSubmitForm = async (): Promise<void> => {
+    const { valid } = await form.value.validate();
+    if (!valid) return;
+
+    if (!store.isEditing) {
+        await handleAddRemind()
+    } else {
+        await handleEditRemind(remindId.value);
+    }
+}
 </script>
 <template>
     <v-btn color="primary" @click="showModal">
@@ -76,20 +92,17 @@ const handleEditRemind = async (id: number): Promise<void> => {
             <v-card-title>
                 {{ modalTitle }}
             </v-card-title>
-            <v-card-text>
-                <v-text-field label="Remind name*" type="input" v-model="name" :rules="textRules"></v-text-field>
-                <h4>Set date to remind you of something</h4>
-                <VueDatePicker v-model="date" inline auto-apply :min-date="new Date()"></VueDatePicker>
-            </v-card-text>
-            <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
-                <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleAddRemind" type="button" v-if="!store.isEditing"
-                    :disabled="!minOneChar(name)">Add
-                    Remind</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleEditRemind(remindId)" type="button" v-else
-                    :disabled="!minOneChar(name)">Edit
-                    Remind</v-btn>
-            </v-card-actions>
+            <v-form @submit.prevent="handleSubmitForm" ref="form">
+                <v-card-text>
+                    <v-text-field label="Remind name*" type="input" v-model="name" :rules="textRules"></v-text-field>
+                    <h4>Set date to remind you of something</h4>
+                    <VueDatePicker v-model="date" inline auto-apply :min-date="new Date()"></VueDatePicker>
+                </v-card-text>
+                <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
+                    <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
+                    <v-btn variant="tonal" color="primary" type="submit">{{ btnText }}</v-btn>
+                </v-card-actions>
+            </v-form>
         </v-card>
     </v-dialog>
 </template>

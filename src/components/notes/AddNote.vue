@@ -16,6 +16,7 @@ const content = ref<string>("")
 const important = ref<boolean>(true);
 const dialog = ref<boolean>(false);
 const modalTitle = computed(() => store.isEditing ? 'Editing note' : 'Add new note')
+const form = ref();
 
 
 const handleAddNote = async (): Promise<void> => {
@@ -71,6 +72,21 @@ watch(isEditing, () => {
     content.value = store.editingData.content;
     important.value = store.editingData.important;
 })
+
+const btnText = computed(() => {
+    return !store.isEditing ? 'Add note' : 'Edit note'
+});
+
+const handleSubmitForm = async (): Promise<void> => {
+    const { valid } = await form.value.validate();
+    if (!valid) return;
+
+    if (!store.isEditing) {
+        await handleAddNote()
+    } else {
+        await handleEditNote(noteId.value);
+    }
+}
 </script>
 <template>
     <v-btn color="primary" @click="showModal">
@@ -82,22 +98,19 @@ watch(isEditing, () => {
             <v-card-title>
                 {{ modalTitle }}
             </v-card-title>
-            <v-card-text>
-                <v-text-field label="Note Title*" type="input" v-model="title" :rules="textRules"></v-text-field>
-                <v-textarea label="Note" auto-grow v-model="content"></v-textarea>
-            </v-card-text>
-            <v-card-item>
-                <v-checkbox label="Important" color="primary" v-model="important"></v-checkbox>
-            </v-card-item>
-            <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
-                <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleAddNote" type="button" v-if="!store.isEditing"
-                    :disabled="!minOneChar(title)">Add
-                    Note</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleEditNote(noteId)" type="button" v-else
-                    :disabled="!minOneChar(title)">Edit
-                    Note</v-btn>
-            </v-card-actions>
+            <v-form @submit.prevent="handleSubmitForm" ref="form">
+                <v-card-text>
+                    <v-text-field label="Note Title*" type="input" v-model="title" :rules="textRules"></v-text-field>
+                    <v-textarea label="Note" auto-grow v-model="content"></v-textarea>
+                </v-card-text>
+                <v-card-item>
+                    <v-checkbox label="Important" color="primary" v-model="important"></v-checkbox>
+                </v-card-item>
+                <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
+                    <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
+                    <v-btn variant="tonal" color="primary" type="submit">{{ btnText }}</v-btn>
+                </v-card-actions>
+            </v-form>
         </v-card>
     </v-dialog>
 </template>

@@ -44,6 +44,15 @@ export const expenseValueRules = [
     }
 ]
 
+export const fieldRequired = [
+    (value: any) => {
+        if(!!value)
+            return true;
+        
+        return 'Field is required'
+    }
+]
+
 
 const numbersOnly = (value: string): boolean => {
     return /^[0-9]+$/.test(value);

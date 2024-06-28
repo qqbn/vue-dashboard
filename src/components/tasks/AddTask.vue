@@ -14,6 +14,7 @@ const content = ref<string>('');
 const done = ref<boolean>(false);
 const taskId = ref<number>(0);
 const modalTitle = computed(() => store.isEditing ? 'Edit task' : 'Add new task')
+const form = ref()
 
 const showModal = (): void => {
     dialog.value = !dialog.value;
@@ -65,6 +66,21 @@ const handleEditTask = async (id: number): Promise<void> => {
         dialog.value = false;
     }
 }
+
+const btnText = computed(() => {
+    return !store.isEditing ? 'Add remind' : 'Edit remind'
+});
+
+const handleSubmitForm = async (): Promise<void> => {
+    const { valid } = await form.value.validate();
+    if (!valid) return;
+
+    if (!store.isEditing) {
+        await handleAddTask()
+    } else {
+        await handleEditTask(taskId.value);
+    }
+}
 </script>
 <template>
     <v-btn color="primary" @click="showModal">
@@ -74,20 +90,17 @@ const handleEditTask = async (id: number): Promise<void> => {
     <v-dialog v-model="dialog" width="500">
         <v-card class="px-6 py-4">
             <v-card-title>{{ modalTitle }}</v-card-title>
-            <v-card-text>
-                <v-checkbox label="Task done" color="primary" v-model="done" v-if="store.isEditing"></v-checkbox>
-                <v-textarea clearable label="Task content*" variant="solo-filled" v-model="content"
-                    :rules="textRules"></v-textarea>
-            </v-card-text>
-            <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
-                <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleAddTask" type="button" v-if="!store.isEditing"
-                    :disabled="!minOneChar(content)">Add
-                    Task</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleEditTask(taskId)" type="button" v-else
-                    :disabled="!minOneChar(content)">Edit
-                    Task</v-btn>
-            </v-card-actions>
+            <v-form @submit.prevent="handleSubmitForm" ref="form">
+                <v-card-text>
+                    <v-checkbox label="Task done" color="primary" v-model="done" v-if="store.isEditing"></v-checkbox>
+                    <v-textarea clearable label="Task content*" variant="solo-filled" v-model="content"
+                        :rules="textRules"></v-textarea>
+                </v-card-text>
+                <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
+                    <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
+                    <v-btn variant="tonal" color="primary" type="submit">{{ btnText }}</v-btn>
+                </v-card-actions>
+            </v-form>
         </v-card>
     </v-dialog>
 </template>

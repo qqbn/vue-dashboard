@@ -52,7 +52,7 @@ export interface ContactData {
   last_name: string,
   phone_number: string,
   email: string,
-  avatar: number,
+  avatar: number | null,
 }
 
 export interface ExpenseData {
