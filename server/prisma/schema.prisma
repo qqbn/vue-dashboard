@@ -39,7 +39,8 @@ model reminds {
 }
 
 model tasks {
-  id      Int     @id @default(autoincrement())
-  content String? @db.VarChar(255)
-  done    Boolean @default(false)
+  id                 Int     @id @default(autoincrement())
+  content            String? @db.VarChar(255)
+  done               Boolean @default(false)
+  added_to_dashboard Boolean @default(false)
 }
