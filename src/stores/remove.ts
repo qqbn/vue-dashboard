@@ -30,7 +30,7 @@ export const useRemoveStore = defineStore('remove', () => {
         case 4: 
           return apiUrl + 'expenses/delete/';
         case 5:
-          return apiUrl + 'tasks/delete';
+          return apiUrl + 'tasks/delete/';
         default:
           return 'test';
       }

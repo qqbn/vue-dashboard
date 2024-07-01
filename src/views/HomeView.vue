@@ -43,7 +43,7 @@ const widgets = ref<SelectedWidget[]>([
   }
 ])
 
-let selectedWidgets = ref<SelectedWidgets | {}>({});
+let selectedWidgets = ref<SelectedWidgets>({});
 const dialog = ref<boolean>(false);
 const availableWidgets = ref<any>(null);
 const actualSelectedWidget = ref<SelectedWidget | null>(null);
