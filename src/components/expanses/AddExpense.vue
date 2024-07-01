@@ -14,10 +14,16 @@ const title = ref<string>('');
 const value = ref<number>(0);
 const expenseTypes = typeItems.filter(el => el.id != 0);
 const form = ref();
+const dateValid = ref<boolean>(true);
 
 const handleAddNote = async (): Promise<void> => {
     const { valid } = await form.value.validate();
-    if (!valid) return;
+    if (!valid) {
+        if (!date.value) {
+            dateValid.value = false;
+        }
+        return;
+    }
     try {
         const response = await axios.post(apiUrl + `expenses/addExpense/`, { title: title.value, value: Number(value.value), type: selectedType.value, date: date.value });
         if (response.status === 200) {
@@ -38,6 +44,12 @@ const showDialog = () => {
     dialog.value = true;
     value.value = 0;
 }
+
+const handleDateChange = () => {
+    if (dateValid.value) return
+
+    dateValid.value = true;
+}
 </script>
 <template>
     <v-btn color="primary" @click="showDialog">
@@ -56,8 +68,10 @@ const showDialog = () => {
                         :rules="expenseValueRules"></v-text-field>
                     <v-select label="Type of expense" :items="expenseTypes" v-model="selectedType" item-title="name"
                         item-value="id" :rules="fieldRequired"></v-select>
-                    <VueDatePicker v-model="date" inline auto-apply>
+                    <VueDatePicker v-model="date" inline auto-apply style="margin-top: 10px;"
+                        @update:model-value="handleDateChange">
                     </VueDatePicker>
+                    <p class="custom-error-text" v-if="!dateValid">Date is required</p>
                 </v-card-text>
                 <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                     <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>

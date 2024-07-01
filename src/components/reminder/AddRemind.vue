@@ -14,7 +14,8 @@ const name = ref<string>('');
 const date = ref<any>();
 const remindId = ref<number>(0);
 const modalTitle = computed(() => store.isEditing ? 'Edit remind' : 'Add new remind');
-const form = ref()
+const form = ref();
+const dateValid = ref<boolean>(true);
 
 
 const showModal = (): void => {
@@ -73,13 +74,24 @@ const btnText = computed(() => {
 
 const handleSubmitForm = async (): Promise<void> => {
     const { valid } = await form.value.validate();
-    if (!valid) return;
+    if (!valid) {
+        if (!date.value) {
+            dateValid.value = false;
+        }
+        return;
+    }
 
     if (!store.isEditing) {
         await handleAddRemind()
     } else {
         await handleEditRemind(remindId.value);
     }
+}
+
+const handleDateChange = () => {
+    if (dateValid.value) return
+
+    dateValid.value = true;
 }
 </script>
 <template>
@@ -96,7 +108,9 @@ const handleSubmitForm = async (): Promise<void> => {
                 <v-card-text>
                     <v-text-field label="Remind name*" type="input" v-model="name" :rules="textRules"></v-text-field>
                     <h4>Set date to remind you of something</h4>
-                    <VueDatePicker v-model="date" inline auto-apply :min-date="new Date()"></VueDatePicker>
+                    <VueDatePicker v-model="date" inline auto-apply :min-date="new Date()"
+                        @update:model-value="handleDateChange" style="margin-top: 10px;"></VueDatePicker>
+                    <p class="custom-error-text" v-if="!dateValid">Date is required</p>
                 </v-card-text>
                 <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                     <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
