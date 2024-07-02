@@ -25,3 +25,8 @@ exports.editTaskAction = async(id, data) => {
     const result = await taskModel.editTask(id, data);
     return result;
 }
+
+exports.addToDashboardAction = async(id, data) => {
+    const result = await taskModel.taskToDashboard(id, data);
+    return result;
+}

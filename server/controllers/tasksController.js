@@ -56,10 +56,22 @@ const editTask = async (req, res) => {
     }
 }
 
+const addToDashboard = async (req, res) => {
+    const id = JSON.parse(req.params['id']);
+    if(!id) res.status(400).json({ message: 'Task not found' });
+
+    const data = await tasksServices.addToDashboardAction(id, req.body);
+    
+    if(data){
+        res.status(200).json({ message: 'Task added to dashboard' });
+    }
+}
+
 module.exports = {
     getTasks,
     setTask,
     deleteTask,
     addTask,
-    editTask
+    editTask,
+    addToDashboard
 }

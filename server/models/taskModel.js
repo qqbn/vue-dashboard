@@ -56,6 +56,19 @@ const editTask = async (id, data) => {
     return task;
 }
 
+const taskToDashboard = async (id, data) => {
+    const task = await prisma.tasks.update({
+        where: {
+            id: id,
+        },
+        data: {
+            added_to_dashboard: data.add,
+        }
+    })
+    
+    return task;
+}
+
 
 module.exports = {
     getAllTasks,
@@ -63,4 +76,5 @@ module.exports = {
     deleteTask,
     addTask,
     editTask,
+    taskToDashboard
 }
