@@ -36,6 +36,7 @@ const addTask = async (data) => {
     const task = await prisma.tasks.create({
         data: {
             content: data.content,
+            added_to_dashboard: data.added_to_dashboard,
         }
     })
 
@@ -49,7 +50,8 @@ const editTask = async (id, data) => {
         },
         data: {
             content: data.content,
-            done: data.done
+            done: data.done,
+            added_to_dashboard: data.added_to_dashboard,
         }
     })
 

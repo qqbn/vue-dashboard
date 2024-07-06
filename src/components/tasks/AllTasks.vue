@@ -31,6 +31,13 @@ const setTaskDone = (id: number): void => {
     }
 }
 
+const taskToDashboard = (id: number): void => {
+    const task = allTasks.value.find((el: any) => el.id === id)
+    if (task) {
+        task.added_to_dashboard = !task.added_to_dashboard;
+    }
+}
+
 onBeforeMount(async () => {
     await store.loadAllTasks();
 })
@@ -43,7 +50,7 @@ onBeforeMount(async () => {
         <div v-for="(task, index) in displayedTasks" :key="task.id">
             <v-divider></v-divider>
             <taskCard :index="index" :task="task" v-if="task.id" @removeTask="removingId = $event"
-                @setTaskDone="setTaskDone" />
+                @setTaskDone="setTaskDone" @taskToDashboard="taskToDashboard" />
             <v-divider></v-divider>
         </div>
     </v-card>

@@ -38,6 +38,7 @@ export interface TaskData {
   content: string;
   done: boolean;
   index?: number;
+  added_to_dashboard: boolean;
 }
 
 export interface RemindData {

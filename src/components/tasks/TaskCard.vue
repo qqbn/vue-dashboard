@@ -32,6 +32,7 @@ const handleEditTask = (): void => {
         content: props.task.content,
         done: props.task.done,
         id: props.task.id,
+        added_to_dashboard: props.task.added_to_dashboard,
     }
 
     store.changeIsEditing(true, obj);
@@ -43,7 +44,15 @@ const handleRemoveTask = (): void => {
 }
 
 const handleAddToDashboard = async (): Promise<void> => {
-    console.log('adding to dashboard');
+    try {
+        const response = await axios.patch(apiUrl + 'tasks/addToDashboard/' + props.task.id, { added_to_dashboard: !props.task.added_to_dashboard });
+        if (response.status === 200) {
+            emit('taskToDashboard', props.task.id);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 </script>
 <template>
@@ -53,9 +62,11 @@ const handleAddToDashboard = async (): Promise<void> => {
             {{ props.task.content }}
         </p>
         <div class="icon-box">
-            <v-tooltip text="Add task to dashboard" location="end">
+            <v-tooltip :text="task.added_to_dashboard ? 'Remove from dashboard' : 'Add task to dashboard'"
+                location="end">
                 <template v-slot:activator="{ props }">
-                    <v-btn variant="tonal" color="primary" type="button" icon="mdi-plus-box" size="small"
+                    <v-btn variant="tonal" color="primary" type="button"
+                        :icon="task.added_to_dashboard ? 'mdi-minus-box' : 'mdi-plus-box'" size="small"
                         @click="handleAddToDashboard" v-bind="props"></v-btn>
                 </template>
             </v-tooltip>

@@ -13,6 +13,7 @@ export const useTasksStore = defineStore('tasks', () => {
       content: '',
       done: false,
       id: 0,
+      added_to_dashboard: false,
     })
 
     function changeIsEditing(val: boolean, data: TaskData): void{
@@ -44,6 +45,7 @@ export const useTasksStore = defineStore('tasks', () => {
       if(index != -1){
         allTasks.value[index].content = data.content;
         allTasks.value[index].done = data.done;
+        allTasks.value[index].added_to_dashboard = data.added_to_dashboard;
       }
     }
   

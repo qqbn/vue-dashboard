@@ -11,7 +11,7 @@ const drawer = ref<boolean>(true);
   <v-layout class="rounded">
     <v-navigation-drawer permanent :rail="rail" v-model="drawer" @click="rail = false">
       <v-list>
-        <v-list-item prepend-avatar=" " title="Sandra Adams" subtitle="sandra_a88@gmailcom">
+        <v-list-item title="Joe Doe">
           <template v-slot:append>
             <v-btn variant="text" icon="mdi-chevron-left" @click.stop="rail = !rail"></v-btn>
           </template>

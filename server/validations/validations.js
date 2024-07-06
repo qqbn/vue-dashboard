@@ -3,6 +3,7 @@ const Joi = require('joi');
 exports.validateTask = async (data) => {
     const schema = Joi.object({
         content: Joi.string().min(1).required(),
+        added_to_dashboard: Joi.boolean(),
     })
 
     return schema.validate(data);
@@ -12,6 +13,7 @@ exports.validateEditingTask = async (data) => {
     const schema = Joi.object({
         content: Joi.string().min(1).required(),
         done: Joi.boolean().required(),
+        added_to_dashboard: Joi.boolean(),
     })
 
     return schema.validate(data);
