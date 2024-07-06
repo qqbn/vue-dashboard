@@ -7,15 +7,6 @@ import Chart from '../others/Chart.vue';
 const props = defineProps<WidgetProps>()
 
 const emit = defineEmits(['removeWidget'])
-const value = [
-    423,
-    446,
-    675,
-    510,
-    590,
-    610,
-    760,
-];
 </script>
 <template>
     <remove-widget @remove-widget="emit('removeWidget', props.data?.widgetId)" />
@@ -25,6 +16,6 @@ const value = [
         <v-card-subtitle>Type: Food</v-card-subtitle>
     </v-card>
     <template v-else>
-        <chart :value="value" />
+        <Chart :values="[423, 446, 675, 510, 590, 610, 760,]" />
     </template>
 </template>
