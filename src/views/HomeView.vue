@@ -7,6 +7,8 @@ import RemindWidget from '@/components/widgets/RemindWidget.vue';
 import TaskWidget from '@/components/widgets/TaskWidget.vue';
 import AddWidget from '@/components/widgets/AddWidget.vue';
 import ExpensesWidget from "@/components/widgets/ExpensesWidget.vue";
+import axios from 'axios';
+import { apiUrl } from '@/helpers/constants';
 
 const ContactsWidgetComponent = ContactsWidget;
 
@@ -105,6 +107,23 @@ const getWidgets = () => {
     (selectedWidgets.value as any)['area' + element.area] = widgets.value.find(el => el.widgetId === element.id);
   });
 }
+
+const handleGetWidgetsData = async (): Promise<void> => {
+  const dataIds = savedWidgets.value.map((obj: any) => obj.id).toString();
+  try {
+    const data = await axios.get(apiUrl + `dashboard/?widgets=${dataIds}`);
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+onMounted(() => {
+  if (!savedWidgets.value) return;
+
+  handleGetWidgetsData();
+
+})
 
 getWidgets()
 </script>
