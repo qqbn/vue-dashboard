@@ -9,6 +9,7 @@ const contactsRoutes = require('./routes/contactsRoutes');
 const expensesRoutes = require('./routes/expensesRoutes');
 const notesRoutes = require('./routes/notesRoutes');
 const remindsRoutes = require('./routes/remindsRoute');
+const dashboardRoutes = require('./routes/dashboardRoutes');
 
 
 app.use(bodyParser.json());
@@ -20,6 +21,7 @@ app.use('/contacts', contactsRoutes);
 app.use('/expenses', expensesRoutes);
 app.use('/notes', notesRoutes);
 app.use('/reminds', remindsRoutes);
+app.use('/dashboard', dashboardRoutes);
 
 app.get('/', (req, res) => {
     res.send('conn workin');
