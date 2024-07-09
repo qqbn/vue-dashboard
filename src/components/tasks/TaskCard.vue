@@ -5,9 +5,11 @@ import { useTasksStore } from '@/stores/tasks';
 import { useRemoveStore } from '@/stores/remove';
 import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
+import { useAlertStore } from '@/stores/alert'
 
 const store = useTasksStore();
 const removeStore = useRemoveStore();
+const alert = useAlertStore();
 const emit = defineEmits()
 const props = defineProps<{
     task: TaskData,
@@ -20,6 +22,7 @@ const setTaskDone = async (): Promise<void> => {
     try {
         const response = await axios.patch(apiUrl + 'tasks/taskDone/' + props.task.id, { done: true });
         if (response.status === 200) {
+            alert.showAlert('Task set as done');
             emit('setTaskDone', props.task.id);
         }
     } catch (error) {
@@ -47,6 +50,7 @@ const handleAddToDashboard = async (): Promise<void> => {
     try {
         const response = await axios.patch(apiUrl + 'tasks/addToDashboard/' + props.task.id, { added_to_dashboard: !props.task.added_to_dashboard });
         if (response.status === 200) {
+            alert.showAlert(!props.task.added_to_dashboard ? 'Task added to dashboard' : 'Task removed from dashboard');
             emit('taskToDashboard', props.task.id);
         }
     } catch (error) {

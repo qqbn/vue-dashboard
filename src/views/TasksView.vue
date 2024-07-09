@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AddTask from '../components/tasks/AddTask.vue';
 import AllTasks from '../components/tasks/AllTasks.vue';
+import Alert from '@/components/others/Alert.vue'
 </script>
 <template>
     <v-container fluid fill-height class="ma-0 pa-xl-6 pa-lg-6 pa-md-2">
@@ -15,4 +16,5 @@ import AllTasks from '../components/tasks/AllTasks.vue';
             </v-col>
         </v-row>
     </v-container>
+    <Alert />
 </template>

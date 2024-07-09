@@ -5,6 +5,7 @@ import { useContactsStore } from '@/stores/contacts';
 import { useRemoveStore } from '@/stores/remove';
 import { storeToRefs } from 'pinia';
 import { computed, onBeforeMount, ref, watch } from "vue";
+import Alert from '@/components/others/Alert.vue'
 
 const store = useContactsStore();
 const removeStore = useRemoveStore();
@@ -34,4 +35,5 @@ onBeforeMount(async () => {
             </v-col>
         </v-row>
     </v-container>
+    <Alert />
 </template>
