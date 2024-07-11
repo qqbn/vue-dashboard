@@ -5,8 +5,10 @@ import { apiUrl } from '@/helpers/constants';
 import { useExpensesStore } from '@/stores/expenses';
 import { typeItems } from '@/helpers/constants.js';
 import { textRules, expenseValueRules, fieldRequired } from '@/helpers/validation';
+import { useAlertStore } from '@/stores/alert'
 
 const store = useExpensesStore();
+const alert = useAlertStore();
 const dialog = ref<boolean>(false);
 const date = ref<any>('');
 const selectedType = ref<number | null>(null);
@@ -28,6 +30,7 @@ const handleAddNote = async (): Promise<void> => {
         const response = await axios.post(apiUrl + `expenses/addExpense/`, { title: title.value, value: Number(value.value), type: selectedType.value, date: date.value });
         if (response.status === 200) {
             store.addExpense(response.data);
+            alert.showAlert('Expense added!');
         }
     } catch (error) {
         console.log(error);

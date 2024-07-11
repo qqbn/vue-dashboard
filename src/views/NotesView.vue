@@ -5,6 +5,7 @@ import AddNote from "../components/notes/AddNote.vue"
 import { useEditNoteStore } from '@/stores/editNote';
 import { useRemoveStore } from '@/stores/remove';
 import { storeToRefs } from 'pinia';
+import Alert from '@/components/others/Alert.vue'
 
 const store = useEditNoteStore();
 const removeStore = useRemoveStore();
@@ -34,5 +35,6 @@ onBeforeMount(async () => {
             </v-col>
         </v-row>
     </v-container>
+    <Alert />
 </template>
 <style></style>

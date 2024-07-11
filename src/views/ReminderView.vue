@@ -5,6 +5,7 @@ import RemindCard from '../components/reminder/RemindCard.vue';
 import { useRemindsStore } from '@/stores/reminds';
 import { useRemoveStore } from '@/stores/remove';
 import { storeToRefs } from 'pinia';
+import Alert from '@/components/others/Alert.vue'
 
 const removeStore = useRemoveStore();
 const store = useRemindsStore();
@@ -34,6 +35,7 @@ onBeforeMount(async () => {
             </v-col>
         </v-row>
     </v-container>
+    <Alert />
 </template>
 
 <style></style>

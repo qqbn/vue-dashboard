@@ -1,9 +1,6 @@
 <script lang="ts" setup>
-import axios, { all } from 'axios'
 import TaskCard from '../tasks/TaskCard.vue';
 import { ref, onBeforeMount, watch, computed } from 'vue';
-import { apiUrl } from '@/helpers/constants';
-import type { TaskData } from '@/helpers/interfaces';
 import { useRemoveStore } from '@/stores/remove';
 import { useTasksStore } from '@/stores/tasks';
 import { storeToRefs } from 'pinia';

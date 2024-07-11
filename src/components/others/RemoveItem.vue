@@ -3,9 +3,11 @@ import { ref, watch, computed, defineEmits } from 'vue';
 import { useRemoveStore } from '@/stores/remove';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
+import { useAlertStore } from '@/stores/alert'
 
 const dialog = ref<boolean>(false);
 const store = useRemoveStore();
+const alert = useAlertStore();
 const { isRemoving } = storeToRefs(store);
 const type = ref<string>('');
 const emit = defineEmits()
@@ -27,6 +29,7 @@ const handleRemove = async (): Promise<void> => {
     try {
         const response = await axios.delete(store.removingData.endpoint);
         if (response.status === 200) {
+            alert.showAlert(`${type.value.charAt(0).toUpperCase() + type.value.slice(1)} removed!`)
             store.isRemoved = true;
         }
     } catch (error) {

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useEditNoteStore } from '@/stores/editNote';
 import { useRemoveStore } from '@/stores/remove';
 import type { NoteData } from '@/helpers/interfaces';

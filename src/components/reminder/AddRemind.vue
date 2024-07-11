@@ -4,10 +4,12 @@ import { useRemindsStore } from '@/stores/reminds';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
-import { textRules, minOneChar } from "@/helpers/validation";
+import { textRules } from "@/helpers/validation";
+import { useAlertStore } from '@/stores/alert'
 
 const store = useRemindsStore();
 const { isEditing } = storeToRefs(store);
+const alert = useAlertStore();
 
 const dialog = ref<boolean>(false);
 const name = ref<string>('');
@@ -45,6 +47,7 @@ const handleAddRemind = async (): Promise<void> => {
         const response = await axios.post(apiUrl + 'reminds/addRemind/', { name: name.value, date: date.value });
         if (response.status === 200) {
             store.addRemind(response.data);
+            alert.showAlert('Remind added!');
         }
     } catch (error) {
         console.log(error);
@@ -59,6 +62,7 @@ const handleEditRemind = async (id: number): Promise<void> => {
         const response = await axios.put(apiUrl + `reminds/editRemind/${id}`, { name: name.value, date: new Date(date.value) })
         if (response.status === 200) {
             store.editRemind({ id: id, name: name.value, date: new Date(date.value).toISOString().slice(0, 10) })
+            alert.showAlert('Remind edited!');
         }
     } catch (error) {
         console.log(error);

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, defineEmits, computed } from 'vue';
+import { defineEmits, computed } from 'vue';
 import type { TaskData } from '../../helpers/interfaces';
 import { useTasksStore } from '@/stores/tasks';
 import { useRemoveStore } from '@/stores/remove';

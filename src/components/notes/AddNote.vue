@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { ref, watch, nextTick, computed } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useEditNoteStore } from '@/stores/editNote';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
-import { textRules, minOneChar } from '@/helpers/validation';
+import { textRules } from '@/helpers/validation';
+import { useAlertStore } from '@/stores/alert'
 
 const store = useEditNoteStore();
 const { isEditing } = storeToRefs(store);
+const alert = useAlertStore();
 
 const noteId = ref<number>(0);
 const title = ref<string>('')
@@ -24,6 +26,7 @@ const handleAddNote = async (): Promise<void> => {
         const response = await axios.post(apiUrl + `notes/addNote/`, { title: title.value, content: content.value, important: important.value });
         if (response.status === 200) {
             store.addNote(response.data);
+            alert.showAlert('Note added!');
         }
     } catch (error) {
         console.log(error);
@@ -38,6 +41,7 @@ const handleEditNote = async (id: number): Promise<void> => {
         const response = await axios.put(apiUrl + `notes/editNote/${id}`, { title: title.value, content: content.value, important: important.value });
         if (response.status === 200) {
             store.editNote({ id: id, title: title.value, date: date.value, content: content.value, important: important.value })
+            alert.showAlert('Note edited!');
         }
     } catch (error) {
         console.log(error);

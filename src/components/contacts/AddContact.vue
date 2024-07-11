@@ -6,8 +6,11 @@ import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
 import { nameRules, phoneNumberRules, emailRules, fieldRequired } from "@/helpers/validation";
 import { avatars } from '@/helpers/constants'
+import { useAlertStore } from '@/stores/alert'
+
 const store = useContactsStore();
 const { isEditing } = storeToRefs(store);
+const alert = useAlertStore();
 
 const dialog = ref<boolean>(false);
 const firstName = ref<string>('');
@@ -51,6 +54,7 @@ const handleAddContact = async (): Promise<void> => {
         const response = await axios.post(apiUrl + `contacts/addContact/`, { first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value });
         if (response.status === 200) {
             store.addContact(response.data);
+            alert.showAlert('Contact added!');
         }
     } catch (error) {
         console.log(error);
@@ -65,6 +69,7 @@ const handleEditContact = async (id: number): Promise<void> => {
         const response = await axios.put(apiUrl + `contacts/editContact/${id}`, { first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value });
         if (response.status === 200) {
             store.editContact({ id: id, first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value });
+            alert.showAlert('Contact edited!');
         }
     } catch (error) {
         console.log(error);

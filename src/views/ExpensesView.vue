@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AddExpense from '../components/expanses/AddExpense.vue';
 import ExpensesChart from '../components/expanses/ExpensesChart.vue';
+import Alert from '@/components/others/Alert.vue'
 </script>
 <template>
     <v-container fluid fill-height class="ma-0 pa-6">
@@ -15,4 +16,5 @@ import ExpensesChart from '../components/expanses/ExpensesChart.vue';
             </v-col>
         </v-row>
     </v-container>
+    <Alert />
 </template>

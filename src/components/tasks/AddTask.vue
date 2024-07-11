@@ -4,9 +4,11 @@ import { useTasksStore } from '@/stores/tasks';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
 import { apiUrl } from '@/helpers/constants';
-import { textRules, minOneChar } from "@/helpers/validation";
+import { textRules } from "@/helpers/validation";
+import { useAlertStore } from '@/stores/alert'
 
 const store = useTasksStore();
+const alert = useAlertStore();
 const { isEditing } = storeToRefs(store);
 
 const dialog = ref<boolean>(false);
@@ -45,6 +47,7 @@ const handleAddTask = async (): Promise<void> => {
         const response = await axios.post(apiUrl + 'tasks/addTask/', { content: content.value, added_to_dashboard: addToDashboard.value });
         if (response.status === 200) {
             store.addTask(response.data);
+            alert.showAlert('Task added!');
         }
     } catch (error) {
         console.log(error);
@@ -60,6 +63,7 @@ const handleEditTask = async (id: number): Promise<void> => {
         const response = await axios.put(apiUrl + `tasks/editTask/${id}`, { content: content.value, done: done.value, added_to_dashboard: addToDashboard.value });
         if (response.status === 200) {
             store.editTask({ id: id, content: content.value, done: done.value, added_to_dashboard: addToDashboard.value })
+            alert.showAlert('Task edited!');
         }
     } catch (error) {
         console.log(error);
