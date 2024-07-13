@@ -54,6 +54,7 @@ export interface ContactData {
   phone_number: string,
   email: string,
   avatar: number | null,
+  added_to_dashboard: boolean,
 }
 
 export interface ExpenseData {

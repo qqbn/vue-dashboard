@@ -16,6 +16,7 @@ export const useContactsStore = defineStore('contacts', () => {
       phone_number: '',
       email: '',
       avatar: 0,
+      added_to_dashboard: false,
     })
 
     function changeIsEditing(val: boolean, data: ContactData){
@@ -50,8 +51,14 @@ export const useContactsStore = defineStore('contacts', () => {
         allContacts.value[index].phone_number = data.phone_number;
         allContacts.value[index].email = data.email;
         allContacts.value[index].avatar = data.avatar;
+        allContacts.value[index].added_to_dashboard = data.added_to_dashboard;
       }
     }
+
+    const addToDashboard = (id: number): void => {
+        const index = allContacts.value.findIndex(obj => obj.id === id);
+        allContacts.value[index].added_to_dashboard = !allContacts.value[index].added_to_dashboard;
+    }
   
-    return {changeIsEditing, isEditing, editingData, loadAllContacts, allContacts, addContact, removeContact, editContact }
+    return {changeIsEditing, isEditing, editingData, loadAllContacts, allContacts, addContact, removeContact, editContact, addToDashboard }
 })

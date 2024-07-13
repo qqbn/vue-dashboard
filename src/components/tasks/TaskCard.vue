@@ -51,7 +51,7 @@ const handleAddToDashboard = async (): Promise<void> => {
         const response = await axios.patch(apiUrl + 'tasks/addToDashboard/' + props.task.id, { added_to_dashboard: !props.task.added_to_dashboard });
         if (response.status === 200) {
             alert.showAlert(!props.task.added_to_dashboard ? 'Task added to dashboard' : 'Task removed from dashboard');
-            emit('taskToDashboard', props.task.id);
+            store.addToDashboard(props.task.id);
         }
     } catch (error) {
         console.log(error);

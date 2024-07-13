@@ -20,6 +20,7 @@ const email = ref<string>('');
 const contactId = ref<number>(0);
 const modalTitle = computed(() => store.isEditing ? 'Edit contact' : 'Add new contact');
 const avatar = ref<number | null>(null);
+const addToDashboard = ref<boolean>(false);
 const form = ref();
 
 const showModal = (): void => {
@@ -47,11 +48,12 @@ watch(isEditing, () => {
     phoneNumber.value = store.editingData.phone_number;
     email.value = store.editingData.email;
     avatar.value = store.editingData.avatar
+    addToDashboard.value = store.editingData.added_to_dashboard;
 })
 
 const handleAddContact = async (): Promise<void> => {
     try {
-        const response = await axios.post(apiUrl + `contacts/addContact/`, { first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value });
+        const response = await axios.post(apiUrl + `contacts/addContact/`, { first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value, added_to_dashboard: addToDashboard.value });
         if (response.status === 200) {
             store.addContact(response.data);
             alert.showAlert('Contact added!');
@@ -66,9 +68,9 @@ const handleAddContact = async (): Promise<void> => {
 
 const handleEditContact = async (id: number): Promise<void> => {
     try {
-        const response = await axios.put(apiUrl + `contacts/editContact/${id}`, { first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value });
+        const response = await axios.put(apiUrl + `contacts/editContact/${id}`, { first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value, added_to_dashboard: addToDashboard.value });
         if (response.status === 200) {
-            store.editContact({ id: id, first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value });
+            store.editContact({ id: id, first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value, added_to_dashboard: addToDashboard.value });
             alert.showAlert('Contact edited!');
         }
     } catch (error) {
@@ -115,6 +117,7 @@ const handleSubmitForm = async (): Promise<void> => {
                     <v-text-field label="E-mail*" type="email" v-model="email" :rules="emailRules"></v-text-field>
                     <v-select label="Contact avatar" :items="avatars" v-model="avatar" item-title="name" item-value="id"
                         :rules="fieldRequired"></v-select>
+                    <v-checkbox label="Add task to dashboard" color="primary" v-model="addToDashboard"></v-checkbox>
                 </v-card-text>
                 <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
                     <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>

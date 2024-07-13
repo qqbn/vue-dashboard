@@ -48,6 +48,11 @@ export const useTasksStore = defineStore('tasks', () => {
         allTasks.value[index].added_to_dashboard = data.added_to_dashboard;
       }
     }
+
+    const addToDashboard = (id: number): void => {
+      const index = allTasks.value.findIndex(obj => obj.id === id);
+      allTasks.value[index].added_to_dashboard = !allTasks.value[index].added_to_dashboard;
+  }
   
-    return {changeIsEditing, isEditing, editingData, loadAllTasks,allTasks, removeTask, addTask, editTask }
+    return {changeIsEditing, isEditing, editingData, loadAllTasks,allTasks, removeTask, addTask, editTask, addToDashboard }
 })
