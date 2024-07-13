@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, onBeforeMount } from 'vue';
-import { type SelectedWidget, type SelectedWidgets, type SavedWidget, ModalType } from '../helpers/interfaces';
+import { type SelectedWidget, type SelectedWidgets, type SavedWidget, type WidgetData, ModalType } from '../helpers/interfaces';
 import ContactsWidget from '@/components/widgets/ContactsWidget.vue';
 import NotesWidget from '@/components/widgets/NotesWidget.vue';
 import RemindWidget from '@/components/widgets/RemindWidget.vue';
@@ -45,7 +45,7 @@ const widgets = ref<SelectedWidget[]>([
   }
 ])
 
-let selectedWidgets = ref<SelectedWidgets>({});
+const selectedWidgets = ref<SelectedWidgets>({});
 const dialog = ref<boolean>(false);
 const availableWidgets = ref<any>(null);
 const actualSelectedWidget = ref<SelectedWidget | null>(null);
@@ -98,32 +98,27 @@ const saveToLS = (): void => {
   localStorage.setItem('vue-dashboard-widgets', JSON.stringify(savedWidgets.value));
 }
 
-const getWidgets = () => {
+const getWidgets = async (): Promise<void> => {
   const data = localStorage.getItem('vue-dashboard-widgets');
   if (!data) return;
 
   savedWidgets.value = JSON.parse(data);
+  const widgetsData = await handleGetWidgetsData();
   savedWidgets.value.forEach((element: { id: number; area: string; }) => {
-    (selectedWidgets.value as any)['area' + element.area] = widgets.value.find(el => el.widgetId === element.id);
+    (selectedWidgets.value as any)['area' + element.area] = { ...widgets.value.find(el => el.widgetId === element.id), ...widgetsData.find((el: any) => el.widgetId === element.id) };
   });
 }
 
-const handleGetWidgetsData = async (): Promise<void> => {
+const handleGetWidgetsData = async (): Promise<any> => {
   const dataIds = savedWidgets.value.map((obj: any) => obj.id).toString();
   try {
-    const data = await axios.get(apiUrl + `dashboard/?widgets=${dataIds}`);
-    console.log(data);
+    const response = await axios.get(apiUrl + `dashboard/?widgets=${dataIds}`);
+    return response.data;
   } catch (error) {
     console.log(error);
   }
 }
 
-onMounted(() => {
-  if (!savedWidgets.value) return;
-
-  handleGetWidgetsData();
-
-})
 
 getWidgets()
 </script>

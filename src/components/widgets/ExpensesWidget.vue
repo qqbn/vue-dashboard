@@ -6,6 +6,8 @@ import Chart from '../others/Chart.vue';
 
 const props = defineProps<WidgetProps>()
 
+console.log(props);
+
 const emit = defineEmits(['removeWidget'])
 </script>
 <template>

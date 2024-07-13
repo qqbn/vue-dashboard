@@ -6,6 +6,7 @@ import RemoveWidget from './RemoveWidget.vue';
 const props = defineProps<WidgetProps>()
 const important = ref<boolean>(true);
 const emit = defineEmits(['removeWidget'])
+console.log(props);
 </script>
 
 <template>
