@@ -3,10 +3,10 @@ import type { ChartProps } from "../../helpers/interfaces";
 import { typeItems, timeItems } from '@/helpers/constants.js';
 
 const props = defineProps<{
-    selectedType: number,
-    selectedTime: string | null,
+    selectedType?: number,
+    selectedTime?: string | null,
     values: number[],
-    getExpenseType: any,
+    getExpenseType?: any,
 }>()
 </script>
 <template>

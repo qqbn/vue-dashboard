@@ -58,7 +58,7 @@ onBeforeMount(async () => {
             item-title="name" item-value="id" @update:modelValue="handleFiltersChange"></v-select>
     </div>
     <v-row>
-        <v-col cols="12" xl="12" lg="12" md="12" sm="12" xs="12" v-show="selectedTime && displayExpenses.length > 0">
+        <v-col cols="12" xl="12" lg="12" md="12" sm="12" xs="12" v-show="selectedTime && displayExpenses.length > 1">
             <Chart :values="values" :selected-time="selectedTimeName" :selected-type="selectedType"
                 :get-expense-type="getExpenseType" />
         </v-col>

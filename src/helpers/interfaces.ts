@@ -3,7 +3,7 @@ export interface SelectedWidget {
     component: any,
     widgetId: number,
     availableAreas: number[],
-    widgetData?: NoteData | ExpenseData | ContactData | RemindData | NoteData;
+    widgetData?: any;
   }
   
 export interface SelectedWidgets {
