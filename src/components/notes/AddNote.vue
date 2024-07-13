@@ -20,10 +20,19 @@ const dialog = ref<boolean>(false);
 const modalTitle = computed(() => store.isEditing ? 'Editing note' : 'Add new note')
 const form = ref();
 
+const noteDataObj = () => {
+    const obj = {
+        title: title.value,
+        content: content.value,
+        important: important.value
+    }
+
+    return obj;
+}
 
 const handleAddNote = async (): Promise<void> => {
     try {
-        const response = await axios.post(apiUrl + `notes/addNote/`, { title: title.value, content: content.value, important: important.value });
+        const response = await axios.post(apiUrl + `notes/addNote/`, noteDataObj());
         if (response.status === 200) {
             store.addNote(response.data);
             alert.showAlert('Note added!');
@@ -38,9 +47,10 @@ const handleAddNote = async (): Promise<void> => {
 
 const handleEditNote = async (id: number): Promise<void> => {
     try {
-        const response = await axios.put(apiUrl + `notes/editNote/${id}`, { title: title.value, content: content.value, important: important.value });
+        const response = await axios.put(apiUrl + `notes/editNote/${id}`, noteDataObj());
         if (response.status === 200) {
-            store.editNote({ id: id, title: title.value, date: date.value, content: content.value, important: important.value })
+            const obj = noteDataObj();
+            store.editNote({ id: id, date: date.value, ...obj })
             alert.showAlert('Note edited!');
         }
     } catch (error) {

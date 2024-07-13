@@ -51,9 +51,22 @@ watch(isEditing, () => {
     addToDashboard.value = store.editingData.added_to_dashboard;
 })
 
+const contactDataObj = () => {
+    const obj = {
+        first_name: firstName.value,
+        last_name: lastName.value,
+        phone_number: phoneNumber.value,
+        email: email.value,
+        avatar: avatar.value,
+        added_to_dashboard: addToDashboard.value
+    }
+
+    return obj;
+}
+
 const handleAddContact = async (): Promise<void> => {
     try {
-        const response = await axios.post(apiUrl + `contacts/addContact/`, { first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value, added_to_dashboard: addToDashboard.value });
+        const response = await axios.post(apiUrl + `contacts/addContact/`, contactDataObj());
         if (response.status === 200) {
             store.addContact(response.data);
             alert.showAlert('Contact added!');
@@ -68,9 +81,10 @@ const handleAddContact = async (): Promise<void> => {
 
 const handleEditContact = async (id: number): Promise<void> => {
     try {
-        const response = await axios.put(apiUrl + `contacts/editContact/${id}`, { first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value, added_to_dashboard: addToDashboard.value });
+        const response = await axios.put(apiUrl + `contacts/editContact/${id}`, contactDataObj());
         if (response.status === 200) {
-            store.editContact({ id: id, first_name: firstName.value, last_name: lastName.value, phone_number: phoneNumber.value, email: email.value, avatar: avatar.value, added_to_dashboard: addToDashboard.value });
+            const obj = contactDataObj();
+            store.editContact({ id: id, ...obj });
             alert.showAlert('Contact edited!');
         }
     } catch (error) {
