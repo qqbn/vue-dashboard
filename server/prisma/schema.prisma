@@ -8,12 +8,13 @@ datasource db {
 }
 
 model contacts {
-  id           Int     @id @default(autoincrement())
-  first_name   String? @db.VarChar(255)
-  last_name    String? @db.VarChar(255)
-  phone_number String? @db.VarChar(255)
-  email        String? @db.VarChar(255)
-  avatar       Int?
+  id                 Int     @id @default(autoincrement())
+  first_name         String? @db.VarChar(255)
+  last_name          String? @db.VarChar(255)
+  phone_number       String? @db.VarChar(255)
+  email              String? @db.VarChar(255)
+  avatar             Int?
+  added_to_dashboard Boolean @default(false)
 }
 
 model expenses {

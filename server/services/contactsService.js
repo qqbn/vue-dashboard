@@ -19,3 +19,8 @@ exports.editContactAction = async (id, data) => {
     const results = await contactsModel.editContact(id, data);
     return results;
 }
+
+exports.addToDashboardAction = async(id, data) => {
+    const result = await contactsModel.contactToDashboard(id, data);
+    return result;
+}

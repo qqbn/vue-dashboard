@@ -46,6 +46,7 @@ exports.validateContact = async(data) => {
         phone_number: Joi.string().min(9).max(9).required(),
         email: Joi.string().email(),
         avatar: Joi.number().required(),
+        added_to_dashboard: Joi.boolean().required()
     })
 
     return schema.validate(data);

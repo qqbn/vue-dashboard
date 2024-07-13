@@ -44,9 +44,21 @@ const editContact = async (req, res) => {
     }
 }
 
+const addToDashboard = async (req, res) => {
+    const id = JSON.parse(req.params['id']);
+    if(!id) res.status(400).json({ message: 'Contact not found' });
+
+    const data = await contactsService.addToDashboardAction(id, req.body);
+    
+    if(data){
+        res.status(200).json({ message: 'Contact added to dashboard' });
+    }
+}
+
 module.exports = {
     getContacts,
     addContact,
     deleteContact,
-    editContact
+    editContact,
+    addToDashboard
 }

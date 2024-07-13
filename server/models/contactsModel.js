@@ -15,7 +15,8 @@ const addContact = async (data) => {
             last_name: data.last_name,
             phone_number: data.phone_number,
             email: data.email,
-            avatar: data.avatar
+            avatar: data.avatar,
+            added_to_dashboard: data.added_to_dashboard
         }
     })
 
@@ -42,11 +43,25 @@ const editContact = async (id, data) => {
             last_name: data.last_name,
             phone_number: data.phone_number,
             email: data.email,
-            avatar: data.avatar
+            avatar: data.avatar,
+            added_to_dashboard: data.added_to_dashboard
         }
     })
 
     return contact;
+}
+
+const contactToDashboard = async (id, data) => {
+    const task = await prisma.contacts.update({
+        where: {
+            id: id,
+        },
+        data: {
+            added_to_dashboard: data.add,
+        }
+    })
+    
+    return task;
 }
 
 
@@ -54,5 +69,6 @@ module.exports = {
     getAllContacts,
     addContact,
     deleteContact,
-    editContact
+    editContact,
+    contactToDashboard
 }
