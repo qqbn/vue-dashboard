@@ -50,10 +50,22 @@ const getTasksWidgetData = async () => {
     return tasks;
 }
 
+const getContactsWidgetData = async () => {
+    const contacts = await prisma.contacts.findMany({
+        where: {
+            added_to_dashboard: true,
+        },
+        take: 5,
+    })
+
+    return contacts;
+}
+
 module.exports = {
     getData,
     getExpenseWidgetData,
     getNotesWidgetData,
     getRemindsWidgetData,
     getTasksWidgetData,
+    getContactsWidgetData,
 }
