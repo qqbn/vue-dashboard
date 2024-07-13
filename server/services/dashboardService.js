@@ -1,4 +1,5 @@
 const dashboardModel = require('../models/dashboardModel');
+const helpers = require('../helpers/helpers');
 
 const getDashboardDataAction = async (data) => {
     const idArr = data.split(',');
@@ -36,6 +37,9 @@ const getWidgetData = async (id) => {
 
 const getExpenseWidgetDataAction = async () => {
     const expenses = await dashboardModel.getExpenseWidgetData();
+    expenses.forEach(expense => {
+        expense.date = helpers.formatDate(expense.date);
+    })
     return expenses;
 }
 
@@ -46,11 +50,17 @@ const getContactsWidgetDataAction = async () => {
 
 const getNotesWidgetDataAction = async () => {
     const notes = await dashboardModel.getNotesWidgetData();
+    notes.forEach(note => {
+        note.date = helpers.formatDate(note.date);
+    })
     return notes
 }
 
 const getRemindsWidgetDataAction = async () => {
     const reminds = await dashboardModel.getRemindsWidgetData();
+    reminds.forEach(remind => {
+        remind.date = helpers.formatDate(remind.date);
+    })
     return reminds;
 }
 
