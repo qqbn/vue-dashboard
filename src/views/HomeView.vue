@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, onBeforeMount } from 'vue';
-import { type SelectedWidget, type SelectedWidgets, type SavedWidget, type WidgetData, ModalType } from '../helpers/interfaces';
+import { type SelectedWidget, type SelectedWidgets, type SavedWidget, ModalType } from '../helpers/interfaces';
 import ContactsWidget from '@/components/widgets/ContactsWidget.vue';
 import NotesWidget from '@/components/widgets/NotesWidget.vue';
 import RemindWidget from '@/components/widgets/RemindWidget.vue';
@@ -61,12 +61,19 @@ const selectComponent = (area: number) => {
   modalType.value = ModalType.add;
 }
 
-const saveWidget = () => {
-  (selectedWidgets.value as SelectedWidgets)['area' + actualSelectedArea.value] = actualSelectedWidget.value;
-  savedWidgets.value.push(saveWidgetObj(actualSelectedArea.value, actualSelectedWidget.value?.widgetId));
-
-  saveToLS();
-  dialog.value = false;
+const saveWidget = async (): Promise<void> => {
+  try {
+    const response = await axios.get(apiUrl + `dashboard/?widgets=${actualSelectedWidget.value?.widgetId}`);
+    if (response.status === 200) {
+      (selectedWidgets.value as SelectedWidgets)['area' + actualSelectedArea.value] = { ...actualSelectedWidget.value, ...response.data[0] };
+      savedWidgets.value.push(saveWidgetObj(actualSelectedArea.value, actualSelectedWidget.value?.widgetId));
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    saveToLS();
+    dialog.value = false;
+  }
 }
 
 const saveWidgetObj = (area?: number | null, widgetId?: number) => {
@@ -99,13 +106,13 @@ const saveToLS = (): void => {
 }
 
 const getWidgets = async (): Promise<void> => {
-  const data = localStorage.getItem('vue-dashboard-widgets');
-  if (!data) return;
+  const data = JSON.parse(localStorage.getItem('vue-dashboard-widgets') || '[]');
+  if (!data.length) return;
 
-  savedWidgets.value = JSON.parse(data);
+  savedWidgets.value = data;
   const widgetsData = await handleGetWidgetsData();
   savedWidgets.value.forEach((element: { id: number; area: string; }) => {
-    (selectedWidgets.value as any)['area' + element.area] = { ...widgets.value.find(el => el.widgetId === element.id), ...widgetsData.find((el: any) => el.widgetId === element.id) };
+    (selectedWidgets.value as SelectedWidgets)['area' + element.area] = { ...widgets.value.find(el => el.widgetId === element.id), ...widgetsData.find((el: any) => el.widgetId === element.id) };
   });
 }
 
