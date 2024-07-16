@@ -48,7 +48,7 @@ const handleRemoveTask = (): void => {
 
 const handleAddToDashboard = async (): Promise<void> => {
     try {
-        const response = await axios.patch(apiUrl + 'tasks/addToDashboard/' + props.task.id, { added_to_dashboard: !props.task.added_to_dashboard });
+        const response = await axios.patch(apiUrl + 'tasks/addToDashboard/' + props.task.id, { add: !props.task.added_to_dashboard });
         if (response.status === 200) {
             alert.showAlert(!props.task.added_to_dashboard ? 'Task added to dashboard' : 'Task removed from dashboard');
             store.addToDashboard(props.task.id);
