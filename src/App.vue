@@ -9,11 +9,12 @@ const drawer = ref<boolean>(true);
 
 <template>
   <v-layout class="rounded">
-    <v-navigation-drawer permanent :rail="rail" v-model="drawer" @click="rail = false">
+    <v-navigation-drawer :rail="rail" v-model="drawer" @click="rail = false" mobile="true" mobile-breakpoint="sm">
       <v-list>
         <v-list-item title="Joe Doe">
           <template v-slot:append>
-            <v-btn variant="text" icon="mdi-chevron-left" @click.stop="rail = !rail"></v-btn>
+            <v-btn variant="text" :icon="!rail ? 'mdi-chevron-left' : 'mdi-chevron-right'"
+              @click.stop="rail = !rail"></v-btn>
           </template>
         </v-list-item>
       </v-list>
