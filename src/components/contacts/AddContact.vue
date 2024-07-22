@@ -21,6 +21,7 @@ const contactId = ref<number>(0);
 const modalTitle = computed(() => store.isEditing ? 'Edit contact' : 'Add new contact');
 const avatar = ref<number | null>(null);
 const addToDashboard = ref<boolean>(false);
+const loading = ref<boolean>(false);
 const form = ref();
 
 const showModal = (): void => {
@@ -65,6 +66,7 @@ const contactDataObj = () => {
 }
 
 const handleAddContact = async (): Promise<void> => {
+    loading.value = true;
     try {
         const response = await axios.post(apiUrl + `contacts/addContact/`, contactDataObj());
         if (response.status === 200) {
@@ -75,11 +77,13 @@ const handleAddContact = async (): Promise<void> => {
         console.log(error);
     }
     finally {
+        loading.value = false;
         dialog.value = false;
     }
 }
 
 const handleEditContact = async (id: number): Promise<void> => {
+    loading.value = true;
     try {
         const response = await axios.put(apiUrl + `contacts/editContact/${id}`, contactDataObj());
         if (response.status === 200) {
@@ -91,6 +95,7 @@ const handleEditContact = async (id: number): Promise<void> => {
         console.log(error);
     }
     finally {
+        loading.value = false;
         dialog.value = false;
     }
 }
@@ -116,7 +121,7 @@ const handleSubmitForm = async (): Promise<void> => {
         Add Contact
     </v-btn>
 
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="dialog" width="500" persistent>
         <v-card class="px-6 py-4">
             <v-card-title>
                 {{ modalTitle }}
@@ -134,8 +139,8 @@ const handleSubmitForm = async (): Promise<void> => {
                     <v-checkbox label="Add task to dashboard" color="primary" v-model="addToDashboard"></v-checkbox>
                 </v-card-text>
                 <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
-                    <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                    <v-btn variant="tonal" color="primary" type="submit">{{ btnText }}</v-btn>
+                    <v-btn variant="tonal" color="red" @click="dialog = false" :loading="loading">Close</v-btn>
+                    <v-btn variant="tonal" color="primary" type="submit" :loading="loading">{{ btnText }}</v-btn>
                 </v-card-actions>
             </v-form>
         </v-card>

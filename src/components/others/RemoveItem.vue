@@ -11,6 +11,7 @@ const alert = useAlertStore();
 const { isRemoving } = storeToRefs(store);
 const type = ref<string>('');
 const emit = defineEmits()
+const loading = ref<boolean>(false);
 
 watch(dialog, () => {
     if (dialog.value) return;
@@ -26,6 +27,7 @@ watch(isRemoving, () => {
 })
 
 const handleRemove = async (): Promise<void> => {
+    loading.value = true;
     try {
         const response = await axios.delete(store.removingData.endpoint);
         if (response.status === 200) {
@@ -36,6 +38,7 @@ const handleRemove = async (): Promise<void> => {
         console.log(error);
     } finally {
         dialog.value = false;
+        loading.value = false;
     }
 }
 
@@ -62,14 +65,15 @@ const removingTitle = computed(() => {
 })
 </script>
 <template>
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="dialog" width="500" persistent>
         <v-card class="px-6 py-4">
             <v-card-title>
                 {{ removingTitle }}
             </v-card-title>
             <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
-                <v-btn variant="tonal" color="red" @click="dialog = false">No</v-btn>
-                <v-btn variant="tonal" color="primary" @click="handleRemove" type="button">Yes</v-btn>
+                <v-btn variant="tonal" color="red" @click="dialog = false" :loading="loading">No</v-btn>
+                <v-btn variant="tonal" color="primary" @click="handleRemove" type="button"
+                    :loading="loading">Yes</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

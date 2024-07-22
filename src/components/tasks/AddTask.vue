@@ -17,6 +17,7 @@ const done = ref<boolean>(false);
 const addToDashboard = ref<boolean>(false);
 const taskId = ref<number>(0);
 const modalTitle = computed(() => store.isEditing ? 'Edit task' : 'Add new task')
+const loading = ref<boolean>(false);
 const form = ref()
 
 const showModal = (): void => {
@@ -43,6 +44,7 @@ watch(isEditing, () => {
 })
 
 const handleAddTask = async (): Promise<void> => {
+    loading.value = true;
     try {
         const response = await axios.post(apiUrl + 'tasks/addTask/', { content: content.value, added_to_dashboard: addToDashboard.value });
         if (response.status === 200) {
@@ -54,11 +56,13 @@ const handleAddTask = async (): Promise<void> => {
     }
     finally {
         dialog.value = false;
+        loading.value = false;
     }
 
 }
 
 const handleEditTask = async (id: number): Promise<void> => {
+    loading.value = true;
     try {
         const response = await axios.put(apiUrl + `tasks/editTask/${id}`, { content: content.value, done: done.value, added_to_dashboard: addToDashboard.value });
         if (response.status === 200) {
@@ -70,6 +74,7 @@ const handleEditTask = async (id: number): Promise<void> => {
     }
     finally {
         dialog.value = false;
+        loading.value = false;
     }
 }
 
@@ -93,7 +98,7 @@ const handleSubmitForm = async (): Promise<void> => {
         Add Task
     </v-btn>
 
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="dialog" width="500" persistent>
         <v-card class="px-6 py-4">
             <v-card-title>{{ modalTitle }}</v-card-title>
             <v-form @submit.prevent="handleSubmitForm" ref="form">
@@ -104,8 +109,8 @@ const handleSubmitForm = async (): Promise<void> => {
                         :rules="textRules"></v-textarea>
                 </v-card-text>
                 <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
-                    <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                    <v-btn variant="tonal" color="primary" type="submit">{{ btnText }}</v-btn>
+                    <v-btn variant="tonal" color="red" @click="dialog = false" :loading="loading">Close</v-btn>
+                    <v-btn variant="tonal" color="primary" type="submit" :loading="loading">{{ btnText }}</v-btn>
                 </v-card-actions>
             </v-form>
         </v-card>

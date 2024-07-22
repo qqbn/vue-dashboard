@@ -17,15 +17,19 @@ const value = ref<number>(0);
 const expenseTypes = typeItems.filter(el => el.id != 0);
 const form = ref();
 const dateValid = ref<boolean>(true);
+const loading = ref<boolean>(false);
 
 const handleAddNote = async (): Promise<void> => {
+    loading.value = true;
     const { valid } = await form.value.validate();
     if (!valid) {
         if (!date.value) {
             dateValid.value = false;
+            loading.value = false;
         }
         return;
     }
+
     try {
         const response = await axios.post(apiUrl + `expenses/addExpense/`, { title: title.value, value: Number(value.value), type: selectedType.value, date: date.value });
         if (response.status === 200) {
@@ -37,6 +41,7 @@ const handleAddNote = async (): Promise<void> => {
     }
     finally {
         dialog.value = false;
+        loading.value = false;
     }
 }
 
@@ -59,7 +64,7 @@ const handleDateChange = () => {
         Add Expense
     </v-btn>
 
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="dialog" width="500" persistent>
         <v-card class="px-6 py-4">
             <v-card-title>
                 Add new expense
@@ -77,8 +82,8 @@ const handleDateChange = () => {
                     <p class="custom-error-text" v-if="!dateValid">Date is required</p>
                 </v-card-text>
                 <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
-                    <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                    <v-btn variant="tonal" color="primary" type="submit">Add Expense</v-btn>
+                    <v-btn variant="tonal" color="red" @click="dialog = false" :loading="loading">Close</v-btn>
+                    <v-btn variant="tonal" color="primary" type="submit" :loading="loading">Add Expense</v-btn>
                 </v-card-actions>
             </v-form>
         </v-card>

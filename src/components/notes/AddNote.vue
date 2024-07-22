@@ -17,6 +17,7 @@ const date = ref<any>('')
 const content = ref<string>("")
 const important = ref<boolean>(true);
 const dialog = ref<boolean>(false);
+const loading = ref<boolean>(false);
 const modalTitle = computed(() => store.isEditing ? 'Editing note' : 'Add new note')
 const form = ref();
 
@@ -31,6 +32,7 @@ const noteDataObj = () => {
 }
 
 const handleAddNote = async (): Promise<void> => {
+    loading.value = true;
     try {
         const response = await axios.post(apiUrl + `notes/addNote/`, noteDataObj());
         if (response.status === 200) {
@@ -42,10 +44,12 @@ const handleAddNote = async (): Promise<void> => {
     }
     finally {
         dialog.value = false;
+        loading.value = false;
     }
 }
 
 const handleEditNote = async (id: number): Promise<void> => {
+    loading.value = true;
     try {
         const response = await axios.put(apiUrl + `notes/editNote/${id}`, noteDataObj());
         if (response.status === 200) {
@@ -58,6 +62,7 @@ const handleEditNote = async (id: number): Promise<void> => {
     }
     finally {
         dialog.value = false;
+        loading.value = false;
     }
 }
 
@@ -107,7 +112,7 @@ const handleSubmitForm = async (): Promise<void> => {
         Add Note
     </v-btn>
 
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="dialog" width="500" persistent>
         <v-card class="px-6 py-4">
             <v-card-title>
                 {{ modalTitle }}
@@ -121,8 +126,8 @@ const handleSubmitForm = async (): Promise<void> => {
                     <v-checkbox label="Important" color="primary" v-model="important"></v-checkbox>
                 </v-card-item>
                 <v-card-actions class="d-flex justify-end align-center pa-4" align="center" justify="end">
-                    <v-btn variant="tonal" color="red" @click="dialog = false">Close</v-btn>
-                    <v-btn variant="tonal" color="primary" type="submit">{{ btnText }}</v-btn>
+                    <v-btn variant="tonal" color="red" @click="dialog = false" :loading="loading">Close</v-btn>
+                    <v-btn variant="tonal" color="primary" type="submit" :loading="loading">{{ btnText }}</v-btn>
                 </v-card-actions>
             </v-form>
         </v-card>
