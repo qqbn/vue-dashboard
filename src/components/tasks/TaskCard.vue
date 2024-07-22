@@ -4,7 +4,6 @@ import type { TaskData } from '../../helpers/interfaces';
 import { useTasksStore } from '@/stores/tasks';
 import { useRemoveStore } from '@/stores/remove';
 import axios from 'axios';
-import { apiUrl } from '@/helpers/constants';
 import { useAlertStore } from '@/stores/alert'
 
 const store = useTasksStore();
@@ -17,6 +16,7 @@ const props = defineProps<{
 }>();
 
 const isDone = computed(() => props.task.done)
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const setTaskDone = async (): Promise<void> => {
     try {

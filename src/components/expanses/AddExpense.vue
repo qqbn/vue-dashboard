@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import axios from 'axios';
-import { apiUrl } from '@/helpers/constants';
 import { useExpensesStore } from '@/stores/expenses';
 import { typeItems } from '@/helpers/constants.js';
 import { textRules, expenseValueRules, fieldRequired } from '@/helpers/validation';
@@ -18,6 +17,7 @@ const expenseTypes = typeItems.filter(el => el.id != 0);
 const form = ref();
 const dateValid = ref<boolean>(true);
 const loading = ref<boolean>(false);
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const handleAddNote = async (): Promise<void> => {
     loading.value = true;

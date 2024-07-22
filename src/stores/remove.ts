@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import type { RemoveData } from '@/helpers/interfaces';
-import { apiUrl } from '@/helpers/constants';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export const useRemoveStore = defineStore('remove', () => {    
     const isRemoving = ref<boolean>(false);

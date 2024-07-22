@@ -1,10 +1,10 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios';
-import { apiUrl } from '@/helpers/constants';
 import type { ContactData } from '@/helpers/interfaces';
 import { useRemoveStore } from './remove';
 const removeStore = useRemoveStore();
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export const useContactsStore = defineStore('contacts', () => {    
     const isEditing = ref<boolean>(false);

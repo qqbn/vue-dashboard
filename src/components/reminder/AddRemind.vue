@@ -3,7 +3,6 @@ import { ref, watch, computed } from 'vue';
 import { useRemindsStore } from '@/stores/reminds';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
-import { apiUrl } from '@/helpers/constants';
 import { textRules } from "@/helpers/validation";
 import { useAlertStore } from '@/stores/alert'
 
@@ -19,6 +18,7 @@ const modalTitle = computed(() => store.isEditing ? 'Edit remind' : 'Add new rem
 const form = ref();
 const dateValid = ref<boolean>(true);
 const loading = ref<boolean>(false);
+const apiUrl = import.meta.env.VITE_API_URL;
 
 
 const showModal = (): void => {

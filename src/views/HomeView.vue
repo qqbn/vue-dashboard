@@ -8,7 +8,7 @@ import TaskWidget from '@/components/widgets/TaskWidget.vue';
 import AddWidget from '@/components/widgets/AddWidget.vue';
 import ExpensesWidget from "@/components/widgets/ExpensesWidget.vue";
 import axios from 'axios';
-import { apiUrl } from '@/helpers/constants';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const ContactsWidgetComponent = ContactsWidget;
 

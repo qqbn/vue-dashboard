@@ -3,7 +3,6 @@ import { ref, watch, computed } from 'vue';
 import { useEditNoteStore } from '@/stores/editNote';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
-import { apiUrl } from '@/helpers/constants';
 import { textRules } from '@/helpers/validation';
 import { useAlertStore } from '@/stores/alert'
 
@@ -20,6 +19,7 @@ const dialog = ref<boolean>(false);
 const loading = ref<boolean>(false);
 const modalTitle = computed(() => store.isEditing ? 'Editing note' : 'Add new note')
 const form = ref();
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const noteDataObj = () => {
     const obj = {

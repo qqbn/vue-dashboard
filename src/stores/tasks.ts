@@ -2,9 +2,9 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import type { TaskData } from '@/helpers/interfaces';
 import axios, { all } from 'axios'
-import { apiUrl } from '@/helpers/constants';
 import { useRemoveStore } from './remove';
 const removeStore = useRemoveStore();
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export const useTasksStore = defineStore('tasks', () => {    
     const isEditing = ref<boolean>(false);

@@ -55,4 +55,3 @@ export const avatars = [
 
 export const avatarsImages = ['https://randomuser.me/api/portraits/lego/1.jpg', 'https://randomuser.me/api/portraits/lego/3.jpg', 'https://randomuser.me/api/portraits/lego/7.jpg', 'https://randomuser.me/api/portraits/lego/8.jpg', 'https://randomuser.me/api/portraits/lego/6.jpg']
 
-export const apiUrl = 'http://localhost:5500/';

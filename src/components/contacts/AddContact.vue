@@ -3,7 +3,6 @@ import { ref, watch, computed } from 'vue';
 import { useContactsStore } from '@/stores/contacts';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
-import { apiUrl } from '@/helpers/constants';
 import { nameRules, phoneNumberRules, emailRules, fieldRequired } from "@/helpers/validation";
 import { avatars } from '@/helpers/constants'
 import { useAlertStore } from '@/stores/alert'
@@ -22,6 +21,7 @@ const modalTitle = computed(() => store.isEditing ? 'Edit contact' : 'Add new co
 const avatar = ref<number | null>(null);
 const addToDashboard = ref<boolean>(false);
 const loading = ref<boolean>(false);
+const apiUrl = import.meta.env.VITE_API_URL;
 const form = ref();
 
 const showModal = (): void => {

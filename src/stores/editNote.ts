@@ -2,9 +2,9 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import type { NoteData } from '@/helpers/interfaces';
 import axios from 'axios';
-import { apiUrl } from '@/helpers/constants';
 import { useRemoveStore } from './remove';
 const removeStore = useRemoveStore();
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export const useEditNoteStore = defineStore('editNote', () => {    
     const isEditing = ref<boolean>(false);

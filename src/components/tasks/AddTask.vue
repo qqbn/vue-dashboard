@@ -3,7 +3,6 @@ import { ref, watch, computed } from 'vue';
 import { useTasksStore } from '@/stores/tasks';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
-import { apiUrl } from '@/helpers/constants';
 import { textRules } from "@/helpers/validation";
 import { useAlertStore } from '@/stores/alert'
 
@@ -18,6 +17,7 @@ const addToDashboard = ref<boolean>(false);
 const taskId = ref<number>(0);
 const modalTitle = computed(() => store.isEditing ? 'Edit task' : 'Add new task')
 const loading = ref<boolean>(false);
+const apiUrl = import.meta.env.VITE_API_URL;
 const form = ref()
 
 const showModal = (): void => {

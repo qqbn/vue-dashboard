@@ -73,8 +73,3 @@ const emailValidation = (value: string): boolean => {
 const selectRequired = (value: string): boolean => {
     return value ? true : false
 }
-
-//buttons validation
-export const minOneChar = (val: string): boolean => {
-    return val.length > 0
-}

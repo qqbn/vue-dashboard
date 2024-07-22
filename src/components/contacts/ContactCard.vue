@@ -6,12 +6,12 @@ import { useAlertStore } from '@/stores/alert'
 import { avatarsImages } from '@/helpers/constants.js'
 import type { ContactData } from '@/helpers/interfaces';
 import axios from 'axios';
-import { apiUrl } from '@/helpers/constants';
 
 const store = useContactsStore();
 const removeStore = useRemoveStore();
 const alert = useAlertStore();
 const emit = defineEmits()
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const props = defineProps<{
     contact: ContactData,
