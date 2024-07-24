@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { RemoveData } from '@/helpers/interfaces';
 const apiUrl = import.meta.env.VITE_API_URL;

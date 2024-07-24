@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { ChartProps } from "../../helpers/interfaces";
-import { typeItems, timeItems } from '@/helpers/constants.js';
 
 const props = defineProps<{
     selectedType?: number,

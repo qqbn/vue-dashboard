@@ -1,7 +1,7 @@
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { TaskData } from '@/helpers/interfaces';
-import axios, { all } from 'axios'
+import axios from 'axios'
 import { useRemoveStore } from './remove';
 const removeStore = useRemoveStore();
 const apiUrl = import.meta.env.VITE_API_URL;

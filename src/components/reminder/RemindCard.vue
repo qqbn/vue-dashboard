@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineEmits } from 'vue';
+import { defineEmits } from 'vue';
 import { useRemindsStore } from '@/stores/reminds';
 import { useRemoveStore } from '@/stores/remove';
 import type { RemindData } from '@/helpers/interfaces';

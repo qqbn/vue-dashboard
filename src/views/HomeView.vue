@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick, onBeforeMount } from 'vue';
+import { ref } from 'vue';
 import { type SelectedWidget, type SelectedWidgets, type SavedWidget, ModalType } from '../helpers/interfaces';
 import ContactsWidget from '@/components/widgets/ContactsWidget.vue';
 import NotesWidget from '@/components/widgets/NotesWidget.vue';
