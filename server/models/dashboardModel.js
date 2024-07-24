@@ -2,13 +2,6 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient()
 
-const getData = async (data) => {
-
-    console.log(data, 'model')
-    if(data.includes)
-    return 'get data model';
-}
-
 const getExpenseWidgetData = async () => {
     const expenses = await prisma.expenses.findMany({
         orderBy: {date: 'desc'},
@@ -62,7 +55,6 @@ const getContactsWidgetData = async () => {
 }
 
 module.exports = {
-    getData,
     getExpenseWidgetData,
     getNotesWidgetData,
     getRemindsWidgetData,
