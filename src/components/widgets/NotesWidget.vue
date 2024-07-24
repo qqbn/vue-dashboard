@@ -13,8 +13,9 @@ const emit = defineEmits(['removeWidget'])
 
 <template>
     <remove-widget @remove-widget="emit('removeWidget', data?.widgetId)" />
-    <v-card class="pa-2 mb-2" v-for="note in props.data.widgetData" :key="note.id"
-        :style="important ? 'border: 2px solid #6200EE;' : 'border: none;'">
+    <p v-if="!props.data.widgetData.length">There is no data in widget</p>
+    <v-card v-else class="pa-2 mb-2" v-for="note in props.data.widgetData" :key="note.id"
+        style="border: 2px solid #6200EE;">
         <v-card-title>{{ note.title }}</v-card-title>
         <v-card-subtitle>{{ `Date: ${note.date}` }}</v-card-subtitle>
     </v-card>

@@ -30,6 +30,8 @@ const showModal = (): void => {
     lastName.value = '';
     phoneNumber.value = '';
     email.value = '';
+    avatar.value = null;
+    addToDashboard.value = false;
 }
 
 watch(dialog, () => {

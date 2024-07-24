@@ -24,6 +24,7 @@ const showModal = (): void => {
     dialog.value = !dialog.value;
     content.value = '';
     done.value = false;
+    addToDashboard.value = false;
 }
 
 watch(dialog, () => {
@@ -79,7 +80,7 @@ const handleEditTask = async (id: number): Promise<void> => {
 }
 
 const btnText = computed(() => {
-    return !store.isEditing ? 'Add remind' : 'Edit remind'
+    return !store.isEditing ? 'Add task' : 'Edit task'
 });
 
 const handleSubmitForm = async (): Promise<void> => {

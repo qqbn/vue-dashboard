@@ -26,7 +26,8 @@ const isTaskDone = computed(() => props.data.widgetData[index.value].done ? 'Tas
 
 <template>
     <remove-widget @remove-widget="emit('removeWidget', props.data?.widgetId)" />
-    <v-card class="pa-2 mb-2">
+    <p v-if="!props.data.widgetData.length">There is no data in widget</p>
+    <v-card class="pa-2 mb-2" v-else>
         <v-card-title>{{ isTaskDone }}</v-card-title>
         <v-card-text class="task-widget-text"
             :style="data.widgetData[index].done ? 'text-decoration: line-through;' : ''">
